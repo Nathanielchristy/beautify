@@ -10,43 +10,43 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 260 80% 55%; /* #6A44E6 */
+    --primary: 340 90% 55%; /* #F24E8A */
     --primary-foreground: 0 0% 100%;
-    --secondary: 260 10% 96%;
-    --secondary-foreground: 260 80% 55%;
-    --muted: 260 10% 96%;
-    --muted-foreground: 260 10% 45%;
-    --accent: 260 10% 96%;
-    --accent-foreground: 260 80% 55%;
+    --secondary: 340 10% 96%;
+    --secondary-foreground: 340 90% 55%;
+    --muted: 340 10% 96%;
+    --muted-foreground: 340 10% 45%;
+    --accent: 340 10% 96%;
+    --accent-foreground: 340 90% 55%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 260 10% 91%;
-    --input: 260 10% 91%;
-    --ring: 260 80% 55%;
+    --border: 340 10% 91%;
+    --input: 340 10% 91%;
+    --ring: 340 90% 55%;
     --radius: 0.5rem;
 
     /* Custom colors from palette */
-    --blue-light: 220 80% 95%; /* #E6F0FA */
-    --blue-medium: 220 80% 85%; /* #B3D1F2 */
-    --indigo-dark: 260 40% 40%; /* #523D80 */
-    --indigo-deep: 260 40% 25%; /* #342654 */
-    --indigo-background: 260 40% 97%; /* #F2EBFA */
+    --coral-light: 20 90% 80%; /* #FAD0C4 */
+    --coral-medium: 10 90% 70%; /* #F7A88B */
+    --teal-dark: 180 40% 40%; /* #3D9999 */
+    --teal-deep: 180 40% 25%; /* #266666 */
+    --teal-background: 180 40% 97%; /* #EBF7F7 */
 
     /* Semantic colors based on new palette */
-    --success: var(--indigo-dark);
-    --success-light: var(--blue-light);
-    --success-foreground: var(--indigo-background);
-    --warning: var(--blue-medium);
-    --warning-light: var(--indigo-background);
-    --warning-foreground: var(--indigo-deep);
+    --success: var(--teal-dark);
+    --success-light: var(--coral-light);
+    --success-foreground: var(--teal-background);
+    --warning: var(--coral-medium);
+    --warning-light: var(--teal-background);
+    --warning-foreground: var(--teal-deep);
 
-    --info: var(--blue-light);
-    --info-light: var(--indigo-background);
-    --info-foreground: var(--indigo-deep);
+    --info: var(--coral-light);
+    --info-light: var(--teal-background);
+    --info-foreground: var(--teal-deep);
 
-    --danger: var(--indigo-deep);
-    --danger-light: var(--blue-light);
-    --danger-foreground: var(--indigo-background);
+    --danger: var(--teal-deep);
+    --danger-light: var(--coral-light);
+    --danger-foreground: var(--teal-background);
   }
 
   .dark {
@@ -85,6 +85,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-indigoBackground text-foreground;
+    @apply bg-tealBackground text-foreground;
   }
 }

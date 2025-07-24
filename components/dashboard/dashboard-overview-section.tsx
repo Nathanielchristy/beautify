@@ -128,6 +128,16 @@ export function DashboardOverviewSection({
           setIsViewDetailsOpen={setIsViewDetailsOpen}
         />
       </div>
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+          <CardContent className="p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Sales</h3>
+            <div className="h-64">
+              {/* Add graph component here */}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
