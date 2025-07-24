@@ -10,43 +10,43 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 326 60% 55%; /* #E70C84 */
-    --primary-foreground: 350 40% 98%;
-    --secondary: 318 60% 96%;
-    --secondary-foreground: 326 60% 55%;
-    --muted: 318 60% 96%;
-    --muted-foreground: 315 20% 45%;
-    --accent: 318 60% 96%;
-    --accent-foreground: 326 60% 55%;
+    --primary: 260 80% 55%; /* #6A44E6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 10% 96%;
+    --secondary-foreground: 260 80% 55%;
+    --muted: 260 10% 96%;
+    --muted-foreground: 260 10% 45%;
+    --accent: 260 10% 96%;
+    --accent-foreground: 260 80% 55%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 350 40% 98%;
-    --border: 314 30% 91%;
-    --input: 314 30% 91%;
-    --ring: 326 60% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 10% 91%;
+    --input: 260 10% 91%;
+    --ring: 260 80% 55%;
     --radius: 0.5rem;
 
     /* Custom colors from palette */
-    --pink-light: 350 80% 88%; /* #FADBE1 */
-    --pink-medium: 340 80% 76%; /* #F2A4C0 */
-    --purple-dark: 280 40% 40%; /* #92278F */
-    --purple-deep: 280 40% 25%; /* #6A1C62 */
-    --purple-background: 280 40% 97%; /* #F3E6F2 */
+    --blue-light: 220 80% 95%; /* #E6F0FA */
+    --blue-medium: 220 80% 85%; /* #B3D1F2 */
+    --indigo-dark: 260 40% 40%; /* #523D80 */
+    --indigo-deep: 260 40% 25%; /* #342654 */
+    --indigo-background: 260 40% 97%; /* #F2EBFA */
 
     /* Semantic colors based on new palette */
-    --success: var(--purple-dark);
-    --success-light: var(--pink-light);
-    --success-foreground: var(--purple-background);
-    --warning: var(--pink-medium);
-    --warning-light: var(--purple-background);
-    --warning-foreground: var(--purple-deep);
+    --success: var(--indigo-dark);
+    --success-light: var(--blue-light);
+    --success-foreground: var(--indigo-background);
+    --warning: var(--blue-medium);
+    --warning-light: var(--indigo-background);
+    --warning-foreground: var(--indigo-deep);
 
-    --info: var(--pink-light);
-    --info-light: var(--purple-background);
-    --info-foreground: var(--purple-deep);
+    --info: var(--blue-light);
+    --info-light: var(--indigo-background);
+    --info-foreground: var(--indigo-deep);
 
-    --danger: var(--purple-deep);
-    --danger-light: var(--pink-light);
-    --danger-foreground: var(--purple-background);
+    --danger: var(--indigo-deep);
+    --danger-light: var(--blue-light);
+    --danger-foreground: var(--indigo-background);
   }
 
   .dark {
@@ -85,6 +85,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-purpleBackground text-foreground;
+    @apply bg-indigoBackground text-foreground;
   }
 }
