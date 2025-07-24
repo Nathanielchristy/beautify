@@ -10,43 +10,43 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --primary: 326 60% 55%; /* #E70C84 */
+    --primary-foreground: 350 40% 98%;
+    --secondary: 318 60% 96%;
+    --secondary-foreground: 326 60% 55%;
+    --muted: 318 60% 96%;
+    --muted-foreground: 315 20% 45%;
+    --accent: 318 60% 96%;
+    --accent-foreground: 326 60% 55%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 350 40% 98%;
+    --border: 314 30% 91%;
+    --input: 314 30% 91%;
+    --ring: 326 60% 55%;
     --radius: 0.5rem;
 
     /* Custom colors from palette */
-    --rose-light: 350 40% 76%; /* #E3A6A6 */
-    --rose-medium: 318 25% 68%; /* #C895B8 */
-    --rose-dark: 326 24% 53%; /* #A66894 */
-    --rose-deep: 350 38% 32%; /* #733A31 */
-    --rose-background: 350 40% 95%; /* #F5E1E1 */
+    --pink-light: 350 80% 88%; /* #FADBE1 */
+    --pink-medium: 340 80% 76%; /* #F2A4C0 */
+    --purple-dark: 280 40% 40%; /* #92278F */
+    --purple-deep: 280 40% 25%; /* #6A1C62 */
+    --purple-background: 280 40% 97%; /* #F3E6F2 */
 
     /* Semantic colors based on new palette */
-    --success: var(--rose-dark);
-    --success-light: var(--rose-light);
-    --success-foreground: var(--rose-background);
-    --warning: var(--rose-medium);
-    --warning-light: var(--rose-background);
-    --warning-foreground: var(--rose-deep);
+    --success: var(--purple-dark);
+    --success-light: var(--pink-light);
+    --success-foreground: var(--purple-background);
+    --warning: var(--pink-medium);
+    --warning-light: var(--purple-background);
+    --warning-foreground: var(--purple-deep);
 
-    --info: var(--rose-light);
-    --info-light: var(--rose-background);
-    --info-foreground: var(--rose-deep);
+    --info: var(--pink-light);
+    --info-light: var(--purple-background);
+    --info-foreground: var(--purple-deep);
 
-    --danger: var(--rose-deep);
-    --danger-light: var(--rose-light);
-    --danger-foreground: var(--rose-background);
+    --danger: var(--purple-deep);
+    --danger-light: var(--pink-light);
+    --danger-foreground: var(--purple-background);
   }
 
   .dark {
@@ -85,6 +85,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-roseBackground text-foreground; /* Use the new background color */
+    @apply bg-purpleBackground text-foreground;
   }
 }

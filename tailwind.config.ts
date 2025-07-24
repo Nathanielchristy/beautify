@@ -54,21 +54,21 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        roseDark: {
-          DEFAULT: "hsl(var(--rose-dark))",
+        purpleDark: {
+          DEFAULT: "hsl(var(--purple-dark))",
         },
-        roseMedium: {
-          DEFAULT: "hsl(var(--rose-medium))",
+        purpleMedium: {
+          DEFAULT: "hsl(var(--purple-medium))",
         },
-        roseDeep: {
-          DEFAULT: "hsl(var(--rose-deep))",
+        purpleDeep: {
+          DEFAULT: "hsl(var(--purple-deep))",
         },
-        roseLight: {
-          DEFAULT: "hsl(var(--rose-light))",
+        pinkLight: {
+          DEFAULT: "hsl(var(--pink-light))",
         },
-        roseBackground: {
-          DEFAULT: "hsl(var(--rose-background))",
-          foreground: "hsl(var(--rose-background-foreground))",
+        purpleBackground: {
+          DEFAULT: "hsl(var(--purple-background))",
+          foreground: "hsl(var(--purple-background-foreground))",
         },
         success: {
           DEFAULT: "hsl(var(--success))",
@@ -79,11 +79,12 @@ const config = {
           light: "hsl(var(--danger-light))",
         },
         // New custom colors
-        "dusty-rose": "#E3A6A6",
-        "muted-mauve": "#C895B8",
-        "deep-orchid": "#A66894",
-        "terracotta-brown": "#733A31",
-        "pale-blush": "#F5E1E1",
+        "electric-pink": "#E70C84",
+        "dark-purple": "#92278F",
+        "light-pink": "#FADBE1",
+        "medium-pink": "#F2A4C0",
+        "deep-purple": "#6A1C62",
+        "pale-purple": "#F3E6F2",
       },
       borderRadius: {
         lg: "var(--radius)",
