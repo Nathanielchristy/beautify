@@ -70,8 +70,8 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
                           handleTabChange(item.id)
                         }}
                       >
-                        <Icon className="h-6 w-6" strokeWidth={2.5} />
-                        <span className="font-semibold text-lg">{item.label}</span>
+                        <Icon className="h-5 w-5" strokeWidth={2} />
+                        <span className="font-medium text-base">{item.label}</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
