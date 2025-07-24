@@ -54,21 +54,21 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        tealDark: {
-          DEFAULT: "hsl(var(--teal-dark))",
+        mintDark: {
+          DEFAULT: "hsl(var(--mint-dark))",
         },
-        tealMedium: {
-          DEFAULT: "hsl(var(--teal-medium))",
+        mintMedium: {
+          DEFAULT: "hsl(var(--mint-medium))",
         },
-        tealDeep: {
-          DEFAULT: "hsl(var(--teal-deep))",
+        mintDeep: {
+          DEFAULT: "hsl(var(--mint-deep))",
         },
-        coralLight: {
-          DEFAULT: "hsl(var(--coral-light))",
+        peachLight: {
+          DEFAULT: "hsl(var(--peach-light))",
         },
-        tealBackground: {
-          DEFAULT: "hsl(var(--teal-background))",
-          foreground: "hsl(var(--teal-background-foreground))",
+        mintBackground: {
+          DEFAULT: "hsl(var(--mint-background))",
+          foreground: "hsl(var(--mint-background-foreground))",
         },
         success: {
           DEFAULT: "hsl(var(--success))",
@@ -79,12 +79,12 @@ const config = {
           light: "hsl(var(--danger-light))",
         },
         // New custom colors
-        "primary-pink": "#F24E8A",
-        "light-coral": "#FAD0C4",
-        "medium-coral": "#F7A88B",
-        "dark-teal": "#3D9999",
-        "deep-teal": "#266666",
-        "pale-teal": "#EBF7F7",
+        "primary-blue": "#5D9CEC",
+        "light-peach": "#FFF0E6",
+        "medium-peach": "#FFD1B3",
+        "dark-mint": "#4DB380",
+        "deep-mint": "#317A52",
+        "pale-mint": "#E6F7EB",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -10,43 +10,43 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 340 90% 55%; /* #F24E8A */
+    --primary: 210 40% 50%; /* #5D9CEC */
     --primary-foreground: 0 0% 100%;
-    --secondary: 340 10% 96%;
-    --secondary-foreground: 340 90% 55%;
-    --muted: 340 10% 96%;
-    --muted-foreground: 340 10% 45%;
-    --accent: 340 10% 96%;
-    --accent-foreground: 340 90% 55%;
+    --secondary: 210 10% 96%;
+    --secondary-foreground: 210 40% 50%;
+    --muted: 210 10% 96%;
+    --muted-foreground: 210 10% 45%;
+    --accent: 210 10% 96%;
+    --accent-foreground: 210 40% 50%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 340 10% 91%;
-    --input: 340 10% 91%;
-    --ring: 340 90% 55%;
+    --border: 210 10% 91%;
+    --input: 210 10% 91%;
+    --ring: 210 40% 50%;
     --radius: 0.5rem;
 
     /* Custom colors from palette */
-    --coral-light: 20 90% 80%; /* #FAD0C4 */
-    --coral-medium: 10 90% 70%; /* #F7A88B */
-    --teal-dark: 180 40% 40%; /* #3D9999 */
-    --teal-deep: 180 40% 25%; /* #266666 */
-    --teal-background: 180 40% 97%; /* #EBF7F7 */
+    --peach-light: 30 90% 95%; /* #FFF0E6 */
+    --peach-medium: 30 90% 85%; /* #FFD1B3 */
+    --mint-dark: 150 40% 40%; /* #4DB380 */
+    --mint-deep: 150 40% 25%; /* #317A52 */
+    --mint-background: 150 40% 97%; /* #E6F7EB */
 
     /* Semantic colors based on new palette */
-    --success: var(--teal-dark);
-    --success-light: var(--coral-light);
-    --success-foreground: var(--teal-background);
-    --warning: var(--coral-medium);
-    --warning-light: var(--teal-background);
-    --warning-foreground: var(--teal-deep);
+    --success: var(--mint-dark);
+    --success-light: var(--peach-light);
+    --success-foreground: var(--mint-background);
+    --warning: var(--peach-medium);
+    --warning-light: var(--mint-background);
+    --warning-foreground: var(--mint-deep);
 
-    --info: var(--coral-light);
-    --info-light: var(--teal-background);
-    --info-foreground: var(--teal-deep);
+    --info: var(--peach-light);
+    --info-light: var(--mint-background);
+    --info-foreground: var(--mint-deep);
 
-    --danger: var(--teal-deep);
-    --danger-light: var(--coral-light);
-    --danger-foreground: var(--teal-background);
+    --danger: var(--mint-deep);
+    --danger-light: var(--peach-light);
+    --danger-foreground: var(--mint-background);
   }
 
   .dark {
@@ -82,9 +82,9 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border transition-all duration-300;
   }
   body {
-    @apply bg-tealBackground text-foreground;
+    @apply bg-mintBackground text-foreground;
   }
 }

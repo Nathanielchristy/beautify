@@ -650,7 +650,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         />
         <main className="flex-1 overflow-auto p-4 sm:p-6">{renderContent()}</main>
         {/* Mobile Bottom Navigation - Keep this as it's a separate navigation */}
-        <div className="lg:hidden bg-white/90 backdrop-blur-xl border-t border-indigo-light px-4 py-2 shadow-lg">
+        <div className="lg:hidden bg-white/90 backdrop-blur-xl border-t border-peach-light px-4 py-2 shadow-lg">
           <div className="flex items-center justify-around">
             {bottomNavItems.map((item) => {
               const Icon = item.icon
@@ -660,8 +660,8 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   onClick={() => handleTabChange(item.id)}
                   className={`flex flex-col items-center space-y-1 p-2 rounded-xl transition-all duration-200 ${
                     activeTab === item.id
-                      ? "bg-gradient-to-r from-primary-blue to-indigo-dark text-white shadow-md"
-                      : "text-gray-600 hover:bg-indigo-light/30"
+                      ? "bg-gradient-to-r from-primary-blue to-mint-dark text-white shadow-md"
+                      : "text-gray-600 hover:bg-mint-light/30"
                   }`}
                 >
                   <Icon className="h-5 w-5" strokeWidth={2} />
