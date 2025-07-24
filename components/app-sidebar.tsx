@@ -33,19 +33,19 @@ const sidebarItems = [
 
 export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }: AppSidebarProps) {
   return (
-    <Sidebar collapsible="none" variant="inset" side="left">
-      <SidebarHeader className="p-6 border-b border-roseLight-DEFAULT flex flex-col items-center">
-        <div className="w-10 h-10 bg-gradient-to-br from-roseDark-DEFAULT to-roseMedium-DEFAULT rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-200">
-          <span className="text-white font-bold text-lg">B</span>
+    <Sidebar collapsible="none" variant="inset" side="left" className="bg-gradient-to-b from-light-pink to-pale-purple">
+      <SidebarHeader className="p-6 border-b border-pink-light flex flex-col items-center">
+        <div className="w-12 h-12 bg-gradient-to-br from-electric-pink to-dark-purple rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow duration-200">
+          <span className="text-white font-bold text-xl">B</span>
         </div>
         <div className="group-data-[state=collapsed]/sidebar-wrapper:hidden mt-2">
-          <h1 className="text-xl font-bold bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-electric-pink to-dark-purple bg-clip-text text-transparent">
             Beautify
           </h1>
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="mt-6 flex-1 px-4">
+      <SidebarContent className="mt-8 flex-1 px-4">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -54,10 +54,10 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
                 return (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
-                      className={`w-full justify-start rounded-xl transition-all duration-200 ${
+                      className={`w-full justify-start rounded-full transition-all duration-300 ${
                         activeTab === item.id
-                          ? "bg-gradient-to-r from-deep-orchid to-terracotta-brown text-white shadow-lg"
-                          : "bg-transparent text-gray-700 hover:bg-pale-blush/30"
+                          ? "bg-gradient-to-r from-electric-pink to-dark-purple text-white shadow-lg scale-105"
+                          : "bg-transparent text-gray-700 hover:bg-white/50 hover:text-electric-pink"
                       }`}
                       asChild
                       isActive={activeTab === item.id}
@@ -70,8 +70,8 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
                           handleTabChange(item.id)
                         }}
                       >
-                        <Icon className="h-5 w-5" strokeWidth={2} />
-                        <span className="font-medium text-base">{item.label}</span>
+                        <Icon className="h-6 w-6" strokeWidth={2.5} />
+                        <span className="font-semibold text-lg">{item.label}</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -82,28 +82,28 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-roseLight-DEFAULT">
+      <SidebarFooter className="p-4 border-t border-pink-light">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="w-full text-left text-gray-700 hover:bg-pale-blush/30"
+              className="w-full text-left text-gray-700 hover:bg-white/50 hover:text-electric-pink rounded-full"
               onClick={() => {
                 /* Add settings logic here */
               }}
               size="lg"
             >
-              <Home className="h-5 w-5" strokeWidth={2} />
-              <span className="group-data-[state=collapsed]/sidebar-wrapper:hidden">Settings</span>
+              <Home className="h-6 w-6" strokeWidth={2.5} />
+              <span className="group-data-[state=collapsed]/sidebar-wrapper:hidden font-semibold">Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="w-full text-left text-danger-DEFAULT hover:bg-danger-light/30 bg-pink-600 text-white"
+              className="w-full text-left text-white bg-gradient-to-r from-electric-pink to-dark-purple hover:opacity-90 rounded-full"
               onClick={() => setShowLogoutConfirm(true)}
               size="lg"
             >
-              <LogOut className="h-5 w-5" strokeWidth={2} />
-              <span className="group-data-[state=collapsed]/sidebar-wrapper:hidden">Logout</span>
+              <LogOut className="h-6 w-6" strokeWidth={2.5} />
+              <span className="group-data-[state=collapsed]/sidebar-wrapper:hidden font-semibold">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
