@@ -2,10 +2,11 @@
 
 import { useState } from "react"
 import BeautyWellnessDashboard from "@/components/dashboard"
+import { Login } from "@/components/login"
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
-  const [userEmail, setUserEmail] = useState("admin@beautify.com")
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userEmail, setUserEmail] = useState("")
 
   const handleLogin = (email: string) => {
     setUserEmail(email)
@@ -22,7 +23,7 @@ export default function App() {
       {isLoggedIn ? (
         <BeautyWellnessDashboard onLogout={handleLogout} userEmail={userEmail} />
       ) : (
-        <div />
+        <Login onLogin={handleLogin} />
       )}
     </div>
   )
