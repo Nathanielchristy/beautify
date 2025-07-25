@@ -13,7 +13,7 @@ export interface Client {
 }
 
 export interface Staff {
-  id: string
+  id:string
   name: string
   email: string
   phone: string
@@ -84,4 +84,20 @@ interface InvoiceItem {
   quantity: number
   price: number
   total: number
+}
+
+export interface RecentSale {
+  id: string
+  clientName: string
+  serviceName: string
+  amount: number
+  date: string
+}
+
+export interface RecentSale {
+  id: string
+  clientName: string
+  serviceName: string
+  amount: number
+  date: string
 }
