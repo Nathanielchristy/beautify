@@ -33,50 +33,45 @@ const sidebarItems = [
 
 export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }: AppSidebarProps) {
   return (
-    <div className="hidden border-r bg-white lg:block dark:bg-gray-950">
-      <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-[60px] items-center border-b px-6">
-          <a href="#" className="flex items-center gap-2 font-semibold">
-            <span className="">Serenity Salon</span>
-          </a>
-        </div>
-        <div className="flex-1 overflow-auto py-2">
-          <nav className="grid items-start px-4 text-sm font-medium">
-            {sidebarItems.map((item) => {
-              const Icon = item.icon
-              return (
-                <a
-                  key={item.id}
-                  href="#"
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-primary dark:text-gray-400 dark:hover:text-primary ${
-                    activeTab === item.id ? "bg-gray-100 text-primary dark:bg-gray-800 dark:text-primary" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    handleTabChange(item.id)
-                  }}
+    <Sidebar>
+      <SidebarHeader>
+        <a href="#" className="flex items-center gap-2 font-semibold">
+          <span className="">Serenity Salon</span>
+        </a>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarMenu>
+          {sidebarItems.map((item) => {
+            const Icon = item.icon
+            return (
+              <SidebarMenuItem key={item.id}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={activeTab === item.id}
+                  onClick={() => handleTabChange(item.id)}
                 >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </a>
-              )
-            })}
-          </nav>
-        </div>
-        <div className="mt-auto p-4">
-          <a
-            href="#"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-primary dark:text-gray-400 dark:hover:text-primary"
-            onClick={(e) => {
-              e.preventDefault()
-              setShowLogoutConfirm(true)
-            }}
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </a>
-        </div>
-      </div>
-    </div>
+                  <a href="#">
+                    <Icon className="h-4 w-4" />
+                    {item.label}
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )
+          })}
+        </SidebarMenu>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild onClick={() => setShowLogoutConfirm(true)}>
+              <a href="#">
+                <LogOut className="h-4 w-4" />
+                Logout
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
   )
 }
