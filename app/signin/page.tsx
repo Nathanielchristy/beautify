@@ -20,7 +20,7 @@ export const SignInPage = (): JSX.Element => {
     >
       <div className="bg-[#f9f6f6] w-full h-screen flex items-center justify-center p-4">
         {/* Left side salon image */}
-        <div className="w-1/4 h-full hidden lg:block">
+        <div className="w h-full hidden lg:block">
           <img
             className="w-full h-full object-cover [border-radius:30px] rounded-2xl"
             alt="Beauty salon interior"
