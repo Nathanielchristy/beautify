@@ -29,7 +29,7 @@ export const SignInPage = (): JSX.Element => {
         </div>
 
         {/* Right side login card */}
-        <div className="w-full h-full flex justify-center items-center mt-0 lg:w-2/5">
+        <div className="w-full h-full flex justify-center mt-0 lg:w-2/5 leading-5 items-stretch flex-row">
           <Card className="w-full max-w-md h-auto bg-[#fde5f3] [border-radius:30px] border-[5px] border-solid border-[#dd0e7f] p-10">
             <CardContent className="p-0">
               {/* Logo and branding section */}
