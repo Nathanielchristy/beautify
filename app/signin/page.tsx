@@ -5,7 +5,7 @@ import { Input } from "../../components/ui/input";
 import { Separator } from "../../components/ui/separator";
 
 export const SignInPage = (): JSX.Element => {
-  // Data for the login forma
+  // Data for the login form
   const loginData = {
     logo: "https://c.animaapp.com/8vK5r0uv/img/group-1@2x.png",
     salonImage: "https://c.animaapp.com/8vK5r0uv/img/rectangle-8.png",
@@ -29,7 +29,7 @@ export const SignInPage = (): JSX.Element => {
         </div>
 
         {/* Right side login card */}
-        <div className="w-full h-full flex justify-center items-center mt-0 lg:w-3/5">
+        <div className="w-full h-full flex justify-center items-center mt-0 lg:w-2/5">
           <Card className="w-full max-w-md h-auto bg-[#fde5f3] [border-radius:30px] border-[5px] border-solid border-[#dd0e7f] p-10">
             <CardContent className="p-0">
               {/* Logo and branding section */}
