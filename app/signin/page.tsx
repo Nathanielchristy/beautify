@@ -18,100 +18,106 @@ export const SignInPage = (): JSX.Element => {
       className="bg-[#f9f6f6] flex flex-row justify-center w-full"
       data-model-id="2108:2"
     >
-      <div className="bg-[#f9f6f6] w-[1920px] h-[1366px] relative">
+      <div className="bg-[#f9f6f6] w-full h-screen flex items-center justify-center">
         {/* Left side salon image */}
-        <img
-          className="absolute w-[744px] h-[1224px] top-[68px] left-[71px] object-cover"
-          alt="Beauty salon interior"
-          src={loginData.salonImage}
-        />
+        <div className="w-1/2 h-full hidden lg:block">
+          <img
+            className="w-full h-full object-cover"
+            alt="Beauty salon interior"
+            src={loginData.salonImage}
+          />
+        </div>
 
         {/* Right side login card */}
-        <div className="absolute w-[1057px] h-[1222px] top-[73px] left-[842px]">
-          <Card className="relative w-[1039px] h-[1222px] bg-[#fde5f3] rounded-[41px] border-[5px] border-solid border-[#dd0e7f]">
+        <div className="w-full lg:w-1/2 h-full flex items-center justify-center">
+          <Card className="w-full max-w-lg h-auto bg-[#fde5f3] rounded-[41px] border-[5px] border-solid border-[#dd0e7f] p-8">
             <CardContent className="p-0">
               {/* Logo and branding section */}
-              <div className="absolute w-[307px] h-[387px] top-[134px] left-[346px]">
+              <div className="flex flex-col items-center mb-8">
                 <img
-                  className="absolute w-[195px] h-[258px] top-0 left-[18px]"
+                  className="w-32 h-auto"
                   alt="Glow Look logo"
                   src={loginData.logo}
                 />
 
-                <h1 className="absolute w-[307px] top-[242px] left-0 font-['Outfit',Helvetica] font-normal text-[64px] tracking-[0] leading-normal">
+                <h1 className="font-['Outfit',Helvetica] font-normal text-4xl tracking-tight leading-normal mt-4">
                   <span className="text-[#92278f]">Glow</span>
                   <span className="text-black">&nbsp;</span>
                   <span className="font-extrabold text-[#92278f]">Look</span>
                 </h1>
 
-                <h2 className="absolute w-[233px] top-[326px] left-[42px] font-['Outfit',Helvetica] font-normal text-black text-[40px] tracking-[0] leading-normal">
+                <h2 className="font-['Outfit',Helvetica] font-normal text-black text-2xl tracking-tight leading-normal">
                   Beauty Salon
                 </h2>
               </div>
 
               {/* Email input field */}
-              <div className="absolute w-[673px] h-[116px] top-[541px] left-[175px]">
+              <div className="mb-6">
                 <Input
-                  className="absolute w-full h-full bg-white rounded-[40px] px-12 text-4xl font-['Outfit',Helvetica]"
+                  className="w-full h-14 bg-white rounded-full px-6 text-lg font-['Outfit',Helvetica]"
                   placeholder="Email"
                 />
               </div>
 
               {/* Password input field with eye icon */}
-              <div className="absolute w-[673px] h-[116px] top-[692px] left-[175px] relative">
+              <div className="mb-6 relative">
                 <Input
                   type="password"
-                  className="absolute w-full h-full bg-white rounded-[40px] px-12 text-4xl font-['Outfit',Helvetica]"
+                  className="w-full h-14 bg-white rounded-full px-6 text-lg font-['Outfit',Helvetica]"
                   placeholder="Password"
                 />
                 <img
-                  className="absolute w-[41px] h-[41px] top-[33px] right-[38px] cursor-pointer"
+                  className="absolute w-6 h-6 top-1/2 -translate-y-1/2 right-6 cursor-pointer"
                   alt="Show password"
                   src={loginData.eyeIcon}
                 />
               </div>
 
               {/* Forget password link */}
-              <div className="absolute w-[197px] top-[827px] left-[650px] font-['Outfit',Helvetica] font-normal text-black text-2xl tracking-[0] leading-normal cursor-pointer">
-                Forget Password ?
+              <div className="text-right mb-6">
+                <a href="#" className="font-['Outfit',Helvetica] font-normal text-black text-sm tracking-tight leading-normal cursor-pointer">
+                  Forget Password ?
+                </a>
               </div>
 
               {/* Login button */}
-              <Button className="absolute w-[673px] h-[116px] top-[888px] left-[175px] bg-[url(https://c.animaapp.com/8vK5r0uv/img/rectangle-5.png)] bg-[100%_100%] rounded-[40px] flex items-center justify-center">
-                <span className="font-['Outfit',Helvetica] font-extrabold text-white text-[40px] tracking-[0] leading-normal">
+              <Button className="w-full h-14 bg-[url(https://c.animaapp.com/8vK5r0uv/img/rectangle-5.png)] bg-cover bg-no-repeat rounded-full flex items-center justify-center mb-6">
+                <span className="font-['Outfit',Helvetica] font-extrabold text-white text-xl tracking-tight leading-normal">
                   Log In
                 </span>
               </Button>
 
               {/* OR divider */}
-              <div className="absolute w-full top-[1017px] flex items-center justify-center">
-                <Separator className="w-[221px] h-[3px]" />
-                <span className="mx-4 font-['Outfit',Helvetica] font-normal text-black text-2xl">
+              <div className="flex items-center justify-center mb-6">
+                <Separator className="w-1/4 h-px" />
+                <span className="mx-4 font-['Outfit',Helvetica] font-normal text-black text-sm">
                   OR
                 </span>
-                <Separator className="w-[221px] h-[3px]" />
+                <Separator className="w-1/4 h-px" />
               </div>
 
               {/* Google login button */}
               <Button
                 variant="outline"
-                className="absolute w-[189px] h-[38px] top-[1077px] left-[417px] bg-white rounded-[40px] flex items-center justify-start px-3"
+                className="w-full h-14 bg-white rounded-full flex items-center justify-center mb-6"
               >
                 <img
-                  className="w-[23px] h-[23px] mr-2"
+                  className="w-5 h-5 mr-2"
                   alt="Google"
                   src={loginData.googleIcon}
                 />
-                <span className="font-['Outfit',Helvetica] font-normal text-black text-base">
-                  Login Within Google
+                <span className="font-['Outfit',Helvetica] font-normal text-black text-sm">
+                  Login With Google
                 </span>
               </Button>
 
               {/* Sign up link */}
-              <div className="absolute w-[223px] top-[1128px] left-[400px] font-['Outfit',Helvetica] font-normal text-base tracking-[0] leading-normal">
-                <span className="text-black">Don&apos;t have an account? </span>
-                <span className="font-bold text-[#e70c84] cursor-pointer">
-                  Sign up
+              <div className="text-center">
+                <span className="font-['Outfit',Helvetica] font-normal text-sm tracking-tight leading-normal">
+                  <span className="text-black">Don&apos;t have an account? </span>
+                  <a href="#" className="font-bold text-[#e70c84] cursor-pointer">
+                    Sign up
+                  </a>
                 </span>
               </div>
             </CardContent>
