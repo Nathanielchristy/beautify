@@ -18,7 +18,7 @@ export const SignInPage = (): JSX.Element => {
       className="bg-[#f9f6f6] flex flex-row justify-center w-full"
       data-model-id="2108:2"
     >
-      <div className="bg-[#f9f6f6] w-full h-screen flex items-center justify-center p-4">
+      <div className="bg-[#f9f6f6] w-2/5 h-screen flex items-center justify-center p-4">
         {/* Left side salon image */}
         <div className="w-1/2 h-full hidden lg:block">
           <img
@@ -29,7 +29,7 @@ export const SignInPage = (): JSX.Element => {
         </div>
 
         {/* Right side login card */}
-        <div className="w-full h-full flex justify-center items-center mt-0 lg:w-2/5">
+        <div className="w-full h-full flex justify-center items-center mt-0 lg:w-3/5">
           <Card className="w-full max-w-md h-auto bg-[#fde5f3] [border-radius:30px] border-[5px] border-solid border-[#dd0e7f] p-10">
             <CardContent className="p-0">
               {/* Logo and branding section */}
