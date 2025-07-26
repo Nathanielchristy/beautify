@@ -22,7 +22,7 @@ export const SignInPage = (): JSX.Element => {
         {/* Left side salon image */}
         <div className="w-1/2 h-full hidden lg:block">
           <img
-            className="w-full h-full object-cover rounded-l-lg rounded-lg"
+            className="w-full h-full object-cover rounded-l-lg rounded-2xl"
             alt="Beauty salon interior"
             src={loginData.salonImage}
           />
