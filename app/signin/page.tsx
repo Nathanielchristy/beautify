@@ -15,7 +15,7 @@ export const SignInPage = (): JSX.Element => {
 
   return (
     <main className="bg-[#f9f6f6] flex flex-row justify-center w-full" data-model-id="2108:2">
-      <div className="bg-[#f9f6f6] w-full h-screen flex items-center justify-center p-4">
+      <div className="bg-[#f9f6f6] w-full h-screen flex items-center justify-center p-6">
         {/* Left side salon image */}
         <div className="hidden lg:block lg:w-2/5 h-full">
           <img
