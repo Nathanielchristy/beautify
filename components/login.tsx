@@ -11,9 +11,10 @@ interface LoginProps {
 
 export function Login({ onLogin }: LoginProps) {
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleLogin = () => {
-    if (email) {
+    if (email && password) {
       onLogin(email)
     }
   }
@@ -31,6 +32,16 @@ export function Login({ onLogin }: LoginProps) {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </div>
