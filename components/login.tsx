@@ -10,8 +10,8 @@ interface LoginProps {
 }
 
 export function Login({ onLogin }: LoginProps) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("admin@serenity.com")
+  const [password, setPassword] = useState("password")
 
   const handleLogin = () => {
     if (email && password) {
