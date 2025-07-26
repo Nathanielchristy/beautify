@@ -2,6 +2,7 @@ import { Button } from "../../components/ui/button"
 import { Card, CardContent } from "../../components/ui/card"
 import { Input } from "../../components/ui/input"
 import { Separator } from "../../components/ui/separator"
+import type { JSX } from "react"
 
 export const SignInPage = (): JSX.Element => {
   // Data for the login form
@@ -26,7 +27,7 @@ export const SignInPage = (): JSX.Element => {
 
         {/* Right side login card */}
         <div className="w-full h-full flex justify-center items-center lg:w-3/5">
-          <Card className="w-full max-w-md h-auto bg-[#fde5f3] rounded-[30px] border-[5px] border-solid border-[#dd0e7f] p-10 max-h-full overflow-y-auto">
+          <Card className="w-full h-auto bg-[#fde5f3] rounded-[30px] border-[5px] border-solid border-[#dd0e7f] p-10 max-h-full overflow-y-auto">
             <CardContent className="p-0">
               {/* Logo and branding section */}
               <div className="flex flex-col items-center mb-6">
