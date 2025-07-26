@@ -119,8 +119,8 @@ export function ServicesPageContent({
               onClick={() => setSelectedCategory("all")}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
                 selectedCategory === "all"
-                  ? "bg-gradient-to-r from-deep-orchid to-terracotta-brown text-white shadow-lg"
-                  : "text-gray-700 hover:bg-roseLight-DEFAULT/30"
+                    ? "bg-gradient-to-r from-pink-400 to-pink-700 text-white shadow-lg"
+                    : "text-gray-700 hover:bg-roseLight-DEFAULT/30"
               }`}
             >
               <span className="font-medium">All categories</span>
@@ -133,7 +133,7 @@ export function ServicesPageContent({
                 onClick={() => setSelectedCategory(category)}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
                   selectedCategory === category
-                    ? "bg-gradient-to-r from-deep-orchid to-terracotta-brown text-white shadow-lg"
+                    ? "bg-gradient-to-r from-pink-400 to-pink-700 text-white shadow-lg"
                     : "text-gray-700 hover:bg-roseLight-DEFAULT/30"
                 }`}
               >

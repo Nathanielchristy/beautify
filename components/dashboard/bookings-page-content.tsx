@@ -382,12 +382,7 @@ export function BookingsPageContent({
         <div className="p-4 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">Bookings</h1>
-            <Button
-              onClick={() => setIsAddBookingOpen(true)}
-              className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground text-white"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add Booking
-            </Button>
+
           </div>
 
           <div className="relative mb-4">

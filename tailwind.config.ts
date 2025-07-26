@@ -78,13 +78,31 @@ const config = {
           DEFAULT: "hsl(var(--danger))",
           light: "hsl(var(--danger-light))",
         },
-        // New custom colors
+
+        // Existing custom colors
         "primary-blue": "#5D9CEC",
         "light-peach": "#FFF0E6",
         "medium-peach": "#FFD1B3",
         "dark-mint": "#4DB380",
         "deep-mint": "#317A52",
         "pale-mint": "#E6F7EB",
+
+        // ✅ Added gradient colors
+        deep: {
+          orchid: "#A66894",
+        },
+        terracotta: {
+          brown: "#733A31",
+        },
+        roseLight: {
+          DEFAULT: "#F5E1E1",
+        },
+        roseDark: {
+          DEFAULT: "#C895B8",
+        },
+        roseMedium: {
+          DEFAULT: "#E3A6A6",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
