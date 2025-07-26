@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import BeautyWellnessDashboard from "@/components/dashboard"
-import { Login } from "@/components/login"
+import SignInPage from "@/app/signin/page"
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -23,7 +23,7 @@ export default function App() {
       {isLoggedIn ? (
         <BeautyWellnessDashboard onLogout={handleLogout} userEmail={userEmail} />
       ) : (
-        <Login onLogin={handleLogin} />
+        <SignInPage />
       )}
     </div>
   )
