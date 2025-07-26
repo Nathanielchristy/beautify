@@ -39,6 +39,17 @@
     --warning: var(--peach-medium);
     --warning-light: var(--mint-background);
     --warning-foreground: var(--mint-deep);
+    --purple-600: 147 51% 43%; /* #7C3AED equivalent */
+    --purple-50: 250 100% 98%;
+    --purple-100: 243 100% 96%;
+    --purple-200: 243 96% 91%;
+    --purple-300: 242 91% 81%;
+    --purple-400: 242 83% 67%;
+    --purple-500: 242 78% 56%;
+    --purple-600: 242 78% 47%;
+    --purple-700: 242 75% 38%;
+    --purple-800: 242 69% 32%;
+    --purple-900: 242 47% 23%;
 
     --info: var(--peach-light);
     --info-light: var(--mint-background);

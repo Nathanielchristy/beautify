@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Calendar, DollarSign, UserCheck } from "lucide-react"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
 import type { Client, Staff, Booking, Invoice } from "@/types"
 import { RecentBookingsCard } from "./recent-bookings-card"
 import { QuickActionsCard } from "./quick-actions-card"
@@ -36,12 +37,42 @@ export function DashboardOverviewSection({
   const todayBookings = bookings.filter((b) => b.date === new Date().toISOString().split("T")[0]).length
   const activeStaffCount = staff.filter((s) => s.isActive).length
 
+  // Generate sales data for the last 7 days
+  const generateSalesData = () => {
+    const data = []
+    const today = new Date()
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today)
+      date.setDate(today.getDate() - i)
+      const dateString = date.toISOString().split("T")[0]
+      
+      // Calculate daily sales from paid invoices
+      const dailySales = invoices
+        .filter(invoice => 
+          invoice.status === "paid" && 
+          invoice.date === dateString
+        )
+        .reduce((sum, invoice) => sum + invoice.total, 0)
+      
+      data.push({
+        date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        sales: dailySales,
+        bookings: bookings.filter(booking => booking.date === dateString).length
+      })
+    }
+    
+    return data
+  }
+
+  const salesData = generateSalesData()
+
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-roseDark-DEFAULT via-roseMedium-DEFAULT to-roseLight-DEFAULT rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
         <div className="absolute inset-0 bg-[rgba(231,12,132,1)]"></div>
         <div className="relative z-10">
-          <h1 className="text-2xl font-bold mb-2">Welcome back to Beautify! ✨</h1>
+          <h1 className="text-2xl font-bold mb-2">Welcome back to Glow Look! ✨</h1>
           <p className="text-roseBackground-DEFAULT">Here's what's happening with your beauty business today.</p>
         </div>
         <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
@@ -110,6 +141,81 @@ export function DashboardOverviewSection({
         </Card>
       </div>
 
+      {/* Recent Sales Chart - Moved before the other cards */}
+      <div className="grid grid-cols-1 gap-6">
+        <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-800">Recent Sales</h3>
+              <div className="text-sm text-gray-600">Last 7 days</div>
+            </div>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={salesData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#666"
+                    fontSize={12}
+                  />
+                  <YAxis 
+                    stroke="#666"
+                    fontSize={12}
+                    tickFormatter={(value) => `$${value}`}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#fff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    }}
+                    formatter={(value, name) => [
+                      name === 'sales' ? `$${value}` : value,
+                      name === 'sales' ? 'Sales' : 'Bookings'
+                    ]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="sales"
+                    stroke="#e70c84"
+                    strokeWidth={3}
+                    dot={{ fill: '#e70c84', strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6, stroke: '#e70c84', strokeWidth: 2 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="bookings"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                    dot={{ fill: '#10b981', strokeWidth: 2, r: 3 }}
+                    activeDot={{ r: 5, stroke: '#10b981', strokeWidth: 2 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex items-center justify-center gap-6 mt-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#e70c84] rounded-full"></div>
+                <span className="text-sm text-gray-600">Sales ($)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#10b981] rounded-full"></div>
+                <span className="text-sm text-gray-600">Bookings</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <RecentBookingsCard
           bookings={bookings}
@@ -127,16 +233,6 @@ export function DashboardOverviewSection({
           setSelectedItem={setSelectedItem}
           setIsViewDetailsOpen={setIsViewDetailsOpen}
         />
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
-        <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Sales</h3>
-            <div className="h-64">
-              {/* Add graph component here */}
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )

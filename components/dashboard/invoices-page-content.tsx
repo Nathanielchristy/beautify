@@ -30,7 +30,7 @@ export function InvoicesPageContent({
   setInvoices,
 }: InvoicesPageContentProps) {
   const [invoiceStatusFilter, setInvoiceStatusFilter] = useState("all")
-  const [isAddInvoiceDialogOpen, setIsAddInvoiceDialogOpen] = useState(false)
+  const [isCreateInvoiceDialogOpen, setIsCreateInvoiceDialogOpen] = useState(false)
   const [isEditInvoiceDialogOpen, setIsEditInvoiceDialogOpen] = useState(false)
   const [currentInvoice, setCurrentInvoice] = useState<Invoice | null>(null)
   const [newInvoice, setNewInvoice] = useState<Omit<Invoice, "id">>({
@@ -69,7 +69,7 @@ export function InvoicesPageContent({
     })
   }
 
-  const handleAddInvoice = () => {
+  const handleCreateInvoice = () => {
     const id = (invoices.length + 1).toString()
     const client = mockClients.find((c) => c.id === newInvoice.clientId)
 
@@ -81,6 +81,8 @@ export function InvoicesPageContent({
         clientName: client?.name || "",
       },
     ])
+    
+    // Reset form
     setNewInvoice({
       clientId: "",
       clientName: "",
@@ -89,7 +91,8 @@ export function InvoicesPageContent({
       status: "Pending",
       items: [],
     })
-    setIsAddInvoiceDialogOpen(false)
+    setNewItem({ type: "service", id: "", name: "", price: 0, quantity: 1 })
+    setIsCreateInvoiceDialogOpen(false)
   }
 
   const handleEditInvoice = () => {
@@ -131,6 +134,33 @@ export function InvoicesPageContent({
     )
   }, [filteredInvoices, searchTerm])
 
+  // Function to add item to current invoice (for editing)
+  const handleAddItemToCurrentInvoice = () => {
+    if (currentInvoice && newItem.id && newItem.name && newItem.price > 0) {
+      const updatedItems = [...currentInvoice.items, newItem]
+      const updatedTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      setCurrentInvoice({
+        ...currentInvoice,
+        items: updatedItems,
+        totalAmount: updatedTotal,
+      })
+      setNewItem({ type: "service", id: "", name: "", price: 0, quantity: 1 })
+    }
+  }
+
+  // Function to remove item from current invoice (for editing)
+  const handleRemoveItemFromCurrentInvoice = (index: number) => {
+    if (currentInvoice) {
+      const updatedItems = currentInvoice.items.filter((_, i) => i !== index)
+      const updatedTotal = updatedItems.reduce((sum, i) => sum + i.price * i.quantity, 0)
+      setCurrentInvoice({
+        ...currentInvoice,
+        items: updatedItems,
+        totalAmount: updatedTotal,
+      })
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -140,7 +170,7 @@ export function InvoicesPageContent({
         </div>
         <Button
           className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-          onClick={() => setIsCreateInvoiceOpen(true)}
+          onClick={() => setIsCreateInvoiceDialogOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
           Create Invoice
@@ -170,9 +200,9 @@ export function InvoicesPageContent({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="paid">Paid</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="overdue">Overdue</SelectItem>
+                <SelectItem value="Paid">Paid</SelectItem>
+                <SelectItem value="Pending">Pending</SelectItem>
+                <SelectItem value="Overdue">Overdue</SelectItem>
                 <SelectItem value="Cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
@@ -224,20 +254,22 @@ export function InvoicesPageContent({
         </CardContent>
       </Card>
 
-      {/* Add Invoice Dialog */}
-      <Dialog open={isAddInvoiceDialogOpen} onOpenChange={setIsAddInvoiceDialogOpen}>
-        <DialogContent className="sm:max-w-[400px] max-h-[80vh] overflow-y-auto">
+      {/* Create Invoice Dialog */}
+      <Dialog open={isCreateInvoiceDialogOpen} onOpenChange={setIsCreateInvoiceDialogOpen}>
+        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Invoice</DialogTitle>
           </DialogHeader>
-          <div className="space-y-6 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="client">Client</Label>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="client" className="text-right">
+                Client
+              </Label>
               <Select
                 onValueChange={(value) => setNewInvoice({ ...newInvoice, clientId: value })}
                 value={newInvoice.clientId}
               >
-                <SelectTrigger className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select a client" />
                 </SelectTrigger>
                 <SelectContent>
@@ -249,23 +281,29 @@ export function InvoicesPageContent({
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="date">Date</Label>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="date" className="text-right">
+                Date
+              </Label>
               <Input
                 id="date"
                 type="date"
                 value={newInvoice.date}
                 onChange={(e) => setNewInvoice({ ...newInvoice, date: e.target.value })}
-                className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="status" className="text-right">
+                Status
+              </Label>
               <Select
                 onValueChange={(value) => setNewInvoice({ ...newInvoice, status: value as Invoice["status"] })}
                 value={newInvoice.status}
               >
-                <SelectTrigger className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -276,39 +314,45 @@ export function InvoicesPageContent({
               </Select>
             </div>
 
-            <h3 className="text-lg font-semibold mt-4">Items</h3>
-            <div className="space-y-3">
-              {newInvoice.items.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center p-3 border rounded-lg border-pale-blush/50 bg-pale-blush/10"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-gray-600">{item.type === "service" ? "Service" : "Product"}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-700">
-                      ${item.price.toFixed(2)} x {item.quantity}
-                    </span>
-                    <Button variant="ghost" size="icon" onClick={() => handleRemoveItem(index)}>
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </div>
+            {/* Items Section */}
+            <div className="col-span-4 space-y-3">
+              <h3 className="text-lg font-semibold">Items</h3>
+              {newInvoice.items.length > 0 && (
+                <div className="space-y-2">
+                  {newInvoice.items.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center p-3 border rounded-lg border-pale-blush/50 bg-pale-blush/10"
+                    >
+                      <div className="flex-1">
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-sm text-gray-600">{item.type === "service" ? "Service" : "Product"}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-700">
+                          ${item.price.toFixed(2)} x {item.quantity}
+                        </span>
+                        <Button variant="ghost" size="icon" onClick={() => handleRemoveItem(index)}>
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
 
-            <div className="space-y-2 mt-4">
-              <Label htmlFor="item-type">Add Item</Label>
-              <div className="flex gap-2">
+            {/* Add Item Section */}
+            <div className="col-span-4 space-y-3 border-t pt-4">
+              <Label>Add Item</Label>
+              <div className="grid grid-cols-2 gap-2">
                 <Select
                   onValueChange={(value) =>
                     setNewItem({ ...newItem, type: value as InvoiceItem["type"], id: "", name: "", price: 0 })
                   }
                   value={newItem.type}
                 >
-                  <SelectTrigger className="flex-1 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -316,6 +360,7 @@ export function InvoicesPageContent({
                     <SelectItem value="product">Product</SelectItem>
                   </SelectContent>
                 </Select>
+                
                 <Select
                   onValueChange={(value) => {
                     const selectedItem =
@@ -331,7 +376,7 @@ export function InvoicesPageContent({
                   }}
                   value={newItem.id}
                 >
-                  <SelectTrigger className="flex-2 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                     <SelectValue placeholder={`Select ${newItem.type}`} />
                   </SelectTrigger>
                   <SelectContent>
@@ -349,33 +394,35 @@ export function InvoicesPageContent({
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="item-quantity">Quantity</Label>
-              <Input
-                id="item-quantity"
-                type="number"
-                value={newItem.quantity}
-                onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) })}
-                className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
-              />
-            </div>
-            <div className="flex justify-end mt-4">
-              <Button
-                variant="outline"
-                className="border-pale-blush hover:bg-pale-blush/30 bg-transparent"
-                onClick={handleAddItem}
-              >
-                Add Item
-              </Button>
+              
+              <div className="grid grid-cols-3 gap-2">
+                <Input
+                  type="number"
+                  placeholder="Quantity"
+                  value={newItem.quantity}
+                  onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) || 1 })}
+                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="col-span-2 border-pale-blush hover:bg-pale-blush/30 bg-transparent"
+                  onClick={handleAddItem}
+                >
+                  Add Item
+                </Button>
+              </div>
             </div>
 
-            <div className="text-right text-xl font-bold mt-4">Total: ${newInvoice.totalAmount.toFixed(2)}</div>
+            <div className="col-span-4 text-right text-xl font-bold border-t pt-4">
+              Total: ${newInvoice.totalAmount.toFixed(2)}
+            </div>
           </div>
           <DialogFooter>
             <Button
-              onClick={handleAddInvoice}
-              className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
+              onClick={handleCreateInvoice}
+              className="bg-roseDark hover:bg-roseMedium text-white"
+              disabled={!newInvoice.clientId || !newInvoice.date || newInvoice.items.length === 0}
             >
               Create Invoice
             </Button>
@@ -385,20 +432,22 @@ export function InvoicesPageContent({
 
       {/* Edit Invoice Dialog */}
       <Dialog open={isEditInvoiceDialogOpen} onOpenChange={setIsEditInvoiceDialogOpen}>
-        <DialogContent className="sm:max-w-[400px] max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Invoice</DialogTitle>
           </DialogHeader>
-          <div className="space-y-6 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-client">Client</Label>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="edit-client" className="text-right">
+                Client
+              </Label>
               <Select
                 onValueChange={(value) =>
                   setCurrentInvoice(currentInvoice ? { ...currentInvoice, clientId: value } : null)
                 }
                 value={currentInvoice?.clientId || ""}
               >
-                <SelectTrigger className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select a client" />
                 </SelectTrigger>
                 <SelectContent>
@@ -410,25 +459,31 @@ export function InvoicesPageContent({
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-date">Date</Label>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="edit-date" className="text-right">
+                Date
+              </Label>
               <Input
                 id="edit-date"
                 type="date"
                 value={currentInvoice?.date || ""}
                 onChange={(e) => setCurrentInvoice(currentInvoice ? { ...currentInvoice, date: e.target.value } : null)}
-                className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-status">Status</Label>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="edit-status" className="text-right">
+                Status
+              </Label>
               <Select
                 onValueChange={(value) =>
                   setCurrentInvoice(currentInvoice ? { ...currentInvoice, status: value as Invoice["status"] } : null)
                 }
                 value={currentInvoice?.status || ""}
               >
-                <SelectTrigger className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -439,53 +494,49 @@ export function InvoicesPageContent({
               </Select>
             </div>
 
-            <h3 className="text-lg font-semibold mt-4">Items</h3>
-            <div className="space-y-3">
-              {currentInvoice?.items.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center p-3 border rounded-lg border-pale-blush/50 bg-pale-blush/10"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-gray-600">{item.type === "service" ? "Service" : "Product"}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-700">
-                      ${item.price.toFixed(2)} x {item.quantity}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        if (currentInvoice) {
-                          const updatedItems = currentInvoice.items.filter((_, i) => i !== index)
-                          const updatedTotal = updatedItems.reduce((sum, i) => sum + i.price * i.quantity, 0)
-                          setCurrentInvoice({
-                            ...currentInvoice,
-                            items: updatedItems,
-                            totalAmount: updatedTotal,
-                          })
-                        }
-                      }}
+            {/* Items Section for Edit */}
+            <div className="col-span-4 space-y-3">
+              <h3 className="text-lg font-semibold">Items</h3>
+              {currentInvoice?.items && currentInvoice.items.length > 0 && (
+                <div className="space-y-2">
+                  {currentInvoice.items.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center p-3 border rounded-lg border-pale-blush/50 bg-pale-blush/10"
                     >
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </div>
+                      <div className="flex-1">
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-sm text-gray-600">{item.type === "service" ? "Service" : "Product"}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-700">
+                          ${item.price.toFixed(2)} x {item.quantity}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleRemoveItemFromCurrentInvoice(index)}
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
 
-            <div className="space-y-2 mt-4">
-              <Label htmlFor="edit-item-type">Add Item</Label>
-              <div className="flex gap-2">
+            {/* Add Item Section for Edit */}
+            <div className="col-span-4 space-y-3 border-t pt-4">
+              <Label>Add Item</Label>
+              <div className="grid grid-cols-2 gap-2">
                 <Select
                   onValueChange={(value) =>
                     setNewItem({ ...newItem, type: value as InvoiceItem["type"], id: "", name: "", price: 0 })
                   }
                   value={newItem.type}
                 >
-                  <SelectTrigger className="flex-1 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -493,6 +544,7 @@ export function InvoicesPageContent({
                     <SelectItem value="product">Product</SelectItem>
                   </SelectContent>
                 </Select>
+                
                 <Select
                   onValueChange={(value) => {
                     const selectedItem =
@@ -508,7 +560,7 @@ export function InvoicesPageContent({
                   }}
                   value={newItem.id}
                 >
-                  <SelectTrigger className="flex-2 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
                     <SelectValue placeholder={`Select ${newItem.type}`} />
                   </SelectTrigger>
                   <SelectContent>
@@ -526,46 +578,34 @@ export function InvoicesPageContent({
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-item-quantity">Quantity</Label>
-              <Input
-                id="edit-item-quantity"
-                type="number"
-                value={newItem.quantity}
-                onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) })}
-                className="w-full rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
-              />
-            </div>
-            <div className="flex justify-end mt-4">
-              <Button
-                variant="outline"
-                className="border-pale-blush hover:bg-pale-blush/30 bg-transparent"
-                onClick={() => {
-                  if (currentInvoice && newItem.id && newItem.name && newItem.price > 0) {
-                    const updatedItems = [...currentInvoice.items, newItem]
-                    const updatedTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-                    setCurrentInvoice({
-                      ...currentInvoice,
-                      items: updatedItems,
-                      totalAmount: updatedTotal,
-                    })
-                    setNewItem({ type: "service", id: "", name: "", price: 0, quantity: 1 })
-                  }
-                }}
-              >
-                Add Item
-              </Button>
+              
+              <div className="grid grid-cols-3 gap-2">
+                <Input
+                  type="number"
+                  placeholder="Quantity"
+                  value={newItem.quantity}
+                  onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) || 1 })}
+                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="col-span-2 border-pale-blush hover:bg-pale-blush/30 bg-transparent"
+                  onClick={handleAddItemToCurrentInvoice}
+                >
+                  Add Item
+                </Button>
+              </div>
             </div>
 
-            <div className="text-right text-xl font-bold mt-4">
+            <div className="col-span-4 text-right text-xl font-bold border-t pt-4">
               Total: ${currentInvoice?.totalAmount.toFixed(2) || "0.00"}
             </div>
           </div>
           <DialogFooter>
             <Button
               onClick={handleEditInvoice}
-              className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
+              className="bg-roseDark hover:bg-roseMedium text-white"
             >
               Save Changes
             </Button>
