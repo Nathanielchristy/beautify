@@ -31,7 +31,7 @@ const sidebarItems = [
 
 export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }: AppSidebarProps) {
   return (
-    <Sidebar>
+    <Sidebar className="hidden lg:flex">
       <SidebarHeader className="items-center">
         <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
           <Image src="/group-1@2x.png" alt="Glow Look Logo" width={80} height={80} className="h-20 w-20" />

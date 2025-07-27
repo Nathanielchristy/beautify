@@ -649,9 +649,9 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
           setIsDarkMode={setIsDarkMode}
           userEmail={userEmail}
         />
-        <main className="flex-1 overflow-auto p-4 sm:p-6">{renderContent()}</main>
+        <main className="flex-1 overflow-auto p-4 sm:p-6 pb-24 lg:pb-6">{renderContent()}</main>
         {/* Mobile Bottom Navigation - Keep this as it's a separate navigation */}
-        <div className="lg:hidden bg-white/90 backdrop-blur-xl border-t border-peach-light px-4 py-2 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white/90 backdrop-blur-xl border-t border-peach-light px-4 py-2 shadow-lg z-50">
           <div className="flex items-center justify-around">
             {bottomNavItems.map((item) => {
               const Icon = item.icon

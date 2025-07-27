@@ -99,3 +99,9 @@
     @apply bg-mintBackground text-foreground;
   }
 }
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

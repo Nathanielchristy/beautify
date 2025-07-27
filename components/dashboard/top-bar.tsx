@@ -1,6 +1,6 @@
 "use client"
 
-import { Moon, Sun, Bell } from "lucide-react"
+import { Moon, Sun, Bell, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SidebarTrigger } from "@/components/ui/sidebar"
@@ -17,7 +17,9 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
     <header className="bg-white/80 backdrop-blur-xl border-b border-roseLight-DEFAULT px-4 sm:px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <SidebarTrigger className="-ml-1" />
+          <SidebarTrigger className="-ml-1">
+            <Menu className="h-6 w-6" />
+          </SidebarTrigger>
 
           <div>
             <h2 className="text-lg font-semibold text-gray-800 capitalize">
@@ -49,9 +51,9 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
           </Button>
 
           <div className="flex items-center space-x-3">
-            <div className="text-right hidden sm:block">
+            <div className="text-right">
               <p className="text-sm font-medium text-gray-800">Admin User</p>
-              <p className="text-xs text-gray-600">{userEmail}</p>
+              <p className="text-xs text-gray-600 truncate max-w-[100px] sm:max-w-full">{userEmail}</p>
             </div>
             <Avatar className="w-10 h-10">
               <AvatarImage src="/placeholder.svg?height=40&width=40&text=AU" />
