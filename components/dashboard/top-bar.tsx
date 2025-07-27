@@ -27,7 +27,6 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
     <header className="bg-white/80 backdrop-blur-xl border-b border-roseLight-DEFAULT px-4 sm:px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <SidebarTrigger className="-ml-1 lg:hidden" />
           <div className="hidden lg:block">
             <h2 className="text-lg font-semibold text-gray-800 capitalize">
               {activeTab === "dashboard" ? "Dashboard Overview" : `${activeTab} Management`}
