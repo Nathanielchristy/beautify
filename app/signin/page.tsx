@@ -15,7 +15,12 @@ interface SignInPageProps {
 export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [loginMessage, setLoginMessage] = useState("")
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
 
   // Data for the login form
   const loginData = {
@@ -35,8 +40,8 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   }
 
   return (
-    <main className="bg-[#f9f6f6] w-screen h-screen flex overflow-hidden p-4 sm:p-6 lg:p-8">
-      <div className="flex w-full h-full max-w-full">
+    <main className="bg-[#f9f6f6] w-screen h-screen flex overflow-hidden">
+      <div className="flex w-full h-full max-w-full p-4 sm:p-6 lg:p-8">
         {/* Left: Salon Image */}
         <div className="w-1/3 h-full hidden lg:block relative">
           <Image
@@ -82,7 +87,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
               <div className="mb-3 lg:mb-4 flex justify-center">
                 <div className="w-full sm:w-3/4 lg:w-1/2 relative">
                   <Input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="w-full h-10 lg:h-12 bg-white rounded-full px-4 lg:px-5 text-sm lg:text-base font-['Outfit',Helvetica]"
                     placeholder="Password"
                     value={password}
@@ -94,6 +99,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                     src={loginData.eyeIcon || "/placeholder.svg"}
                     width={20}
                     height={20}
+                    onClick={togglePasswordVisibility}
                   />
                 </div>
               </div>
