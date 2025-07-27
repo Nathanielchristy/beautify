@@ -12,20 +12,43 @@ interface TopBarProps {
   userEmail: string
 }
 
+import Image from "next/image"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+
 export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopBarProps) {
   return (
     <header className="bg-white/80 backdrop-blur-xl border-b border-roseLight-DEFAULT px-4 sm:px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <SidebarTrigger className="-ml-1" />
-
-          <div>
+          <SidebarTrigger className="-ml-1 lg:hidden" />
+          <div className="hidden lg:block">
             <h2 className="text-lg font-semibold text-gray-800 capitalize">
               {activeTab === "dashboard" ? "Dashboard Overview" : `${activeTab} Management`}
             </h2>
             <p className="text-sm text-gray-600">
               {activeTab === "dashboard" ? "Welcome back!" : `Manage your ${activeTab}`}
             </p>
+          </div>
+          <div className="lg:hidden flex items-center gap-2">
+            <Image src="/group-1@2x.png" alt="Glow Look Logo" width={32} height={32} />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="capitalize">{activeTab}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
           </div>
         </div>
 

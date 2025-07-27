@@ -34,10 +34,16 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 // 3. Add `import { AppSidebar } from "./app-sidebar"`
 import { AppSidebar } from "./app-sidebar"
 
+import { UserCheck, Scissors, Package, FileText } from "lucide-react"
+
 const bottomNavItems = [
   { id: "dashboard", label: "Dashboard", icon: Home },
-  { id: "bookings", label: "Bookings", icon: Calendar },
   { id: "clients", label: "Clients", icon: Users },
+  { id: "staff", label: "Staff", icon: UserCheck },
+  { id: "services", label: "Services", icon: Scissors },
+  { id: "bookings", label: "Bookings", icon: Calendar },
+  { id: "inventory", label: "Inventory", icon: Package },
+  { id: "invoices", label: "Invoices", icon: FileText },
   { id: "reports", label: "Reports", icon: BarChart3 },
 ]
 
@@ -661,8 +667,8 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   onClick={() => handleTabChange(item.id)}
                   className={`flex flex-col items-center space-y-1 p-2 rounded-xl transition-all duration-200 ${
                     activeTab === item.id
-                      ? "bg-gradient-to-r from-primary-blue to-mint-dark text-white shadow-md"
-                      : "text-gray-600 hover:bg-mint-light/30"
+                      ? "bg-gradient-to-r from-[#92278f] to-[#e83e8c] text-white shadow-md"
+                      : "text-gray-600 hover:bg-pink-100/50"
                   }`}
                 >
                   <Icon className="h-5 w-5" strokeWidth={2} />
