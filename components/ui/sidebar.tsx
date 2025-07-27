@@ -29,9 +29,7 @@ export const SidebarProvider = ({
   collapsible?: "classic" | "modern" | "none"
   side?: "left" | "right"
 }) => {
-  const isDesktop = window.matchMedia("(min-width: 1024px)").matches
-  const [open, setOpen] = React.useState(isDesktop ? defaultOpen : false)
-
+  const [open, setOpen] = React.useState(defaultOpen)
   return (
     <SidebarContext.Provider value={{ open, setOpen, collapsible, side }}>
       {children}
@@ -67,8 +65,6 @@ export interface SidebarProps
   side?: "left" | "right"
 }
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-
 const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
   (
     {
@@ -80,32 +76,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
     },
     ref
   ) => {
-    const { open, setOpen, collapsible, side } = useSidebar()
-    const isDesktop = window.matchMedia("(min-width: 1024px)").matches
-
-    if (!isDesktop) {
-      return (
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <div ref={ref} {...props} />
-          </SheetTrigger>
-          <SheetContent side={side} className="w-64 p-0">
-            <div
-              className={cn(
-                sidebarVariants({
-                  variant,
-                  state: "open",
-                }),
-                "h-full"
-              )}
-            >
-              {props.children}
-            </div>
-          </SheetContent>
-        </Sheet>
-      )
-    }
-
+    const { open, collapsible, side } = useSidebar()
     return (
       <div
         ref={ref}
@@ -114,8 +85,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
             variant,
             state: open ? "open" : "closed",
           }),
-          "group/sidebar-wrapper",
-          className
+          "group/sidebar-wrapper"
         )}
         data-side={localSide ?? side}
         {...props}
@@ -332,14 +302,12 @@ const SidebarInset = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { open } = useSidebar()
-  const isDesktop = window.matchMedia("(min-width: 1024px)").matches
-
   return (
     <div
       ref={ref}
       className={cn(
         "transition-all duration-300 ease-in-out",
-        isDesktop && (open ? "ml-64" : "ml-16"),
+        "lg:ml-64",
         className
       )}
       {...props}
