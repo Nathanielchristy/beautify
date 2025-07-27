@@ -683,7 +683,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
       {/* All Modals */}
       {/* Logout Confirmation Modal */}
       <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Confirm Logout</DialogTitle>
             <DialogDescription className="text-gray-600">
@@ -711,7 +711,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Client Modal */}
       <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Add New Client</DialogTitle>
             <DialogDescription className="text-gray-600">
@@ -792,7 +792,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Staff Modal */}
       <Dialog open={isAddStaffOpen} onOpenChange={setIsAddStaffOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Add Staff Member</DialogTitle>
             <DialogDescription className="text-gray-600">Enter staff member information.</DialogDescription>
@@ -887,7 +887,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Service Modal */}
       <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Add New Service</DialogTitle>
             <DialogDescription className="text-gray-600">Create a new service offering.</DialogDescription>
@@ -986,7 +986,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Edit Service Modal */}
       <Dialog open={isEditServiceOpen} onOpenChange={setIsEditServiceOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Edit Service</DialogTitle>
             <DialogDescription className="text-gray-600">Update service information.</DialogDescription>
@@ -1096,7 +1096,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Category Modal */}
       <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Add New Category</DialogTitle>
             <DialogDescription className="text-gray-600">Create a new service category.</DialogDescription>
@@ -1138,7 +1138,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Booking Modal */}
       <Dialog open={isAddBookingOpen} onOpenChange={setIsAddBookingOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Create New Booking</DialogTitle>
             <DialogDescription className="text-gray-600">Schedule a new appointment.</DialogDescription>
@@ -1274,7 +1274,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Inventory Item Modal */}
       <Dialog open={isAddInventoryOpen} onOpenChange={setIsAddInventoryOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Add Inventory Item</DialogTitle>
             <DialogDescription className="text-gray-600">Add a new product to inventory.</DialogDescription>
@@ -1387,7 +1387,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Create Invoice Modal */}
       <Dialog open={isCreateInvoiceOpen} onOpenChange={setIsCreateInvoiceOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Create Invoice</DialogTitle>
             <DialogDescription className="text-gray-600">Generate invoice from completed bookings.</DialogDescription>
@@ -1414,7 +1414,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* View Details Modal */}
       <Dialog open={isViewDetailsOpen} onOpenChange={setIsViewDetailsOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">View Details</DialogTitle>
             <DialogDescription className="text-gray-600">
@@ -1616,7 +1616,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Update Quantity Modal */}
       <Dialog open={isUpdateQuantityOpen} onOpenChange={setIsUpdateQuantityOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Update Quantity</DialogTitle>
             <DialogDescription className="text-gray-600">
@@ -1661,7 +1661,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Delete Confirmation Modal */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-md mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Confirm Delete</DialogTitle>
             <DialogDescription className="text-gray-600">
@@ -1688,7 +1688,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Manage Order Modal */}
       <Dialog open={isManageOrderOpen} onOpenChange={setIsManageOrderOpen}>
-        <DialogContent className="sm:max-w-lg mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent className="sm:max-w-lg mx-4 bg-white/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-pop-up">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-800">Manage Service Order</DialogTitle>
             <DialogDescription className="text-gray-600">

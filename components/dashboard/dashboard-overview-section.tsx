@@ -68,7 +68,7 @@ export function DashboardOverviewSection({
   const salesData = generateSalesData()
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="bg-gradient-to-r from-roseDark-DEFAULT via-roseMedium-DEFAULT to-roseLight-DEFAULT rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
         <div className="absolute inset-0 bg-[rgba(231,12,132,1)]"></div>
         <div className="relative z-10">
@@ -80,7 +80,7 @@ export function DashboardOverviewSection({
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseLight-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseLight-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl animate-slide-in-from-bottom">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -95,7 +95,7 @@ export function DashboardOverviewSection({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseMedium-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseMedium-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl animate-slide-in-from-bottom" style={{ animationDelay: '0.1s' }}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -110,7 +110,7 @@ export function DashboardOverviewSection({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-success-light border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-success-light border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl animate-slide-in-from-bottom" style={{ animationDelay: '0.2s' }}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -125,7 +125,7 @@ export function DashboardOverviewSection({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-info-light border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-info-light border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl animate-slide-in-from-bottom" style={{ animationDelay: '0.3s' }}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -142,7 +142,7 @@ export function DashboardOverviewSection({
       </div>
 
       {/* Recent Sales Chart - Moved before the other cards */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
         <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-6">
@@ -216,7 +216,7 @@ export function DashboardOverviewSection({
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in" style={{ animationDelay: '0.5s' }}>
         <RecentBookingsCard
           bookings={bookings}
           setSelectedItem={setSelectedItem}
