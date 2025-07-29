@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 import { Button } from "../../components/ui/button"
-import { Card, CardContent } from "../../components/ui/card"
 import { Input } from "../../components/ui/input"
-import { Separator } from "../../components/ui/separator"
 import Image from "next/image"
+import Link from "next/link"
 import type { JSX } from "react"
+import { Eye, EyeOff } from "lucide-react"
 
 interface SignInPageProps {
   onLogin: (email: string) => void
@@ -15,155 +15,135 @@ interface SignInPageProps {
 export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
   const [loginMessage, setLoginMessage] = useState("")
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
-
-  // Data for the login form
-  const loginData = {
-    logo: "/group-1@2x.png",
-    salonImage: "/rectangle-8.png", // Using local image for salon background
-    googleIcon: "/google-1@2x.png",
-    eyeIcon: "/mask-group@2x.png",
-  }
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleLoginClick = () => {
     if (email === "dummy@example.com" && password === "password123") {
       setLoginMessage("Login successful!")
-      onLogin(email) // Call the onLogin prop to update parent state
+      onLogin(email)
     } else {
       setLoginMessage("Invalid email or password.")
     }
   }
 
   return (
-    <main className="bg-[#f9f6f6] w-screen h-screen flex overflow-hidden">
-      <div className="flex w-full h-full max-w-full p-4 sm:p-6 lg:p-8">
-        {/* Left: Salon Image */}
-        <div className="w-1/3 h-full hidden lg:block relative">
-          <Image
-            className="object-cover rounded-[30px] "
-            alt="Beauty salon interior"
-            src={loginData.salonImage || "/placeholder.svg"}
-            fill
-            priority // Added priority for LCP image
-          />
-        </div>
+    <main className="min-h-screen w-full overflow-x-hidden relative bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url("/background-image.jpg")'}}>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#060606]/80 via-[#060606]/60 to-[#060606]/90"></div>
+      <div className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-8">
+        <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-16 xl:gap-24">
 
-        {/* Right: Login Card */}
-        <div className="w-full lg:w-2/3 h-full min-w-0">
-          <Card className="w-full h-full bg-[#fde5f3] rounded-[30px] border-[5px] border-solid border-[#dd0e7f] p-4 sm:p-6 lg:p-8">
-            <CardContent className="p-0 h-full flex flex-col justify-center max-h-full overflow-hidden min-w-0">
-              {/* Logo and brand */}
-              <div className="flex flex-col items-center mb-4 lg:mb-6">
-                <Image
-                  className="w-16 sm:w-20 lg:w-24 h-auto"
-                  alt="Glow Look logo"
-                  src={loginData.logo || "/placeholder.svg"}
-                  width={96}
-                  height={96}
-                />
-                <h1 className="font-['Outfit',Helvetica] text-xl sm:text-2xl lg:text-3xl mt-2 lg:mt-3 text-[#92278f]">
-                  Glow <span className="font-extrabold">Look</span>
-                </h1>
-                <h2 className="text-sm sm:text-lg lg:text-xl text-black">Beauty Salon</h2>
-              </div>
+          {/* Left side - Woman image */}
+          <div className="hidden lg:flex lg:w-1/2 lg:max-w-[705px] lg:h-[500px] xl:h-[600px] 2xl:h-[685px] flex-shrink-0 lg:order-1">
+            {/* <Image
+              src="/women-grey.png"
+              alt="Woman with styled hair"
+              width={705}
+              height={685}
+              className="object-cover w-full h-full rounded-lg shadow-2xl"
+              priority
+            /> */}
+          </div>
 
-              {/* Email field */}
-              <div className="mb-3 lg:mb-4 flex justify-center">
+          {/* Right side - Login form area */}
+          <div className="flex flex-col items-center justify-center flex-shrink-0 lg:order-2 lg:w-1/2 lg:max-w-[700px] relative w-full">
+
+            {/* Logo positioned above the form */}
+            <div className="absolute -top-4 xs:-top-5 sm:-top-6 md:-top-8 lg:-top-16 xl:-top-20 left-1/2 transform -translate-x-1/2 z-10">
+              <Image
+                src="/gabi_logo.webp"
+                alt="GABI Logo"
+                width={255}
+                height={255}
+                className="object-cover w-28 h-28 xs:w-32 xs:h-32 sm:w-36 sm:h-36 md:w-32 md:h-32 lg:w-40 lg:h-40 xl:w-48 xl:h-48 2xl:w-64 2xl:h-64 pt-10"
+              />
+            </div>
+
+            {/* Form container */}
+            <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-[500px] xs:min-h-[550px] sm:min-h-[600px] md:min-h-[650px] lg:min-h-[688px] rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-[#FFDE59] bg-white/[0.03] shadow-[0_5px_40px_0_rgba(255,222,89,0.60)] backdrop-blur-sm flex flex-col items-center justify-center p-6 xs:p-7 sm:p-8 md:p-10 lg:p-12 xl:p-16 pt-16 xs:pt-18 sm:pt-20 md:pt-22 lg:pt-24 xl:pt-28">
+
+              {/* Email Input */}
+              <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-3 sm:mb-4 md:mb-5">
                 <Input
-                  className="w-full sm:w-3/4 lg:w-1/2 h-10 lg:h-12 bg-white rounded-full px-4 lg:px-5 text-sm lg:text-base font-['Outfit',Helvetica]"
-                  placeholder="Email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  placeholder="Email"
                 />
               </div>
 
-              {/* Password field */}
-              <div className="mb-3 lg:mb-4 flex justify-center">
-                <div className="w-full sm:w-3/4 lg:w-1/2 relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    className="w-full h-10 lg:h-12 bg-white rounded-full px-4 lg:px-5 text-sm lg:text-base font-['Outfit',Helvetica]"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Image
-                    className="absolute w-4 lg:w-5 h-4 lg:h-5 top-1/2 -translate-y-1/2 right-4 lg:right-5 cursor-pointer"
-                    alt="Show password"
-                    src={loginData.eyeIcon || "/placeholder.svg"}
-                    width={20}
-                    height={20}
-                    onClick={togglePasswordVisibility}
-                  />
-                </div>
+              {/* Password Input */}
+              <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-4 sm:mb-5 md:mb-6 lg:mb-7">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  placeholder="Password"
+                />
+
+                {/* Eye Icon Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFD700] hover:text-yellow-400 transition"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
 
-              {/* Forget password */}
-              <div className="mb-3 lg:mb-4 flex justify-center">
-                <div className="w-full sm:w-3/4 lg:w-1/2 text-center text-xs text-black font-['Outfit',Helvetica]">
-                  <a href="#" className="cursor-pointer">
-                    Forget Password ?
-                  </a>
-                </div>
+              {/* Forget Password Link */}
+              <div className="w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] text-center mb-5 sm:mb-6 md:mb-7 lg:mb-8">
+                <Link 
+                  href="/forgot-password" 
+                  className="text-white font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline"
+                >
+                  Forget Password?
+                </Link>
               </div>
 
               {/* Login Button */}
-              <div className="mb-3 lg:mb-4 flex justify-center">
+              <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-7">
                 <Button
-                  className="w-full sm:w-3/4 lg:w-1/2 h-10 lg:h-12 rounded-full bg-[#92278f] hover:bg-[#92278f]/90"
                   onClick={handleLoginClick}
+                  className="w-32 xs:w-36 sm:w-40 md:w-44 lg:w-48 xl:w-52 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.97)] hover:bg-[#FFDE59] hover:scale-105 active:scale-95 text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
-                  <span className="font-['Outfit',Helvetica] font-extrabold text-white text-sm lg:text-lg">Log In</span>
+                  Login
                 </Button>
               </div>
 
+              {/* Error/Success Message */}
               {loginMessage && (
-                <p
-                  className={`text-center text-xs lg:text-sm mb-3 lg:mb-4 ${loginMessage.includes("successful") ? "text-green-600" : "text-red-600"}`}
-                >
-                  {loginMessage}
-                </p>
+                <div className="mb-3 sm:mb-4 md:mb-5 lg:mb-6 text-center w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px]">
+                  <p className={`font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl px-2 py-2 rounded-lg backdrop-blur-sm ${
+                    loginMessage.includes("successful") 
+                      ? "text-green-400 bg-green-400/10 border border-green-400/20" 
+                      : "text-red-400 bg-red-400/10 border border-red-400/20"
+                  } transition-all duration-200`}>
+                    {loginMessage}
+                  </p>
+                </div>
               )}
 
-              {/* OR Divider */}
-              <div className="flex items-center justify-center mb-3 lg:mb-4">
-                <Separator className="w-1/4" />
-                <span className="mx-3 text-xs text-black font-['Outfit',Helvetica]">OR</span>
-                <Separator className="w-1/4" />
-              </div>
-
-              {/* Google Login */}
-              <div className="mb-3 lg:mb-4 flex justify-center">
-                <Button
-                  variant="outline"
-                  className="w-full sm:w-3/4 lg:w-1/2 h-10 lg:h-12 bg-white rounded-full flex items-center justify-center"
-                >
-                  <Image
-                    className="w-3 lg:w-4 h-3 lg:h-4 mr-2"
-                    alt="Google"
-                    src={loginData.googleIcon || "/placeholder.svg"}
-                    width={16}
-                    height={16}
-                  />
-                  <span className="text-xs text-black font-['Outfit',Helvetica]">Login With Google</span>
-                </Button>
-              </div>
-
               {/* Sign up link */}
-              <div className="text-center text-xs font-['Outfit',Helvetica]">
-                <span className="text-black">Don&apos;t have an account? </span>
-                <a href="/signup" className="font-bold text-[#e70c84]">
-                  Sign up
-                </a>
+              <div className="text-center px-2 max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px]">
+                <div className="flex flex-col xs:flex-row items-center justify-center gap-1 xs:gap-2">
+                  <span className="text-white font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+                    Don&apos;t have an account?
+                  </span>
+                  <Link
+                    href="/signup"
+                    className="text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline font-medium"
+                  >
+                    Sign up
+                  </Link>
+                </div>
               </div>
-            </CardContent>
-          </Card>
+
+            </div>
+          </div>
         </div>
       </div>
     </main>

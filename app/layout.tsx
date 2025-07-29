@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
+import { Reem_Kufi_Fun } from "next/font/google";
 import "./globals.css";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const reemKufiFun = Reem_Kufi_Fun({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-reem-kufi-fun",
 });
 
 export const metadata: Metadata = {
@@ -20,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={quicksand.className}>{children}</body>
+      <body className={`${quicksand.className} ${reemKufiFun.variable}`}>{children}</body>
     </html>
   );
 }

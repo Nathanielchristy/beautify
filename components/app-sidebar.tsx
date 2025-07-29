@@ -35,13 +35,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
       <Sidebar>
         <SidebarHeader className="items-center">
           <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
-            <Image src="/group-1@2x.png" alt="Glow Look Logo" width={80} height={80} className="h-20 w-20" />
-            <div className="flex flex-col items-center mt-2">
-              <h1 className="font-['Outfit',Helvetica] text-2xl text-[#92278f]">
-                Glow <span className="font-extrabold">Look</span>
-              </h1>
-              <h2 className="text-lg text-black">Beauty Salon</h2>
-            </div>
+            <Image src="/gabi_logo.webp" alt="Glow Look Logo" width={80} height={80} className="h-20 w-20" />
           </a>
         </SidebarHeader>
         <SidebarContent>
@@ -49,15 +43,15 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
             {sidebarItems.map((item) => {
               const Icon = item.icon
               return (
-                <SidebarMenuItem key={item.id} className="bg-pink-100">
+                <SidebarMenuItem key={item.id} className="bg-black-100">
                   <SidebarMenuButton
                     asChild
                     isActive={activeTab === item.id}
                     onClick={() => handleTabChange(item.id)}
                     className="flex items-center gap-3"
-                    style={activeTab === item.id ? { backgroundColor: '#92278f', color: 'white' } : {}}
+                    style={activeTab === item.id ? { backgroundColor: '#FFDE59', color: 'white' } : {}}
                   >
-                    <a href="#" className="flex items-center gap-3" style={activeTab === item.id ? { backgroundColor: '#92278f', color: 'white' } : {}}>
+                    <a href="#" className="flex items-center gap-3" style={activeTab === item.id ? { backgroundColor: '#FFDE59', color: 'black' } : {}}>
                       <Icon className="h-4 w-4" />
                       <span>{item.label}</span>
                     </a>

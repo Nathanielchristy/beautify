@@ -3,92 +3,73 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 20 20% 98%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 210 40% 50%; /* #5D9CEC */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 10% 96%;
-    --secondary-foreground: 210 40% 50%;
-    --muted: 210 10% 96%;
-    --muted-foreground: 210 10% 45%;
-    --accent: 210 10% 96%;
-    --accent-foreground: 210 40% 50%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 210 10% 91%;
-    --input: 210 10% 91%;
-    --ring: 210 40% 50%;
-    --radius: 0.5rem;
+:root {
+  --background: hsla(0, 0%, 0%, 0.6);              /* Black background */
+  --foreground: 48 100% 60%;          /* Gold foreground */
 
-    /* Custom colors from palette */
-    --peach-light: 30 90% 95%; /* #FFF0E6 */
-    --peach-medium: 30 90% 85%; /* #FFD1B3 */
-    --mint-dark: 150 40% 40%; /* #4DB380 */
-    --mint-deep: 150 40% 25%; /* #317A52 */
-    --mint-background: 150 40% 97%; /* #E6F7EB */
+  --card: 0 0% 5%;
+  --card-foreground: 48 100% 60%;
 
-    /* Semantic colors based on new palette */
-    --success: var(--mint-dark);
-    --success-light: var(--peach-light);
-    --success-foreground: var(--mint-background);
-    --warning: var(--peach-medium);
-    --warning-light: var(--mint-background);
-    --warning-foreground: var(--mint-deep);
-    --purple-600: 147 51% 43%; /* #7C3AED equivalent */
-    --purple-50: 250 100% 98%;
-    --purple-100: 243 100% 96%;
-    --purple-200: 243 96% 91%;
-    --purple-300: 242 91% 81%;
-    --purple-400: 242 83% 67%;
-    --purple-500: 242 78% 56%;
-    --purple-600: 242 78% 47%;
-    --purple-700: 242 75% 38%;
-    --purple-800: 242 69% 32%;
-    --purple-900: 242 47% 23%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 48 100% 60%;
 
-    --info: var(--peach-light);
-    --info-light: var(--mint-background);
-    --info-foreground: var(--mint-deep);
+  --gold: 48 100% 60%;                /* Main Gold */
+  --gold-dark: 48 100% 50%;
+  --gold-light: 48 100% 80%;
+  --gold-foreground: 0 0% 0%;         /* Black on gold */
 
-    --danger: var(--mint-deep);
-    --danger-light: var(--peach-light);
-    --danger-foreground: var(--mint-background);
-  }
+  --primary: var(--gold);
+  --primary-foreground: var(--gold-foreground);
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: var(--gold);
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 48 100% 50%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+  --accent: 0 0% 25%;
+  --accent-foreground: var(--gold);
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+  --border: 48 100% 30%;              /* Deep gold border */
+  --input: 0 0% 20%;
+  --ring: var(--gold-light);
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+  --radius: 0.5rem;
+}
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+.dark {
+  --background: 0 0% 0% / 0.6;              /* Black background */
+  --foreground: 48 100% 60%;          /* Gold foreground */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+  --card: 0 0% 5%;
+  --card-foreground: 48 100% 60%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+  --popover: 0 0% 10%;
+  --popover-foreground: 48 100% 60%;
+
+  --primary: var(--gold);
+  --primary-foreground: 0 0% 0% / 0.6;      /* Black on gold */
+
+  --secondary: 0 0% 15%;
+  --secondary-foreground: var(--gold);
+
+  --muted: 0 0% 20%;
+  --muted-foreground: 48 100% 50%;
+
+  --accent: 0 0% 25%;
+  --accent-foreground: var(--gold);
+
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 48 100% 30%;
+  --input: 0 0% 20%;
+  --ring: var(--gold-light);
+}
+
 }
 
 @layer base {

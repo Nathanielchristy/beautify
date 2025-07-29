@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        'reem-kufi-fun': ['var(--font-reem-kufi-fun)', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -95,7 +98,7 @@ const config = {
           brown: "#733A31",
         },
         roseLight: {
-          DEFAULT: "#F5E1E1",
+          DEFAULT: "##00000099",
         },
         roseDark: {
           DEFAULT: "#C895B8",

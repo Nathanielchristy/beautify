@@ -24,14 +24,14 @@ import {
 
 export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopBarProps) {
   return (
-    <header className="bg-white/80 backdrop-blur-xl border-b border-roseLight-DEFAULT px-4 sm:px-6 py-4 shadow-sm">
+    <header className="bg-black/90 backdrop-blur-xl border-b border-gray-200 px-4 sm:px-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="hidden lg:block">
-            <h2 className="text-lg font-semibold text-gray-800 capitalize">
+            <h2 className="text-lg font-semibold text-white capitalize">
               {activeTab === "dashboard" ? "Dashboard Overview" : `${activeTab} Management`}
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-white">
               {activeTab === "dashboard" ? "Welcome back!" : `Manage your ${activeTab}`}
             </p>
           </div>
@@ -72,8 +72,8 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
 
           <div className="flex items-center space-x-3">
             <div className="text-right">
-              <p className="text-sm font-medium text-gray-800">Admin User</p>
-              <p className="text-xs text-gray-600 truncate max-w-[100px] sm:max-w-full">{userEmail}</p>
+              <p className="text-sm font-medium text-white">Admin User</p>
+              <p className="text-xs text-white truncate max-w-[100px] sm:max-w-full">{userEmail}</p>
             </div>
             <Avatar className="w-10 h-10">
               <AvatarImage src="/placeholder.svg?height=40&width=40&text=AU" />
