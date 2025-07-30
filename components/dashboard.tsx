@@ -1707,10 +1707,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Manage Order Modal */}
       <Dialog open={isManageOrderOpen} onOpenChange={setIsManageOrderOpen}>
-        <DialogContent
-          className="sm:max-w-lg mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl"
-          style={{ transform: "translate(0, 0)" }}
-        >
+        <DialogContent className="sm:max-w-lg mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl transform-gpu">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-white">Manage Service Order</DialogTitle>
             <DialogDescription className="text-white">
