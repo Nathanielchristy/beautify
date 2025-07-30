@@ -41,7 +41,7 @@ export function StaffPageContent({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Staff Management</h2>
+          <h2 className="text-2xl font-bold text-white">Staff Management</h2>
           <p className="text-gray-600">Manage your team members</p>
         </div>
         <Button
@@ -57,7 +57,7 @@ export function StaffPageContent({
         {filteredStaff.map((member) => (
           <Card
             key={member.id}
-            className="bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group rounded-2xl"
+            className="bg-black/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group rounded-2xl"
           >
             <CardContent className="p-6">
               <div className="flex items-center space-x-4 mb-4">
@@ -68,7 +68,7 @@ export function StaffPageContent({
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-800 text-lg">{member.name}</h3>
+                  <h3 className="font-semibold text-white text-lg">{member.name}</h3>
                   <Badge className={member.color}>{member.specialty}</Badge>
                 </div>
               </div>

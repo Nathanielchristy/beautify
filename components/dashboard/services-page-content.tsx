@@ -111,16 +111,17 @@ export function ServicesPageContent({
 
   return (
     <div className="flex h-full">
-      <div className="w-80 bg-white/80 backdrop-blur-sm border-r border-roseLight-DEFAULT p-6 rounded-l-2xl shadow-lg">
+      <div className="hidden sm:block w-80 bg-black/90 backdrop-blur-sm border-r border-roseLight-DEFAULT p-6 rounded-l-2xl shadow-lg">
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Categories</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">Categories</h3>
           <div className="space-y-2">
             <button
               onClick={() => setSelectedCategory("all")}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
                 selectedCategory === "all"
-                    ? "bg-gradient-to-r from-pink-400 to-pink-700 text-white shadow-lg"
-                    : "text-gray-700 hover:bg-roseLight-DEFAULT/30"
+                ? "bg-gradient-to-r from-[#FFD700] via-[#FFC300] to-[#FFB000] text-black shadow-xl"
+                : "text-[#FFD700] hover:bg-[#FFD700]/20 hover:text-black"
+
               }`}
             >
               <span className="font-medium">All categories</span>
@@ -133,8 +134,9 @@ export function ServicesPageContent({
                 onClick={() => setSelectedCategory(category)}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
                   selectedCategory === category
-                    ? "bg-gradient-to-r from-pink-400 to-pink-700 text-white shadow-lg"
-                    : "text-gray-700 hover:bg-roseLight-DEFAULT/30"
+                    ? "bg-gradient-to-r from-[#FFD700] via-[#FFC300] to-[#FFB000] text-black shadow-xl"
+                    : "text-[#FFD700] hover:bg-[#FFD700]/20 hover:text-black"
+
                 }`}
               >
                 <span className="font-medium">{category}</span>
@@ -157,7 +159,7 @@ export function ServicesPageContent({
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">Service Menu</h2>
+              <h2 className="text-2xl font-bold text-white">Service Menu</h2>
               <p className="text-gray-600">View and manage the services offered by your business</p>
             </div>
             <div className="flex space-x-2">
@@ -207,7 +209,7 @@ export function ServicesPageContent({
                   categoryServices.length > 0 && (
                     <div key={category}>
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-gray-800">{category}</h3>
+                        <h3 className="text-xl font-semibold text-white">{category}</h3>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
@@ -232,14 +234,14 @@ export function ServicesPageContent({
                         {categoryServices.map((service) => (
                           <Card
                             key={service.id}
-                            className="bg-white/80 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl"
+                            className="bg-black/50 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl"
                           >
                             <CardContent className="p-4">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-4">
                                   <div className="w-1 h-12 bg-gradient-to-b from-roseDark-DEFAULT to-roseMedium-DEFAULT rounded-full"></div>
                                   <div>
-                                    <h4 className="font-semibold text-gray-800">{service.name}</h4>
+                                    <h4 className="font-semibold text-white">{service.name}</h4>
                                     <p className="text-sm text-gray-600">{service.duration}min</p>
                                     {service.description && (
                                       <p className="text-xs text-gray-500 mt-1">{service.description}</p>
@@ -249,7 +251,7 @@ export function ServicesPageContent({
 
                                 <div className="flex items-center space-x-4">
                                   <div className="text-right">
-                                    <p className="font-bold text-lg text-gray-800">${service.price}</p>
+                                    <p className="font-bold text-lg text-white">${service.price}</p>
                                   </div>
                                   <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -301,7 +303,7 @@ export function ServicesPageContent({
             ) : (
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-gray-800">{selectedCategory}</h3>
+                  <h3 className="text-xl font-semibold text-white">{selectedCategory}</h3>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button

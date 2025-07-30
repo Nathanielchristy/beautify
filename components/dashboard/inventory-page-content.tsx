@@ -77,7 +77,7 @@ export function InventoryPageContent({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Inventory Management</h2>
+          <h2 className="text-2xl font-bold text-white">Inventory Management</h2>
           <p className="text-gray-600">Track your stock and supplies</p>
         </div>
         <Button
@@ -99,7 +99,7 @@ export function InventoryPageContent({
         />
       </div>
 
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
+      <Card className="bg-black/50 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">

@@ -39,7 +39,18 @@ export const SignUpPage = ({ onSignUp }: SignUpPageProps): JSX.Element => {
   }
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden relative bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url("/background-image.jpg")'}}>
+    <main className="min-h-screen w-full overflow-x-hidden relative bg-cover bg-center bg-no-repeat" >
+          {/* Video Element */}
+          <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+          >
+              <source src="/background-video.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+          </video>
       <div className="absolute inset-0 bg-gradient-to-br from-[#060606]/80 via-[#060606]/60 to-[#060606]/90"></div>
       <div className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-8">
         <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-16 xl:gap-24">

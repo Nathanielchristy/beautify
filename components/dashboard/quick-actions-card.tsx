@@ -18,7 +18,7 @@ export function QuickActionsCard({
   setIsCreateInvoiceOpen,
 }: QuickActionsCardProps) {
   return (
-    <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
+    <Card className="bg-black/95 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
       <CardHeader>
         <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
           <TrendingUp className="w-5 h-5 text-roseDark-DEFAULT" strokeWidth={2} />

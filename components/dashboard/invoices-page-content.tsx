@@ -165,7 +165,7 @@ export function InvoicesPageContent({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Invoice Management</h2>
+          <h2 className="text-2xl font-bold text-white">Invoice Management</h2>
           <p className="text-gray-600">Track payments and billing</p>
         </div>
         <Button
@@ -187,7 +187,7 @@ export function InvoicesPageContent({
         />
       </div>
 
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
+      <Card className="bg-black/50 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
@@ -195,7 +195,7 @@ export function InvoicesPageContent({
               <span>All Invoices ({searchFilteredInvoices.length})</span>
             </CardTitle>
             <Select value={invoiceStatusFilter} onValueChange={setInvoiceStatusFilter}>
-              <SelectTrigger className="w-full sm:w-40 rounded-xl border-roseLight-DEFAULT bg-white/50 backdrop-blur-sm">
+              <SelectTrigger className="w-full sm:w-40 rounded-xl border-roseLight-DEFAULT bg-black/50 backdrop-blur-sm">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>

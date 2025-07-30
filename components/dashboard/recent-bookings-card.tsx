@@ -14,7 +14,7 @@ interface RecentBookingsCardProps {
 
 export function RecentBookingsCard({ bookings, setSelectedItem, setIsViewDetailsOpen }: RecentBookingsCardProps) {
   return (
-    <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
+    <Card className="lg:col-span-2 bg-black/95 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
       <CardHeader>
         <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
           <Clock className="w-5 h-5 text-roseDark-DEFAULT" strokeWidth={2} />
@@ -40,12 +40,12 @@ export function RecentBookingsCard({ bookings, setSelectedItem, setIsViewDetails
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium text-gray-800">{booking.clientName}</p>
+                  <p className="font-medium text-white">{booking.clientName}</p>
                   <p className="text-sm text-gray-600">{booking.serviceName}</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-800">{booking.time}</p>
+                <p className="text-sm font-medium text-white">{booking.time}</p>
                 <Badge
                   className={
                     booking.status === "completed"

@@ -69,14 +69,14 @@ export function DashboardOverviewSection({
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-roseDark-DEFAULT via-roseMedium-DEFAULT to-roseLight-DEFAULT rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
-        <div className="absolute inset-0 bg-[rgba(231,12,132,1)]"></div>
+      <div className="bg-gradient-to-r from-black via-black to-black rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
+        <div className="absolute inset-0 bg-[#000000]"></div>
         <div className="relative z-10">
-          <h1 className="text-2xl font-bold mb-2">Welcome back to Glow Look! ✨</h1>
+          <h1 className="text-2xl font-bold mb-2">Welcome back to GABI By ! ✨</h1>
           <p className="text-roseBackground-DEFAULT">Here's what's happening with your beauty business today.</p>
         </div>
-        <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
-        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-white/10 rounded-full"></div>
+        <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#FFD700]/10 rounded-full"></div>
+        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#FFD700]/10 rounded-full"></div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -142,79 +142,77 @@ export function DashboardOverviewSection({
       </div>
 
       {/* Recent Sales Chart - Moved before the other cards */}
-      <div className="grid grid-cols-1 gap-6">
-        <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-800">Recent Sales</h3>
-              <div className="text-sm text-gray-600">Last 7 days</div>
-            </div>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={salesData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="#666"
-                    fontSize={12}
-                  />
-                  <YAxis 
-                    stroke="#666"
-                    fontSize={12}
-                    tickFormatter={(value) => `$${value}`}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#fff',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                    }}
-                    formatter={(value, name) => [
-                      name === 'sales' ? `$${value}` : value,
-                      name === 'sales' ? 'Sales' : 'Bookings'
-                    ]}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="sales"
-                    stroke="#e70c84"
-                    strokeWidth={3}
-                    dot={{ fill: '#e70c84', strokeWidth: 2, r: 4 }}
-                    activeDot={{ r: 6, stroke: '#e70c84', strokeWidth: 2 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="bookings"
-                    stroke="#10b981"
-                    strokeWidth={2}
-                    dot={{ fill: '#10b981', strokeWidth: 2, r: 3 }}
-                    activeDot={{ r: 5, stroke: '#10b981', strokeWidth: 2 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex items-center justify-center gap-6 mt-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-[#e70c84] rounded-full"></div>
-                <span className="text-sm text-gray-600">Sales ($)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-[#10b981] rounded-full"></div>
-                <span className="text-sm text-gray-600">Bookings</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+<div className="grid grid-cols-1 gap-6">
+  <Card className="bg-[#0d0d0d] border border-[#d4af37]/30 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-[#d4af37]">Recent Sales</h3>
+        <div className="text-sm text-[#999999]">Last 7 days</div>
       </div>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={salesData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+            <XAxis 
+              dataKey="date" 
+              stroke="#d4af37"
+              fontSize={12}
+            />
+            <YAxis 
+              stroke="#d4af37"
+              fontSize={12}
+              tickFormatter={(value) => `$${value}`}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#1a1a1a',
+                border: '1px solid #d4af37',
+                borderRadius: '8px',
+                boxShadow: '0 4px 6px -1px rgba(212, 175, 55, 0.4)',
+                color: '#fff'
+              }}
+              formatter={(value, name) => [
+                name === 'sales' ? `$${value}` : value,
+                name === 'sales' ? 'Sales' : 'Bookings'
+              ]}
+              labelStyle={{ color: '#d4af37' }}
+              itemStyle={{ color: '#fff' }}
+            />
+            <Line
+              type="monotone"
+              dataKey="sales"
+              stroke="#d4af37"
+              strokeWidth={3}
+              dot={{ fill: '#d4af37', strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, stroke: '#d4af37', strokeWidth: 2 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="bookings"
+              stroke="#facc15" // gold-yellow for contrast
+              strokeWidth={2}
+              dot={{ fill: '#facc15', strokeWidth: 2, r: 3 }}
+              activeDot={{ r: 5, stroke: '#facc15', strokeWidth: 2 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="flex items-center justify-center gap-6 mt-4">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-[#d4af37] rounded-full"></div>
+          <span className="text-sm text-gray-300">Sales ($)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-[#facc15] rounded-full"></div>
+          <span className="text-sm text-gray-300">Bookings</span>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <RecentBookingsCard

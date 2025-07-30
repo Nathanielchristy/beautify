@@ -128,7 +128,7 @@ export function BookingsPageContent({
       staffName: "",
       date: "",
       time: "",
-      status: "Pending",
+      status: "",
       notes: "",
     })
     setIsAddBookingDialogOpen(false)
@@ -173,7 +173,7 @@ export function BookingsPageContent({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Booking Management</h2>
+          <h2 className="text-2xl font-bold text-white">Booking Management</h2>
           <p className="text-gray-600">Manage appointments and schedules</p>
         </div>
         <div className="flex space-x-2">

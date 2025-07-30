@@ -36,7 +36,7 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
             </p>
           </div>
           <div className="lg:hidden flex items-center gap-2">
-            <Image src="/group-1@2x.png" alt="Glow Look Logo" width={32} height={32} />
+            <Image src="/gabi_logo.webp" alt="GAbi Logo" width={32} height={32} />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>

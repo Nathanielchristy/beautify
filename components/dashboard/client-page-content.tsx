@@ -38,6 +38,7 @@ export function ClientPageContent({
     phone: "",
     address: "",
     notes: "",
+    status:"active",
   })
   const [clientSearch, setClientSearch] = useState("")
   const debouncedClientSearch = useDebounce(clientSearch, 300)
@@ -76,8 +77,8 @@ export function ClientPageContent({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Client Management</h2>
-          <p className="text-gray-600">Manage your client relationships</p>
+          <h2 className="text-2xl font-bold text-white">Client Management</h2>
+          <p className="text-white">Manage your client relationships</p>
         </div>
         <Button
           className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
@@ -88,7 +89,7 @@ export function ClientPageContent({
         </Button>
       </div>
 
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
+      <Card className="bg-black/90 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
@@ -103,7 +104,7 @@ export function ClientPageContent({
                 />
                 <Input
                   placeholder="Search clients..."
-                  className="w-full sm:w-80 pl-10 rounded-xl border-roseLight-DEFAULT focus:border-roseDark-DEFAULT focus:ring-roseDark-DEFAULT bg-white/50 backdrop-blur-sm"
+                  className="w-full sm:w-80 pl-10 rounded-xl border-roseLight-DEFAULT focus:border-roseDark-DEFAULT focus:ring-roseDark-DEFAULT bg-black/50 backdrop-blur-sm"
                   value={clientSearch}
                   onChange={(e) => setClientSearch(e.target.value)}
                 />
@@ -136,21 +137,21 @@ export function ClientPageContent({
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-semibold text-gray-800">{client.name}</h3>
-                        <p className="text-sm text-gray-600">{client.email}</p>
+                        <h3 className="font-semibold text-white">{client.name}</h3>
+                        <p className="text-sm text-white">{client.email}</p>
                       </div>
                     </div>
                     <Badge
                       className={
                         client.status === "active"
                           ? "bg-success-light text-success-DEFAULT"
-                          : "bg-gray-100 text-gray-800"
+                          : "bg-gray-100 text-white"
                       }
                     >
                       {client.status}
                     </Badge>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-3">
+                  <div className="grid grid-cols-2 gap-4 text-sm text-white mb-3">
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4" strokeWidth={2} />
                       <span>{client.phone}</span>
@@ -216,8 +217,8 @@ export function ClientPageContent({
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-gray-800">{client.name}</p>
-                          <p className="text-sm text-gray-600">{client.email}</p>
+                          <p className="font-medium text-white">{client.name}</p>
+                          <p className="text-sm text-white">{client.email}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -227,7 +228,7 @@ export function ClientPageContent({
                         className={
                           client.status === "active"
                             ? "bg-success-light text-success-DEFAULT"
-                            : "bg-gray-100 text-gray-800"
+                            : "bg-gray-100 text-white"
                         }
                       >
                         {client.status}

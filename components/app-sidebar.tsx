@@ -35,7 +35,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
       <Sidebar>
         <SidebarHeader className="items-center">
           <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
-            <Image src="/gabi_logo.webp" alt="Glow Look Logo" width={80} height={80} className="h-20 w-20" />
+            <Image src="/gabi_logo.webp" alt="Glow Look Logo" width={100} height={100} className="h-30 w-30" />
           </a>
         </SidebarHeader>
         <SidebarContent>
@@ -63,7 +63,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem className="bg-pink-100">
+            <SidebarMenuItem className="bg-black">
               <SidebarMenuButton
                 asChild
                 onClick={() => setShowLogoutConfirm(true)}

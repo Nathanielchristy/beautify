@@ -104,6 +104,7 @@ export const mockStaff: Staff[] = [
     phone: "555-100-2000",
     schedule: "Mon-Fri, 9 AM - 5 PM",
     notes: "Specializes in advanced skin treatments.",
+    status:"active"
   },
   {
     id: "s2",

@@ -31,7 +31,6 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          light: "hsl(var(--primary-light))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -56,55 +55,6 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        mintDark: {
-          DEFAULT: "hsl(var(--mint-dark))",
-        },
-        mintMedium: {
-          DEFAULT: "hsl(var(--mint-medium))",
-        },
-        mintDeep: {
-          DEFAULT: "hsl(var(--mint-deep))",
-        },
-        peachLight: {
-          DEFAULT: "hsl(var(--peach-light))",
-        },
-        mintBackground: {
-          DEFAULT: "hsl(var(--mint-background))",
-          foreground: "hsl(var(--mint-background-foreground))",
-        },
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          light: "hsl(var(--success-light))",
-        },
-        danger: {
-          DEFAULT: "hsl(var(--danger))",
-          light: "hsl(var(--danger-light))",
-        },
-
-        // Existing custom colors
-        "primary-blue": "#5D9CEC",
-        "light-peach": "#FFF0E6",
-        "medium-peach": "#FFD1B3",
-        "dark-mint": "#4DB380",
-        "deep-mint": "#317A52",
-        "pale-mint": "#E6F7EB",
-
-        // ✅ Added gradient colors
-        deep: {
-          orchid: "#A66894",
-        },
-        terracotta: {
-          brown: "#733A31",
-        },
-        roseLight: {
-          DEFAULT: "##00000099",
-        },
-        roseDark: {
-          DEFAULT: "#C895B8",
-        },
-        roseMedium: {
-          DEFAULT: "#E3A6A6",
         },
       },
       borderRadius: {
