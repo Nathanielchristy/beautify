@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { mockClients, mockServices, mockStaff } from "@/data/mockData"
+import { DayView } from "./day-view"
+import { WeekView } from "./week-view"
 
 interface CalendarPageContentProps {
   bookings: Booking[]
@@ -32,6 +34,7 @@ export function CalendarPageContent({
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [bookingStatusFilter, setBookingStatusFilter] = useState("all")
+  const [calendarView, setCalendarView] = useState("month")
 
   const getDaysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
 
@@ -112,21 +115,28 @@ export function CalendarPageContent({
                 <ChevronRight className="h-4 w-4" />
                 </Button>
             </div>
+            <div className="flex items-center space-x-2">
+                <Button onClick={() => setCalendarView("month")} variant={calendarView === "month" ? "default" : "outline"}>Month</Button>
+                <Button onClick={() => setCalendarView("week")} variant={calendarView === "week" ? "default" : "outline"}>Week</Button>
+                <Button onClick={() => setCalendarView("day")} variant={calendarView === "day" ? "default" : "outline"}>Day</Button>
+            </div>
             </div>
         </CardHeader>
 
         <CardContent className="p-0">
-            {/* Weekdays Header */}
-            <div className="grid grid-cols-7 bg-gradient-to-r from-black via-zinc-900 to-black text-gold font-semibold">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="p-3 text-center border border-gold/20">
-                {day}
+            {calendarView === "month" && (
+            <>
+                {/* Weekdays Header */}
+                <div className="grid grid-cols-7 bg-gradient-to-r from-black via-zinc-900 to-black text-gold font-semibold">
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                    <div key={day} className="p-3 text-center border border-gold/20">
+                    {day}
+                    </div>
+                ))}
                 </div>
-            ))}
-            </div>
 
-            {/* Calendar Days */}
-            <div className="grid grid-cols-7">
+                {/* Calendar Days */}
+                <div className="grid grid-cols-7">
             {(() => {
                 const daysInMonth = getDaysInMonth(currentDate)
                 const firstDay = getFirstDayOfMonth(currentDate)
@@ -258,6 +268,10 @@ export function CalendarPageContent({
                 ))}
             </div>
             </div>
+            </>
+            )}
+            {calendarView === "week" && <WeekView bookings={bookings} currentDate={currentDate} />}
+            {calendarView === "day" && <DayView bookings={bookings} selectedDate={selectedDate || currentDate} />}
         </CardContent>
     </Card>
   )
