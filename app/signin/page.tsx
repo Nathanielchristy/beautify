@@ -79,7 +79,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
                   placeholder="Email"
                 />
               </div>
@@ -90,7 +90,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
                   placeholder="Password"
                 />
 

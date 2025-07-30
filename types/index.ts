@@ -3,13 +3,13 @@ export interface Client {
   name: string
   email: string
   phone: string
-  avatar?: string
-  firstVisit: string
-  servicesCount: number
-  totalSpent: number
-  lastVisit: string
-  notes?: string
-  status: "active" | "inactive"
+  address: string
+  notes: string
+  status: "active" | "inactive" | string  // you can adjust status options if needed
+  avatar?: string  // optional, since you sometimes fallback to placeholder
+  lastVisit?: string  // e.g., "2024-07-25" or any formatted date string
+  servicesCount?: number  // number of services the client used
+  totalSpent?: number  // total amount spent by the client
 }
 
 export interface Staff {
@@ -24,20 +24,17 @@ export interface Staff {
   hireDate: string
   isActive: boolean
   totalRevenue: number
-  color: string // Tailwind class for badge color
 }
 
 export interface Service {
   id: string
   name: string
-  category: string
+  description?: string
   price: number
-  duration: number
-  description: string
-  isActive: boolean
-  icon: string
-  color: string // Tailwind class for badge color
+  duration: string // e.g. "30", "45", "60" minutes as string or "30min"
+  category: string
 }
+
 
 export interface Booking {
   id: string

@@ -21,6 +21,7 @@ const config = {
     extend: {
       fontFamily: {
         'reem-kufi-fun': ['var(--font-reem-kufi-fun)', 'sans-serif'],
+        
       },
       colors: {
         border: "hsl(var(--border))",

@@ -164,7 +164,8 @@ export function ServicesPageContent({
             </div>
             <div className="flex space-x-2">
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
+"
                 onClick={() => setIsAddServiceOpen(true)}
               >
                 <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
@@ -181,7 +182,7 @@ export function ServicesPageContent({
               />
               <Input
                 placeholder="Search service name"
-                className="pl-10 rounded-xl border-roseLight-DEFAULT focus:border-roseDark-DEFAULT focus:ring-roseDark-DEFAULT bg-white/50 backdrop-blur-sm"
+                className="pl-10 rounded-xl border-roseLight-DEFAULT focus:border-roseDark-DEFAULT focus:ring-roseDark-DEFAULT bg-black/50 backdrop-blur-sm"
                 value={serviceSearch}
                 onChange={(e) => setServiceSearch(e.target.value)}
               />

@@ -69,15 +69,25 @@ export function DashboardOverviewSection({
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-black via-black to-black rounded-2xl p-6 text-white relative overflow-hidden shadow-lg">
-        <div className="absolute inset-0 bg-[#000000]"></div>
-        <div className="relative z-10">
-          <h1 className="text-2xl font-bold mb-2">Welcome back to GABI By ! ✨</h1>
-          <p className="text-roseBackground-DEFAULT">Here's what's happening with your beauty business today.</p>
-        </div>
-        <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#FFD700]/10 rounded-full"></div>
-        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#FFD700]/10 rounded-full"></div>
+    <div className="relative rounded-2xl p-6 text-white overflow-hidden shadow-xl bg-gradient-to-r from-[#0a0a0a] via-[#111] to-[#0a0a0a]">
+      {/* Soft Gold Glow Accents */}
+      <div className="absolute -top-6 -right-6 w-32 h-32 bg-[#d4af37]/20 rounded-full blur-2xl"></div>
+      <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#d4af37]/20 rounded-full blur-2xl"></div>
+
+      {/* Gold Gradient Stripe */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#d4af37]/5 to-transparent pointer-events-none"></div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        <h1 className="text-3xl font-semibold mb-2 text-[#ffc01f]">
+          Welcome back to GABI
+        </h1>
+        <p className="text-sm text-[#ffc01f]">
+          Here's what's happening with your beauty business today.
+        </p>
       </div>
+    </div>
+
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseLight-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">

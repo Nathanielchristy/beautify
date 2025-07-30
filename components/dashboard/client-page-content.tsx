@@ -46,7 +46,7 @@ export function ClientPageContent({
   const handleAddClient = () => {
     const id = (clients.length + 1).toString()
     setClients([...clients, { id, ...newClient }])
-    setNewClient({ name: "", email: "", phone: "", address: "", notes: "" })
+    setNewClient({ name: "", email: "", phone: "", address: "", notes: "", status: "active" })
     setIsAddClientDialogOpen(false)
   }
 
@@ -81,7 +81,8 @@ export function ClientPageContent({
           <p className="text-white">Manage your client relationships</p>
         </div>
         <Button
-          className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+          className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
+"
           onClick={() => setIsAddClientOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
@@ -125,7 +126,7 @@ export function ClientPageContent({
             {filteredClients.map((client) => (
               <Card
                 key={client.id}
-                className="bg-gradient-to-r from-white to-roseBackground-DEFAULT border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl"
+                className="bg-black/50 border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-3">

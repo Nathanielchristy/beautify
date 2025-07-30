@@ -27,7 +27,8 @@ export function QuickActionsCard({
       </CardHeader>
       <CardContent className="space-y-3">
         <Button
-          className="w-full bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+          className="w-full bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
+"
           onClick={() => setIsAddBookingOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />

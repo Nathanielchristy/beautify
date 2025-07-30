@@ -45,7 +45,8 @@ export function StaffPageContent({
           <p className="text-gray-600">Manage your team members</p>
         </div>
         <Button
-          className="bg-gradient-to-r from-dusty-rose to-muted-mauve hover:from-deep-orchid hover:to-terracotta-brown text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+          className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
+"
           onClick={() => setIsAddStaffOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
@@ -61,37 +62,42 @@ export function StaffPageContent({
           >
             <CardContent className="p-6">
               <div className="flex items-center space-x-4 mb-4">
-                <Avatar className="w-16 h-16">
+                <Avatar className="w-16 h-16 border-2 border-yellow-500 shadow-md">
                   <AvatarImage src={member.avatar || "/placeholder.svg"} />
-                  <AvatarFallback className="bg-gradient-to-br from-roseDark-DEFAULT to-roseMedium-DEFAULT text-white text-lg">
+                  <AvatarFallback className="bg-gradient-to-br from-yellow-600 to-yellow-400 text-black font-bold text-lg">
                     {member.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
+
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white text-lg">{member.name}</h3>
-                  <Badge className={member.color}>{member.specialty}</Badge>
+                  <h3 className="font-semibold text-yellow-300 text-lg">{member.name}</h3>
+                  <Badge className="bg-yellow-500 text-black font-medium shadow-sm">
+                    {member.specialty}
+                  </Badge>
                 </div>
               </div>
 
-              <div className="space-y-3">
+
+              <div className="space-y-4 rounded-xl border border-yellow-500 bg-black p-4 shadow-lg">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Rating</span>
+                  <span className="text-sm text-yellow-300">Rating</span>
                   <div className="flex items-center space-x-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" strokeWidth={2} />
-                    <span className="font-medium">{member.rating}</span>
+                    <span className="font-medium text-white">{member.rating}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Revenue</span>
-                  <span className="font-medium text-success-DEFAULT">${member.totalRevenue}</span>
+                  <span className="text-sm text-yellow-300">Revenue</span>
+                  <span className="font-medium text-yellow-400">${member.totalRevenue}</span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Availability</span>
-                  <span className="text-sm font-medium">{member.availability}</span>
+                  <span className="text-sm text-yellow-300">Availability</span>
+                  <span className="text-sm font-medium text-white">{member.availability}</span>
                 </div>
               </div>
+
 
               <div className="flex space-x-2 mt-4 pt-4 border-t border-roseLight-DEFAULT">
                 <Button
