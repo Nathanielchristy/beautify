@@ -23,6 +23,7 @@ import { ClientPageContent } from "./dashboard/client-page-content"
 import { StaffPageContent } from "./dashboard/staff-page-content"
 import { ServicesPageContent } from "./dashboard/services-page-content"
 import { BookingsPageContent } from "./dashboard/bookings-page-content"
+import { CalendarPageContent } from "./dashboard/calendar-page-content"
 import { InventoryPageContent } from "./dashboard/inventory-page-content"
 import { InvoicesPageContent } from "./dashboard/invoices-page-content"
 import { ReportsPageContent } from "./dashboard/reports-page-content"
@@ -603,6 +604,18 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             handleUpdateBookingStatus={handleUpdateBookingStatus}
+            setBookings={setBookings}
+          />
+        )
+      case "calendar":
+        return (
+          <CalendarPageContent
+            bookings={bookings}
+            setIsAddBookingOpen={setIsAddBookingOpen}
+            setSelectedItem={setSelectedItem}
+            setIsViewDetailsOpen={setIsViewDetailsOpen}
+            handleUpdateBookingStatus={handleUpdateBookingStatus}
+            setBookings={setBookings}
           />
         )
       case "inventory":

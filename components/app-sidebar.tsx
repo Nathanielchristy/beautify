@@ -20,6 +20,7 @@ interface AppSidebarProps {
 
 const sidebarItems = [
   { id: "dashboard", label: "Dashboard", icon: Home },
+  { id: "calendar", label: "Calendar", icon: Calendar },
   { id: "clients", label: "Clients", icon: Users },
   { id: "staff", label: "Staff", icon: UserCheck },
   { id: "services", label: "Services", icon: Scissors },
