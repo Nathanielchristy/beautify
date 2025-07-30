@@ -197,190 +197,185 @@ export function BookingsPageContent({
       </div>
 
       {isCalendarView ? (
-        <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden rounded-2xl">
-          <CardHeader className="bg-gradient-to-r from-roseDark-DEFAULT via-roseMedium-DEFAULT to-roseLight-DEFAULT text-white">
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center space-x-2">
-                <Calendar className="w-5 h-5" strokeWidth={2} />
-                <span>Calendar View</span>
-              </CardTitle>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white hover:bg-white/20 rounded-xl"
-                  onClick={() => navigateMonth("prev")}
-                >
-                  <ChevronLeft className="h-4 w-4" strokeWidth={2} />
-                </Button>
-                <span className="font-semibold text-lg min-w-48 text-center">{formatMonthYear(currentDate)}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white hover:bg-white/20 rounded-xl"
-                  onClick={() => navigateMonth("next")}
-                >
-                  <ChevronRight className="h-4 w-4" strokeWidth={2} />
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="grid grid-cols-7 bg-gradient-to-r from-roseBackground-DEFAULT to-roseLight-DEFAULT">
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-                <div
-                  key={day}
-                  className={`p-4 text-center font-bold text-roseDeep-DEFAULT border-r border-b border-roseLight-DEFAULT last:border-r-0 ${
-                    index === 0 || index === 6 ? "bg-gradient-to-b from-roseLight-DEFAULT to-roseMedium-DEFAULT" : ""
+<Card className="bg-black/80 backdrop-blur border border-gold/30 shadow-xl rounded-2xl overflow-hidden">
+  <CardHeader className="bg-gradient-to-r from-gold to-yellow-600 text-black shadow-md">
+    <div className="flex items-center justify-between">
+      <CardTitle className="flex items-center space-x-2 text-lg font-bold">
+        <Calendar className="w-5 h-5 text-black" />
+        <span>Calendar View</span>
+      </CardTitle>
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-black hover:bg-black/20 rounded-xl"
+          onClick={() => navigateMonth("prev")}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <span className="font-semibold text-base text-black min-w-48 text-center">
+          {formatMonthYear(currentDate)}
+        </span>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-black hover:bg-black/20 rounded-xl"
+          onClick={() => navigateMonth("next")}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  </CardHeader>
+
+  <CardContent className="p-0">
+    {/* Weekdays Header */}
+    <div className="grid grid-cols-7 bg-gradient-to-r from-black via-zinc-900 to-black text-gold font-semibold">
+      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+        <div key={day} className="p-3 text-center border border-gold/20">
+          {day}
+        </div>
+      ))}
+    </div>
+
+    {/* Calendar Days */}
+    <div className="grid grid-cols-7">
+      {(() => {
+        const daysInMonth = getDaysInMonth(currentDate)
+        const firstDay = getFirstDayOfMonth(currentDate)
+        const totalCells = Math.ceil((daysInMonth + firstDay) / 7) * 7
+
+        return Array.from({ length: totalCells }, (_, i) => {
+          const dayNumber = i - firstDay + 1
+          const isValidDay = dayNumber > 0 && dayNumber <= daysInMonth
+          const isCurrentDay = isValidDay && isToday(currentDate, dayNumber)
+          const isSelected =
+            selectedDate &&
+            isValidDay &&
+            isSameDay(selectedDate, new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNumber))
+          const dayBookings = isValidDay ? getBookingsForDate(currentDate, dayNumber) : []
+          const isWeekend = i % 7 === 0 || i % 7 === 6
+
+          if (!isValidDay) {
+            return <div key={i} className="min-h-32 bg-black border border-gold/10" />
+          }
+
+          return (
+            <div
+              key={i}
+              className={`min-h-32 p-2 border border-gold/10 transition-all duration-200 group cursor-pointer ${
+                isWeekend ? "bg-black/70" : "bg-black"
+              } ${
+                isCurrentDay
+                  ? "ring-2 ring-gold bg-gradient-to-br from-yellow-600 to-yellow-800"
+                  : isSelected
+                  ? "ring-2 ring-gold/70 bg-zinc-900"
+                  : ""
+              } hover:bg-gradient-to-br hover:from-gold/10 hover:to-black`}
+              onClick={() => handleDateClick(dayNumber)}
+            >
+              <div className={`flex items-center justify-between mb-2 ${isCurrentDay ? "text-black" : "text-gold/70"}`}>
+                <span
+                  className={`text-sm font-bold ${
+                    isCurrentDay || isSelected
+                      ? "bg-gold text-black rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                      : ""
                   }`}
                 >
-                  {day}
-                </div>
-              ))}
-            </div>
+                  {dayNumber}
+                </span>
+                {dayBookings.length > 0 && (
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full animate-pulse" />
+                    <span className="text-xs font-medium text-gold/60">{dayBookings.length}</span>
+                  </div>
+                )}
+              </div>
 
-            <div className="grid grid-cols-7">
-              {(() => {
-                const daysInMonth = getDaysInMonth(currentDate)
-                const firstDay = getFirstDayOfMonth(currentDate)
-                const totalCells = Math.ceil((daysInMonth + firstDay) / 7) * 7
-
-                return Array.from({ length: totalCells }, (_, i) => {
-                  const dayNumber = i - firstDay + 1
-                  const isValidDay = dayNumber > 0 && dayNumber <= daysInMonth
-                  const isCurrentDay = isValidDay && isToday(currentDate, dayNumber)
-                  const isSelected =
-                    selectedDate &&
-                    isValidDay &&
-                    isSameDay(selectedDate, new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNumber))
-                  const dayBookings = isValidDay ? getBookingsForDate(currentDate, dayNumber) : []
-                  const isWeekend = i % 7 === 0 || i % 7 === 6
-
-                  if (!isValidDay) {
-                    return (
-                      <div
-                        key={i}
-                        className="min-h-32 p-2 border-r border-b border-roseLight-DEFAULT last:border-r-0 bg-roseBackground-DEFAULT"
-                      />
-                    )
+              {/* Bookings */}
+              <div className="space-y-1">
+                {dayBookings.slice(0, 3).map((booking) => {
+                  const statusColors = {
+                    completed: "from-green-500 to-green-300",
+                    confirmed: "from-blue-600 to-blue-400",
+                    pending: "from-yellow-500 to-yellow-300",
+                    cancelled: "from-red-500 to-red-300",
                   }
 
                   return (
                     <div
-                      key={i}
-                      className={`min-h-32 p-2 border-r border-b border-roseLight-DEFAULT last:border-r-0 transition-all duration-200 hover:bg-gradient-to-br hover:from-roseBackground-DEFAULT hover:to-roseLight-DEFAULT cursor-pointer group ${
-                        isWeekend ? "bg-gradient-to-b from-roseBackground-DEFAULT to-roseLight-DEFAULT/50" : "bg-white"
-                      } ${isCurrentDay ? "bg-gradient-to-br from-roseLight-DEFAULT to-roseMedium-DEFAULT ring-2 ring-roseMedium-DEFAULT" : ""} ${
-                        isSelected ? "ring-2 ring-roseDark-DEFAULT bg-roseLight-DEFAULT" : ""
+                      key={booking.id}
+                      className={`text-xs p-2 rounded-lg text-black font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 bg-gradient-to-r ${
+                        statusColors[booking.status] || statusColors.pending
                       }`}
-                      onClick={() => handleDateClick(dayNumber)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setSelectedItem(booking)
+                        setIsViewDetailsOpen(true)
+                      }}
                     >
-                      <div
-                        className={`flex items-center justify-between mb-2 ${isCurrentDay ? "text-roseDeep-DEFAULT" : "text-gray-600"}`}
-                      >
-                        <span
-                          className={`text-sm font-bold ${
-                            isCurrentDay
-                              ? "bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                              : isSelected
-                                ? "bg-roseDark-DEFAULT text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                                : ""
-                          }`}
-                        >
-                          {dayNumber}
-                        </span>
-                        {dayBookings.length > 0 && (
-                          <div className="flex items-center space-x-1">
-                            <div className="w-2 h-2 bg-gradient-to-r from-success-DEFAULT to-info-DEFAULT rounded-full animate-pulse"></div>
-                            <span className="text-xs font-medium text-gray-500">{dayBookings.length}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="space-y-1">
-                        {dayBookings.slice(0, 3).map((booking, bookingIndex) => {
-                          const statusColors = {
-                            completed: "from-success-DEFAULT to-success-light",
-                            confirmed: "from-info-DEFAULT to-info-light",
-                            pending: "from-warning-DEFAULT to-warning-light",
-                            cancelled: "from-danger-DEFAULT to-danger-light",
-                          }
-
-                          return (
-                            <div
-                              key={booking.id}
-                              className={`text-xs p-2 rounded-lg text-white shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer transform hover:scale-105 bg-gradient-to-r ${statusColors[booking.status] || statusColors.pending}`}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setSelectedItem(booking)
-                                setIsViewDetailsOpen(true)
-                              }}
-                            >
-                              <div className="font-semibold truncate">{booking.clientName}</div>
-                              <div className="opacity-90 truncate text-xs">{booking.serviceName}</div>
-                              <div className="opacity-75 text-xs">{booking.time.split(" - ")[0]}</div>
-                            </div>
-                          )
-                        })}
-
-                        {dayBookings.length > 3 && (
-                          <div
-                            className="text-xs text-center p-1 bg-gradient-to-r from-roseLight-DEFAULT to-roseMedium-DEFAULT text-roseDeep-DEFAULT rounded-lg font-medium hover:from-roseMedium-DEFAULT hover:to-roseDark-DEFAULT transition-all duration-200 cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              toast({
-                                title: "All Bookings",
-                                description: `${dayBookings.length} bookings on ${dayNumber}/${currentDate.getMonth() + 1}`,
-                              })
-                            }}
-                          >
-                            +{dayBookings.length - 3} more
-                          </div>
-                        )}
-
-                        {dayBookings.length === 0 && (
-                          <div
-                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs text-center p-2 border-2 border-dashed border-roseLight-DEFAULT rounded-lg text-roseMedium-DEFAULT hover:border-roseMedium-DEFAULT hover:text-roseDark-DEFAULT"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleDateClick(dayNumber)
-                            }}
-                          >
-                            <Plus className="h-3 w-3 mx-auto mb-1" strokeWidth={2} />
-                            Add booking
-                          </div>
-                        )}
-                      </div>
+                      <div className="truncate">{booking.clientName}</div>
+                      <div className="truncate opacity-80">{booking.serviceName}</div>
+                      <div className="opacity-60">{booking.time.split(" - ")[0]}</div>
                     </div>
                   )
-                })
-              })()}
-            </div>
+                })}
 
-            <div className="p-4 bg-gradient-to-r from-roseBackground-DEFAULT to-roseLight-DEFAULT border-t border-roseLight-DEFAULT">
-              <div className="flex items-center justify-center space-x-6 text-sm">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-gradient-to-r from-success-DEFAULT to-success-light rounded-full"></div>
-                  <span className="text-gray-600">Completed</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-gradient-to-r from-info-DEFAULT to-info-light rounded-full"></div>
-                  <span className="text-gray-600">Confirmed</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-gradient-to-r from-warning-DEFAULT to-warning-light rounded-full"></div>
-                  <span className="text-gray-600">Pending</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-gradient-to-r from-danger-DEFAULT to-danger-light rounded-full"></div>
-                  <span className="text-gray-600">Cancelled</span>
-                </div>
+                {dayBookings.length > 3 && (
+                  <div
+                    className="text-xs text-center p-1 bg-gradient-to-r from-gold to-yellow-600 text-black rounded-lg font-medium hover:from-yellow-700 hover:to-yellow-800"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toast({
+                        title: "All Bookings",
+                        description: `${dayBookings.length} bookings on ${dayNumber}/${currentDate.getMonth() + 1}`,
+                      })
+                    }}
+                  >
+                    +{dayBookings.length - 3} more
+                  </div>
+                )}
+
+                {dayBookings.length === 0 && (
+                  <div
+                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs text-center p-2 border-2 border-dashed border-gold/40 text-gold/60 hover:border-gold hover:text-gold"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDateClick(dayNumber)
+                    }}
+                  >
+                    <Plus className="h-3 w-3 mx-auto mb-1" />
+                    Add booking
+                  </div>
+                )}
               </div>
             </div>
-          </CardContent>
-        </Card>
+          )
+        })
+      })()}
+    </div>
+
+    {/* Legend */}
+    <div className="p-4 bg-black border-t border-gold/20">
+      <div className="flex items-center justify-center space-x-6 text-sm text-gold/60">
+        {[
+          ["Completed", "from-green-400 to-green-600"],
+          ["Confirmed", "from-blue-400 to-blue-600"],
+          ["Pending", "from-yellow-400 to-yellow-600"],
+          ["Cancelled", "from-red-400 to-red-600"],
+        ].map(([label, gradient]) => (
+          <div key={label} className="flex items-center space-x-2">
+            <div className={`w-3 h-3 bg-gradient-to-r ${gradient} rounded-full`} />
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </CardContent>
+</Card>
+
       ) : (
-        <div className="p-4 md:p-6">
+        <div className="p-4 md:p-6 bg-black/50">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">Bookings</h1>
 
@@ -396,7 +391,7 @@ export function BookingsPageContent({
             />
           </div>
 
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-lg border overflow-hidden ">
             <Table>
               <TableHeader>
                 <TableRow>
