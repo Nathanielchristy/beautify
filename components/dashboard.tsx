@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { createPortal } from "react-dom"
 import { LogOut, Home, Calendar, Users, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -9,11 +10,12 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { usePortal } from "@/hooks/use-portal"
 import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd"
 import { Card, CardContent } from "@/components/ui/card"
 
 // Import types and mock data
-import type { Client, Staff, Service, Booking, InventoryItem, Invoice } from "@/types"
+import type { Client, Staff, Service, Booking, InventoryItem, Invoice, DraggableProvided, DraggableStateSnapshot } from "@/types"
 import { mockClients, mockStaff, mockServices, mockBookings, mockInventory, mockInvoices } from "@/data/mockData"
 
 // Import refactored components
@@ -37,6 +39,57 @@ import { AppSidebar } from "./app-sidebar"
 
 import { UserCheck, Scissors, Package, FileText } from "lucide-react"
 
+const ServiceListItem = ({
+  service,
+  index,
+  provided,
+  snapshot,
+}: {
+  service: Service
+  index: number
+  provided: DraggableProvided
+  snapshot: DraggableStateSnapshot
+}) => (
+  <Card
+    ref={provided.innerRef}
+    {...provided.draggableProps}
+    {...provided.dragHandleProps}
+    className={`bg-black border transition-all duration-200 rounded-xl ${
+      snapshot.isDragging
+        ? "shadow-lg scale-105 rotate-2 bg-gradient-to-r from-roseBackground-DEFAULT to-roseLight-DEFAULT"
+        : "hover:shadow-md cursor-grab active:cursor-grabbing"
+    }`}
+  >
+    <CardContent className="p-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-roseLight-DEFAULT rounded-lg flex items-center justify-center text-roseDeep-DEFAULT font-bold text-sm">
+            {index + 1}
+          </div>
+          <div>
+            <h4 className="font-semibold text-white">{service.name}</h4>
+            <p className="text-sm text-white">
+              {service.category} • ${service.price}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2 text-gray-400">
+          <div className="flex flex-col space-y-1">
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+          </div>
+          <div className="flex flex-col space-y-1">
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+)
+
 const bottomNavItems = [
   { id: "dashboard", label: "Dashboard", icon: Home },
   { id: "clients", label: "Clients", icon: Users },
@@ -54,6 +107,7 @@ interface DashboardProps {
 }
 
 export default function BeautyWellnessDashboard({ onLogout, userEmail }: DashboardProps) {
+  const portal = usePortal("react-beautiful-dnd-portal")
   // State management
   const [activeTab, setActiveTab] = useState("dashboard")
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -1710,51 +1764,33 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
           </DialogHeader>
           <div className="mt-4 max-h-96 overflow-y-auto">
             <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable droppableId="services">
+              <Droppable
+                droppableId="services"
+                renderClone={(provided, snapshot, rubric) => {
+                  const service = reorderingServices[rubric.source.index]
+                  return (
+                    <ServiceListItem
+                      service={service}
+                      index={rubric.source.index}
+                      provided={provided}
+                      snapshot={snapshot}
+                    />
+                  )
+                }}
+              >
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
                     {reorderingServices.map((service, index) => (
                       <Draggable key={service.id} draggableId={service.id} index={index}>
-                        {(provided, snapshot) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`bg-black border  transition-all duration-200 rounded-xl ${
-                              snapshot.isDragging
-                                ? "shadow-lg scale-105 rotate-2 bg-gradient-to-r from-roseBackground-DEFAULT to-roseLight-DEFAULT"
-                                : "hover:shadow-md cursor-grab active:cursor-grabbing"
-                            }`}
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-roseLight-DEFAULT rounded-lg flex items-center justify-center text-roseDeep-DEFAULT font-bold text-sm">
-                                    {index + 1}
-                                  </div>
-                                  <div>
-                                    <h4 className="font-semibold text-white">{service.name}</h4>
-                                    <p className="text-sm text-white">
-                                      {service.category} • ${service.price}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center space-x-2 text-gray-400">
-                                  <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                  </div>
-                                  <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        )}
+                        {(provided, snapshot) => {
+                          const child = (
+                            <ServiceListItem service={service} index={index} provided={provided} snapshot={snapshot} />
+                          )
+                          if (snapshot.isDragging && portal) {
+                            return createPortal(child, portal)
+                          }
+                          return child
+                        }}
                       </Draggable>
                     ))}
                     {provided.placeholder}
