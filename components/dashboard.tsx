@@ -100,14 +100,9 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   const { toast } = useToast()
 
   // Service categories state
-  const [serviceCategories, setServiceCategories] = useState([
-    "Hair",
-    "Skin",
-    "Nails",
-    "Spa",
-    "Massage",
-    "Eyebrows & Eyelashes",
-  ])
+  const [serviceCategories, setServiceCategories] = useState(
+    Array.from(new Set(mockServices.map((s) => s.category))),
+  )
 
   const [selectedCategory, setSelectedCategory] = useState("all")
 
@@ -319,10 +314,25 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   }
 
   const handleSaveOrder = () => {
-    const otherServices =
-      selectedCategory === "all" ? [] : services.filter((service) => service.category !== selectedCategory)
+    let updatedServices
 
-    const updatedServices = selectedCategory === "all" ? reorderingServices : [...otherServices, ...reorderingServices]
+    if (selectedCategory === "all") {
+      updatedServices = reorderingServices
+    } else {
+      const newServices: Service[] = []
+      let reorderedAdded = false
+      for (const service of services) {
+        if (service.category === selectedCategory) {
+          if (!reorderedAdded) {
+            newServices.push(...reorderingServices)
+            reorderedAdded = true
+          }
+        } else {
+          newServices.push(service)
+        }
+      }
+      updatedServices = newServices
+    }
 
     setServices(updatedServices)
     setIsManageOrderOpen(false)
