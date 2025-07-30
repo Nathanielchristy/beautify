@@ -484,17 +484,23 @@ export function BookingsPageContent({
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
             <DialogHeader>
-              <DialogTitle>Are you sure?</DialogTitle>
+              <DialogTitle className="text-xl font-bold text-white">Confirm Delete</DialogTitle>
+              <p className="text-white">
+                Are you sure you want to delete the booking for <span className="font-semibold">{bookingToDelete?.clientName}</span>? This action cannot be undone.
+              </p>
             </DialogHeader>
-            <p>Are you sure you want to delete the booking for {bookingToDelete?.clientName}?</p>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDeleteConfirmOpen(false)}>
+            <div className="flex justify-end space-x-3 mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setIsDeleteConfirmOpen(false)}
+                className="rounded-xl hover:bg-roseLight-DEFAULT/30"
+              >
                 Cancel
               </Button>
               <Button
-                variant="destructive"
+                className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-black rounded-xl bg-[#FFD700]"
                 onClick={() => {
                   if (bookingToDelete) {
                     handleDeleteBooking(bookingToDelete.id)
@@ -504,9 +510,10 @@ export function BookingsPageContent({
               >
                 Delete
               </Button>
-            </DialogFooter>
+            </div>
           </DialogContent>
         </Dialog>
+
       </div>
     </div>
   )

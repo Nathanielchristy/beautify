@@ -100,9 +100,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   const { toast } = useToast()
 
   // Service categories state
-  const [serviceCategories, setServiceCategories] = useState(
-    Array.from(new Set(mockServices.map((s) => s.category))),
-  )
+  const [serviceCategories, setServiceCategories] = useState([
+    "Hair",
+    "Skin",
+    "Nails",
+    "Spa",
+    "Massage",
+    "Eyebrows & Eyelashes",
+  ])
 
   const [selectedCategory, setSelectedCategory] = useState("all")
 
@@ -314,23 +319,12 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   }
 
   const handleSaveOrder = () => {
-    if (selectedCategory === "all") {
-      setServices(reorderingServices)
-    } else {
-      const reorderedIds = new Set(reorderingServices.map((s) => s.id))
-      const firstOriginalIndex = services.findIndex((s) => reorderedIds.has(s.id))
+    const otherServices =
+      selectedCategory === "all" ? [] : services.filter((service) => service.category !== selectedCategory)
 
-      if (firstOriginalIndex !== -1) {
-        const updatedServices = services.filter((s) => !reorderedIds.has(s.id))
-        updatedServices.splice(firstOriginalIndex, 0, ...reorderingServices)
-        setServices(updatedServices)
-      } else {
-        // Fallback for safety, though this case should ideally not be reached
-        const otherServices = services.filter((service) => service.category !== selectedCategory)
-        setServices([...otherServices, ...reorderingServices])
-      }
-    }
+    const updatedServices = selectedCategory === "all" ? reorderingServices : [...otherServices, ...reorderingServices]
 
+    setServices(updatedServices)
     setIsManageOrderOpen(false)
     setReorderingServices([])
 
@@ -1707,7 +1701,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Manage Order Modal */}
       <Dialog open={isManageOrderOpen} onOpenChange={setIsManageOrderOpen}>
-        <DialogContent className="sm:max-w-lg mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl transform-gpu">
+        <DialogContent className="sm:max-w-lg mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-white">Manage Service Order</DialogTitle>
             <DialogDescription className="text-white">
