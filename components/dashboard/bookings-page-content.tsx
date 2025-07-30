@@ -31,6 +31,8 @@ export function BookingsPageContent({
 }: BookingsPageContentProps) {
   const [isAddBookingDialogOpen, setIsAddBookingDialogOpen] = useState(false)
   const [isEditBookingDialogOpen, setIsEditBookingDialogOpen] = useState(false)
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null)
   const [currentBooking, setCurrentBooking] = useState<Booking | null>(null)
   const [newBooking, setNewBooking] = useState<Omit<Booking, "id">>({
     clientId: "",
@@ -180,7 +182,14 @@ export function BookingsPageContent({
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="outline" size="icon" onClick={() => handleDeleteBooking(booking.id)}>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          setBookingToDelete(booking)
+                          setIsDeleteConfirmOpen(true)
+                        }}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -468,6 +477,32 @@ export function BookingsPageContent({
                 className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
               >
                 Save Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you sure?</DialogTitle>
+            </DialogHeader>
+            <p>Are you sure you want to delete the booking for {bookingToDelete?.clientName}?</p>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDeleteConfirmOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  if (bookingToDelete) {
+                    handleDeleteBooking(bookingToDelete.id)
+                  }
+                  setIsDeleteConfirmOpen(false)
+                }}
+              >
+                Delete
               </Button>
             </DialogFooter>
           </DialogContent>
