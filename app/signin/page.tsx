@@ -35,6 +35,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
         loop
         muted
         playsInline
+        poster="/5459923.jpg"
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
     >
         <source src="/background-video.mp4" type="video/mp4" />
