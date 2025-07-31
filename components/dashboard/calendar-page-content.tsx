@@ -88,28 +88,28 @@ export function CalendarPageContent({
 
   return (
     <Card className="bg-black/80 backdrop-blur border border-gold/30 shadow-xl rounded-2xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-gold to-yellow-600 text-black shadow-md">
+        <CardHeader className="bg-gradient-to-r from-gold to-yellow-600 text-[#FFD700] shadow-md">
             <div className="flex items-center justify-between">
             <CardTitle className="flex items-center space-x-2 text-lg font-bold">
-                <Calendar className="w-5 h-5 text-black" />
+                <Calendar className="w-5 h-5 text-[#FFD700]" />
                 <span>Calendar View</span>
             </CardTitle>
             <div className="flex items-center space-x-2">
                 <Button
                 variant="ghost"
                 size="sm"
-                className="text-black hover:bg-black/20 rounded-xl"
+                className="text-[#FFD700] hover:bg-black/20 rounded-xl"
                 onClick={() => navigateMonth("prev")}
                 >
                 <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span className="font-semibold text-base text-black min-w-48 text-center">
+                <span className="font-semibold text-base text-[#FFD700] min-w-48 text-center">
                 {formatMonthYear(currentDate)}
                 </span>
                 <Button
                 variant="ghost"
                 size="sm"
-                className="text-black hover:bg-black/20 rounded-xl"
+                className="text-[#FFD700] hover:bg-black/20 rounded-xl"
                 onClick={() => navigateMonth("next")}
                 >
                 <ChevronRight className="h-4 w-4" />
