@@ -169,7 +169,7 @@ export function ServicesPageContent({
                 onClick={() => setIsAddServiceOpen(true)}
               >
                 <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
-                Add
+                Add A New Service
               </Button>
             </div>
           </div>

@@ -993,7 +993,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
+                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-black rounded-xl"
                 onClick={handleAddService}
               >
                 Add Service
