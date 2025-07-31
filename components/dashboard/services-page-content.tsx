@@ -111,7 +111,7 @@ export function ServicesPageContent({
 
   return (
     <div className="flex h-full">
-      <div className="hidden sm:block w-80 bg-black/90 backdrop-blur-sm border-r border-roseLight-DEFAULT p-6 rounded-l-2xl shadow-lg">
+      <div className="hidden sm:block w-80 bg-black/95 backdrop-blur-sm border-r border-roseLight-DEFAULT p-6 rounded-l-2xl shadow-lg">
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-white mb-4">Categories</h3>
           <div className="space-y-2">
@@ -182,7 +182,7 @@ export function ServicesPageContent({
               />
               <Input
                 placeholder="Search service name"
-                className="pl-10 rounded-xl border-roseLight-DEFAULT focus:border-roseDark-DEFAULT focus:ring-roseDark-DEFAULT bg-black/50 backdrop-blur-sm"
+                className="pl-10 rounded-xl border-roseLight-DEFAULT focus:border-roseDark-DEFAULT focus:ring-roseDark-DEFAULT bg-black/95 backdrop-blur-sm"
                 value={serviceSearch}
                 onChange={(e) => setServiceSearch(e.target.value)}
               />
@@ -235,12 +235,12 @@ export function ServicesPageContent({
                         {categoryServices.map((service) => (
                           <Card
                             key={service.id}
-                            className="bg-black/50 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl"
+                            className="bg-black/95 backdrop-blur-sm border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl"
                           >
                             <CardContent className="p-4">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-4">
-                                  <div className="w-1 h-12 bg-gradient-to-b from-roseDark-DEFAULT to-roseMedium-DEFAULT rounded-full"></div>
+                                  <div className="w-1 h-12 bg-black rounded-full"></div>
                                   <div>
                                     <h4 className="font-semibold text-white">{service.name}</h4>
                                     <p className="text-sm text-gray-600">{service.duration}min</p>
@@ -325,7 +325,7 @@ export function ServicesPageContent({
                   </DropdownMenu>
                 </div>
 
-                <div className="rounded-lg border overflow-hidden">
+                <div className="rounded-lg border overflow-hidden bg-black/95">
                   <Table>
                     <TableHeader>
                       <TableRow>

@@ -200,7 +200,7 @@ export function InvoicesPageContent({
         />
       </div>
 
-      <Card className="bg-black/50 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
+      <Card className="bg-black/95 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
@@ -208,7 +208,7 @@ export function InvoicesPageContent({
               <span>All Invoices ({searchFilteredInvoices.length})</span>
             </CardTitle>
             <Select value={invoiceStatusFilter} onValueChange={setInvoiceStatusFilter}>
-              <SelectTrigger className="w-full sm:w-40 rounded-xl border-roseLight-DEFAULT bg-black/50 backdrop-blur-sm">
+              <SelectTrigger className="w-full sm:w-40 rounded-xl border-roseLight-DEFAULT bg-black/95 backdrop-blur-sm">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
