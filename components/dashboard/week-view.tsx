@@ -1,6 +1,7 @@
 "use client"
 import type { Booking } from "@/types"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { toYMD } from "@/lib/utils"
 
 interface WeekViewProps {
   bookings: Booking[]
@@ -20,7 +21,7 @@ export function WeekView({ bookings, currentDate }: WeekViewProps) {
   const bookingsForWeek = days.map((day) => ({
     date: day,
     bookings: bookings.filter(
-      (booking) => booking.date === day.toISOString().split("T")[0],
+      (booking) => booking.date === toYMD(day),
     ),
   }))
 

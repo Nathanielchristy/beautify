@@ -1,6 +1,7 @@
 "use client"
 import type { Booking } from "@/types"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { toYMD } from "@/lib/utils"
 
 interface DayViewProps {
   bookings: Booking[]
@@ -9,7 +10,7 @@ interface DayViewProps {
 
 export function DayView({ bookings, selectedDate }: DayViewProps) {
   const bookingsForDay = bookings.filter(
-    (booking) => booking.date === selectedDate.toISOString().split("T")[0],
+    (booking) => booking.date === toYMD(selectedDate)
   )
 
   return (

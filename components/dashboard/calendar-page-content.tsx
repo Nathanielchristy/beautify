@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { mockClients, mockServices, mockStaff } from "@/data/mockData"
+import { toYMD } from "@/lib/utils"
 import { DayView } from "./day-view"
 import { WeekView } from "./week-view"
 
@@ -65,7 +66,7 @@ export function CalendarPageContent({
 
   const getBookingsForDate = (date: Date, day: number) => {
     const targetDate = new Date(date.getFullYear(), date.getMonth(), day)
-    const dateString = targetDate.toISOString().split("T")[0]
+    const dateString = toYMD(targetDate)
     return filteredBookings.filter((booking) => booking.date === dateString)
   }
 
