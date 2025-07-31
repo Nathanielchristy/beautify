@@ -11,6 +11,21 @@ interface WeekViewProps {
 export function WeekView({ bookings, currentDate }: WeekViewProps) {
   const startOfWeek = new Date(currentDate)
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay())
+  const endOfWeek = new Date(startOfWeek)
+  endOfWeek.setDate(endOfWeek.getDate() + 6)
+
+  const formatWeekRange = (start: Date, end: Date) => {
+    const startMonth = start.toLocaleDateString("en-US", { month: "long" })
+    const endMonth = end.toLocaleDateString("en-US", { month: "long" })
+    const startDay = start.getDate()
+    const endDay = end.getDate()
+
+    if (startMonth === endMonth) {
+      return `${startMonth} ${startDay} - ${endDay}`
+    } else {
+      return `${startMonth} ${startDay} - ${endMonth} ${endDay}`
+    }
+  }
 
   const days = Array.from({ length: 7 }, (_, i) => {
     const day = new Date(startOfWeek)
@@ -28,7 +43,7 @@ export function WeekView({ bookings, currentDate }: WeekViewProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Week of {startOfWeek.toLocaleDateString("en-US", { month: 'long', day: 'numeric' })}</CardTitle>
+        <CardTitle>{formatWeekRange(startOfWeek, endOfWeek)}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-7 gap-2">
