@@ -70,16 +70,24 @@ export function CalendarPageContent({
     return filteredBookings.filter((booking) => booking.date === dateString)
   }
 
-  const navigateMonth = (direction: "prev" | "next") =>
+  const navigate = (direction: "prev" | "next") => {
     setCurrentDate((prev) => {
       const newDate = new Date(prev)
-      if (direction === "prev") {
-        newDate.setMonth(prev.getMonth() - 1)
-      } else {
-        newDate.setMonth(prev.getMonth() + 1)
+      const multiplier = direction === "prev" ? -1 : 1
+      switch (calendarView) {
+        case "month":
+          newDate.setMonth(newDate.getMonth() + multiplier)
+          break
+        case "week":
+          newDate.setDate(newDate.getDate() + 7 * multiplier)
+          break
+        case "day":
+          newDate.setDate(newDate.getDate() + 1 * multiplier)
+          break
       }
       return newDate
     })
+  }
 
   const handleDateClick = (day: number) => {
     const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
@@ -100,7 +108,7 @@ export function CalendarPageContent({
                 variant="ghost"
                 size="sm"
                 className="text-[#FFD700] hover:bg-black/20 rounded-xl"
-                onClick={() => navigateMonth("prev")}
+                onClick={() => navigate("prev")}
                 >
                 <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -111,7 +119,7 @@ export function CalendarPageContent({
                 variant="ghost"
                 size="sm"
                 className="text-[#FFD700] hover:bg-black/20 rounded-xl"
-                onClick={() => navigateMonth("next")}
+                onClick={() => navigate("next")}
                 >
                 <ChevronRight className="h-4 w-4" />
                 </Button>
