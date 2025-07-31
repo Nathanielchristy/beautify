@@ -7,7 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { FileText, Plus, Edit, Trash2, Search } from "lucide-react"
 import type { Invoice, InvoiceItem } from "@/types"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { mockClients, mockServices, mockInventory } from "@/data/mockData"
@@ -32,6 +38,8 @@ export function InvoicesPageContent({
   const [invoiceStatusFilter, setInvoiceStatusFilter] = useState("all")
   const [isCreateInvoiceDialogOpen, setIsCreateInvoiceDialogOpen] = useState(false)
   const [isEditInvoiceDialogOpen, setIsEditInvoiceDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [invoiceToDelete, setInvoiceToDelete] = useState<string | null>(null)
   const [currentInvoice, setCurrentInvoice] = useState<Invoice | null>(null)
   const [newInvoice, setNewInvoice] = useState<Omit<Invoice, "id">>({
     clientId: "",
@@ -113,8 +121,12 @@ export function InvoicesPageContent({
     }
   }
 
-  const handleDeleteInvoice = (id: string) => {
-    setInvoices(invoices.filter((invoice) => invoice.id !== id))
+  const handleDeleteInvoice = () => {
+    if (invoiceToDelete) {
+      setInvoices(invoices.filter((invoice) => invoice.id !== invoiceToDelete))
+      setInvoiceToDelete(null)
+    }
+    setIsDeleteDialogOpen(false)
   }
 
   const filteredInvoices = useMemo(() => {
@@ -242,7 +254,14 @@ export function InvoicesPageContent({
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="icon" onClick={() => handleDeleteInvoice(invoice.id)}>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => {
+                            setInvoiceToDelete(invoice.id)
+                            setIsDeleteDialogOpen(true)
+                          }}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -254,6 +273,36 @@ export function InvoicesPageContent({
           </div>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">Confirm Delete</DialogTitle>
+            <p className="text-white">
+              Are you sure you want to delete this invoice? This action cannot be undone.
+            </p>
+          </DialogHeader>
+          <div className="flex justify-end space-x-3 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDeleteDialogOpen(false)
+                setInvoiceToDelete(null)
+              }}
+              className="rounded-xl hover:bg-roseLight-DEFAULT/30"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-black rounded-xl bg-[#FFD700]"
+              onClick={handleDeleteInvoice}
+            >
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Create Invoice Dialog */}
       <Dialog open={isCreateInvoiceDialogOpen} onOpenChange={setIsCreateInvoiceDialogOpen}>

@@ -10,7 +10,13 @@ import { Plus, Edit, Package, Search, Trash2 } from "lucide-react"
 import type { InventoryItem, Product } from "@/types"
 import { mockInventory } from "@/data/mockData"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 
 interface InventoryPageContentProps {
@@ -29,6 +35,8 @@ export function InventoryPageContent({
   const [inventory, setInventory] = useState<Product[]>(mockInventory)
   const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false)
   const [isEditProductDialogOpen, setIsEditProductDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<string | null>(null)
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
   const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
     name: "",
@@ -56,8 +64,12 @@ export function InventoryPageContent({
     }
   }
 
-  const handleDeleteProduct = (id: string) => {
-    setInventory(inventory.filter((product) => product.id !== id))
+  const handleDeleteProduct = () => {
+    if (productToDelete) {
+      setInventory(inventory.filter((product) => product.id !== productToDelete))
+      setProductToDelete(null)
+    }
+    setIsDeleteDialogOpen(false)
   }
 
   const filteredInventory = useMemo(() => {
@@ -154,7 +166,14 @@ export function InventoryPageContent({
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="icon" onClick={() => handleDeleteProduct(product.id)}>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => {
+                            setProductToDelete(product.id)
+                            setIsDeleteDialogOpen(true)
+                          }}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -166,6 +185,36 @@ export function InventoryPageContent({
           </div>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">Confirm Delete</DialogTitle>
+            <p className="text-white">
+              Are you sure you want to delete this product? This action cannot be undone.
+            </p>
+          </DialogHeader>
+          <div className="flex justify-end space-x-3 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDeleteDialogOpen(false)
+                setProductToDelete(null)
+              }}
+              className="rounded-xl hover:bg-roseLight-DEFAULT/30"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-black rounded-xl bg-[#FFD700]"
+              onClick={handleDeleteProduct}
+            >
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Add Product Dialog */}
       <Dialog open={isAddProductDialogOpen} onOpenChange={setIsAddProductDialogOpen}>
