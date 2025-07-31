@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState,useMemo } from "react"
 import { LogOut, Home, Calendar, Users, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -100,14 +100,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   const { toast } = useToast()
 
   // Service categories state
-  const [serviceCategories, setServiceCategories] = useState([
-    "Hair",
-    "Skin",
-    "Nails",
-    "Spa",
-    "Massage",
-    "Eyebrows & Eyelashes",
-  ])
+  const serviceCategories = useMemo(() => {
+    const categories = services.map((service) => service.category)
+    return [...new Set(categories)]
+  }, [services])
 
   const [selectedCategory, setSelectedCategory] = useState("all")
 
@@ -319,12 +315,22 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   }
 
   const handleSaveOrder = () => {
-    const otherServices =
-      selectedCategory === "all" ? [] : services.filter((service) => service.category !== selectedCategory)
-
-    const updatedServices = selectedCategory === "all" ? reorderingServices : [...otherServices, ...reorderingServices]
-
-    setServices(updatedServices)
+    const reorderedIds = new Set(reorderingServices.map(s => s.id));
+    const newServices: Service[] = [];
+    let reorderedInserted = false;
+    
+    for (const service of services) {
+      if (reorderedIds.has(service.id)) {
+        if (!reorderedInserted) {
+          newServices.push(...reorderingServices);
+          reorderedInserted = true;
+        }
+      } else {
+        newServices.push(service);
+      }
+    }
+    
+    setServices(newServices);
     setIsManageOrderOpen(false)
     setReorderingServices([])
 
@@ -1275,7 +1281,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
+                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-black rounded-xl"
                 onClick={handleAddBooking}
               >
                 Create Booking

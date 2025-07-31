@@ -257,7 +257,7 @@ export function InvoicesPageContent({
 
       {/* Create Invoice Dialog */}
       <Dialog open={isCreateInvoiceDialogOpen} onOpenChange={setIsCreateInvoiceDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto bg-black/90">
           <DialogHeader>
             <DialogTitle>Create New Invoice</DialogTitle>
           </DialogHeader>
@@ -422,7 +422,7 @@ export function InvoicesPageContent({
           <DialogFooter>
             <Button
               onClick={handleCreateInvoice}
-              className="bg-roseDark hover:bg-roseMedium text-white"
+              className="bg-[#FFD700] text-black"
               disabled={!newInvoice.clientId || !newInvoice.date || newInvoice.items.length === 0}
             >
               Create Invoice

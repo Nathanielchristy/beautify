@@ -169,7 +169,7 @@ export function InventoryPageContent({
 
       {/* Add Product Dialog */}
       <Dialog open={isAddProductDialogOpen} onOpenChange={setIsAddProductDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-black/90">
           <DialogHeader>
             <DialogTitle>Add New Product</DialogTitle>
           </DialogHeader>
@@ -246,7 +246,7 @@ export function InventoryPageContent({
           <DialogFooter>
             <Button
               onClick={handleAddProduct}
-              className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
+              className="bg-[#FFD700] text-black"
             >
               Add Product
             </Button>

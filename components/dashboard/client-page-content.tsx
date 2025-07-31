@@ -146,7 +146,7 @@ export function ClientPageContent({
                       className={
                         client.status === "active"
                           ? "bg-success-light text-success-DEFAULT"
-                          : "bg-gray-100 text-white"
+                          : "bg-[#FFD700] text-white"
                       }
                     >
                       {client.status}
@@ -229,7 +229,7 @@ export function ClientPageContent({
                         className={
                           client.status === "active"
                             ? "bg-success-light text-success-DEFAULT"
-                            : "bg-gray-100 text-white"
+                            : "bg-[#FFD700] text-black"
                         }
                       >
                         {client.status}
