@@ -6,6 +6,7 @@ import { Input } from "../../components/ui/input"
 import Image from "next/image"
 import Link from "next/link"
 import type { JSX } from "react"
+import { Eye, EyeOff } from "lucide-react"
 
 interface SignUpPageProps {
   onSignUp?: (email: string) => void
@@ -16,6 +17,8 @@ export const SignUpPage = ({ onSignUp }: SignUpPageProps): JSX.Element => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [signUpMessage, setSignUpMessage] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleSignUpClick = () => {
     if (!email || !password || !confirmPassword) {
@@ -38,20 +41,50 @@ export const SignUpPage = ({ onSignUp }: SignUpPageProps): JSX.Element => {
     onSignUp?.(email)
   }
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+    // Clear any previous error messages when user starts typing
+    if (signUpMessage) {
+      setSignUpMessage("")
+    }
+  }
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+    // Clear any previous error messages when user starts typing
+    if (signUpMessage) {
+      setSignUpMessage("")
+    }
+  }
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value)
+    // Clear any previous error messages when user starts typing
+    if (signUpMessage) {
+      setSignUpMessage("")
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSignUpClick()
+    }
+  }
+
   return (
     <main className="min-h-screen w-full overflow-x-hidden relative bg-cover bg-center bg-no-repeat" >
-          {/* Video Element */}
-    <video
+      {/* Video Element */}
+      <video
         autoPlay
         loop
         muted
         playsInline
         poster="/5459923.jpg"
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-    >
+      >
         <source src="/background-video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-    </video>
+      </video>
       <div className="absolute inset-0 bg-gradient-to-br from-[#060606]/80 via-[#060606]/60 to-[#060606]/90"></div>
       <div className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-8">
         <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-16 xl:gap-24">
@@ -90,39 +123,80 @@ export const SignUpPage = ({ onSignUp }: SignUpPageProps): JSX.Element => {
                 <Input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  onChange={handleEmailChange}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="email"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200 caret-white selection:bg-[#FFDE59]/30 cursor-text"
                   placeholder="Email"
+                  style={{ WebkitAppearance: 'none', appearance: 'none' }}
                 />
               </div>
 
               {/* Password Input */}
               <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-2 sm:mb-3 md:mb-4">
                 <Input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  onChange={handlePasswordChange}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="new-password"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200 caret-white selection:bg-[#FFDE59]/30 cursor-text"
                   placeholder="Password"
+                  style={{ WebkitAppearance: 'none', appearance: 'none' }}
                 />
+
+                {/* Eye Icon Toggle for Password */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFD700] hover:text-yellow-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded pointer-events-auto z-10"
+                  aria-label="Toggle password visibility"
+                  tabIndex={0}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
 
               {/* Confirm Password Input */}
               <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-3 sm:mb-4 md:mb-5 lg:mb-6">
                 <Input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  onChange={handleConfirmPasswordChange}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="new-password"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-white/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200 caret-white selection:bg-[#FFDE59]/30 cursor-text"
                   placeholder="Confirm Password"
+                  style={{ WebkitAppearance: 'none', appearance: 'none' }}
                 />
+
+                {/* Eye Icon Toggle for Confirm Password */}
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFD700] hover:text-yellow-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded pointer-events-auto z-10"
+                  aria-label="Toggle confirm password visibility"
+                  tabIndex={0}
+                >
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
 
               {/* Sign Up Button */}
               <div className="mb-3 sm:mb-4 md:mb-5 lg:mb-6">
                 <Button
                   onClick={handleSignUpClick}
-                  className="w-36 xs:w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.97)] hover:bg-[#FFDE59] hover:scale-105 active:scale-95 text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+                  disabled={!email || !password || !confirmPassword}
+                  className="w-36 xs:w-40 sm:w-44 md:w-48 lg:w-52 xl:w-56 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.97)] hover:bg-[#FFDE59] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[rgba(255,222,89,0.97)] text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50"
                 >
                   Sign Up
                 </Button>
@@ -149,7 +223,7 @@ export const SignUpPage = ({ onSignUp }: SignUpPageProps): JSX.Element => {
                   </span>
                   <Link
                     href="/signin"
-                    className="text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline font-medium"
+                    className="text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline font-medium focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-1"
                   >
                     Sign In
                   </Link>
@@ -159,8 +233,7 @@ export const SignUpPage = ({ onSignUp }: SignUpPageProps): JSX.Element => {
             </div>
           </div>
         </div>
-              </div>
-
+      </div>
     </main>
   )
 }

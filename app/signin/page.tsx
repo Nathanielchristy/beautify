@@ -27,20 +27,42 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
     }
   }
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+    // Clear any previous error messages when user starts typing
+    if (loginMessage) {
+      setLoginMessage("")
+    }
+  }
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+    // Clear any previous error messages when user starts typing
+    if (loginMessage) {
+      setLoginMessage("")
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLoginClick()
+    }
+  }
+
   return (
-<main className="min-h-screen w-full overflow-x-hidden relative">
-    {/* Video Element */}
-    <video
+    <main className="min-h-screen w-full overflow-x-hidden relative">
+      {/* Video Element */}
+      <video
         autoPlay
         loop
         muted
         playsInline
         poster="/5459923.jpg"
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
-    >
+      >
         <source src="/background-video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-    </video>
+      </video>
       <div className="absolute inset-0 bg-gradient-to-br from-[#060606]/80 via-[#060606]/60 to-[#060606]/90"></div>
       <div className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-8">
         <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-16 xl:gap-24">
@@ -79,9 +101,15 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                 <Input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  onChange={handleEmailChange}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="email"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200 caret-white selection:bg-[#FFDE59]/30 cursor-text"
                   placeholder="Email"
+                  style={{ WebkitAppearance: 'none', appearance: 'none' }}
                 />
               </div>
 
@@ -90,17 +118,24 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                 <Input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200"
+                  onChange={handlePasswordChange}
+                  onKeyPress={handleKeyPress}
+                  autoComplete="current-password"
+                  spellCheck={false}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  className="w-full h-full rounded-xl sm:rounded-2xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.60)] backdrop-blur-sm px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-1 focus:ring-[#FFDE59] focus:bg-[rgba(217,217,217,0.15)] outline-none transition-all duration-200 caret-white selection:bg-[#FFDE59]/30 cursor-text"
                   placeholder="Password"
+                  style={{ WebkitAppearance: 'none', appearance: 'none' }}
                 />
 
                 {/* Eye Icon Toggle */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFD700] hover:text-yellow-400 transition"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFD700] hover:text-yellow-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded pointer-events-auto z-10"
                   aria-label="Toggle password visibility"
+                  tabIndex={0}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -110,7 +145,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
               <div className="w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] text-center mb-5 sm:mb-6 md:mb-7 lg:mb-8">
                 <Link 
                   href="/forgot-password" 
-                  className="text-white font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline"
+                  className="text-white font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-1"
                 >
                   Forget Password?
                 </Link>
@@ -120,7 +155,8 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
               <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-7">
                 <Button
                   onClick={handleLoginClick}
-                  className="w-32 xs:w-36 sm:w-40 md:w-44 lg:w-48 xl:w-52 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.97)] hover:bg-[#FFDE59] hover:scale-105 active:scale-95 text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+                  disabled={!email || !password}
+                  className="w-32 xs:w-36 sm:w-40 md:w-44 lg:w-48 xl:w-52 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border border-[rgba(255,222,89,0.60)] bg-[rgba(255,222,89,0.97)] hover:bg-[#FFDE59] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[rgba(255,222,89,0.97)] text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50"
                 >
                   Login
                 </Button>
@@ -147,7 +183,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                   </span>
                   <Link
                     href="/signup"
-                    className="text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline font-medium"
+                    className="text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-colors duration-200 underline-offset-2 hover:underline font-medium focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-1"
                   >
                     Sign up
                   </Link>
