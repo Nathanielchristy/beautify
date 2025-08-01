@@ -18,6 +18,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 interface InventoryPageContentProps {
   inventory: InventoryItem[]
@@ -305,7 +306,7 @@ export function InventoryPageContent({
 
       {/* Edit Product Dialog */}
       <Dialog open={isEditProductDialogOpen} onOpenChange={setIsEditProductDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-black/95">
           <DialogHeader>
             <DialogTitle>Edit Product</DialogTitle>
           </DialogHeader>
@@ -396,7 +397,7 @@ export function InventoryPageContent({
           <DialogFooter>
             <Button
               onClick={handleEditProduct}
-              className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
+              className="bg-[#FFD700] text-black"
             >
               Save Changes
             </Button>

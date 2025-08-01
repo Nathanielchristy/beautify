@@ -637,6 +637,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         return (
           <InvoicesPageContent
             invoices={invoices}
+            setInvoices={setInvoices}
             setIsCreateInvoiceOpen={setIsCreateInvoiceOpen}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}

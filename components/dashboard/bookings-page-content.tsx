@@ -335,7 +335,7 @@ export function BookingsPageContent({
 
         {/* Edit Booking Dialog */}
         <Dialog open={isEditBookingDialogOpen} onOpenChange={setIsEditBookingDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] bg-black/95">
             <DialogHeader>
               <DialogTitle>Edit Booking</DialogTitle>
             </DialogHeader>
@@ -474,7 +474,7 @@ export function BookingsPageContent({
             <DialogFooter>
               <Button
                 onClick={handleEditBooking}
-                className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
+                className="bg-[#FFD700] text-black"
               >
                 Save Changes
               </Button>

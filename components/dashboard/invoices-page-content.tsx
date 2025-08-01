@@ -77,31 +77,47 @@ export function InvoicesPageContent({
     })
   }
 
-  const handleCreateInvoice = () => {
-    const id = (invoices.length + 1).toString()
-    const client = mockClients.find((c) => c.id === newInvoice.clientId)
+const handleCreateInvoice = () => {
+  if (!newInvoice.clientId || !newInvoice.date || newInvoice.items.length === 0) return;
 
-    setInvoices([
-      ...invoices,
-      {
-        id,
-        ...newInvoice,
-        clientName: client?.name || "",
-      },
-    ])
-    
-    // Reset form
-    setNewInvoice({
-      clientId: "",
-      clientName: "",
-      date: "",
-      totalAmount: 0,
-      status: "Pending",
-      items: [],
-    })
-    setNewItem({ type: "service", id: "", name: "", price: 0, quantity: 1 })
-    setIsCreateInvoiceDialogOpen(false)
+  const client = mockClients.find((c) => c.id === newInvoice.clientId)
+  const newId = Date.now().toString()
+
+  const invoiceToCreate: Invoice = {
+    id: newId,
+    clientId: newInvoice.clientId,
+    clientName: client?.name || "",
+    date: newInvoice.date,
+    status: newInvoice.status,
+    items: newInvoice.items,
+    totalAmount: newInvoice.items.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    ),
   }
+
+  setInvoices([...invoices, invoiceToCreate])
+
+  // Reset form state
+  setNewInvoice({
+    clientId: "",
+    clientName: "",
+    date: "",
+    totalAmount: 0,
+    status: "Pending",
+    items: [],
+  })
+  setNewItem({
+    type: "service",
+    id: "",
+    name: "",
+    price: 0,
+    quantity: 1,
+  })
+
+  setIsCreateInvoiceDialogOpen(false)
+}
+
 
   const handleEditInvoice = () => {
     if (currentInvoice) {
@@ -178,7 +194,7 @@ export function InvoicesPageContent({
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Invoice Management</h2>
-          <p className="text-gray-600">Track payments and billing</p>
+          <p className="text-white">Track payments and billing</p>
         </div>
         <Button
           className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
@@ -319,7 +335,7 @@ export function InvoicesPageContent({
                 onValueChange={(value) => setNewInvoice({ ...newInvoice, clientId: value })}
                 value={newInvoice.clientId}
               >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select a client" />
                 </SelectTrigger>
                 <SelectContent>
@@ -341,7 +357,7 @@ export function InvoicesPageContent({
                 type="date"
                 value={newInvoice.date}
                 onChange={(e) => setNewInvoice({ ...newInvoice, date: e.target.value })}
-                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
               />
             </div>
             
@@ -353,7 +369,7 @@ export function InvoicesPageContent({
                 onValueChange={(value) => setNewInvoice({ ...newInvoice, status: value as Invoice["status"] })}
                 value={newInvoice.status}
               >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -376,10 +392,10 @@ export function InvoicesPageContent({
                     >
                       <div className="flex-1">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-600">{item.type === "service" ? "Service" : "Product"}</p>
+                        <p className="text-sm text-white">{item.type === "service" ? "Service" : "Product"}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-700">
+                        <span className="text-white">
                           ${item.price.toFixed(2)} x {item.quantity}
                         </span>
                         <Button variant="ghost" size="icon" onClick={() => handleRemoveItem(index)}>
@@ -402,7 +418,7 @@ export function InvoicesPageContent({
                   }
                   value={newItem.type}
                 >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -426,7 +442,7 @@ export function InvoicesPageContent({
                   }}
                   value={newItem.id}
                 >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                     <SelectValue placeholder={`Select ${newItem.type}`} />
                   </SelectTrigger>
                   <SelectContent>
@@ -451,7 +467,7 @@ export function InvoicesPageContent({
                   placeholder="Quantity"
                   value={newItem.quantity}
                   onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) || 1 })}
-                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
                 />
                 <Button
                   type="button"
@@ -482,7 +498,7 @@ export function InvoicesPageContent({
 
       {/* Edit Invoice Dialog */}
       <Dialog open={isEditInvoiceDialogOpen} onOpenChange={setIsEditInvoiceDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto bg-black">
           <DialogHeader>
             <DialogTitle>Edit Invoice</DialogTitle>
           </DialogHeader>
@@ -497,7 +513,7 @@ export function InvoicesPageContent({
                 }
                 value={currentInvoice?.clientId || ""}
               >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select a client" />
                 </SelectTrigger>
                 <SelectContent>
@@ -519,7 +535,7 @@ export function InvoicesPageContent({
                 type="date"
                 value={currentInvoice?.date || ""}
                 onChange={(e) => setCurrentInvoice(currentInvoice ? { ...currentInvoice, date: e.target.value } : null)}
-                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
               />
             </div>
             
@@ -533,7 +549,7 @@ export function InvoicesPageContent({
                 }
                 value={currentInvoice?.status || ""}
               >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -556,10 +572,10 @@ export function InvoicesPageContent({
                     >
                       <div className="flex-1">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-600">{item.type === "service" ? "Service" : "Product"}</p>
+                        <p className="text-sm text-white">{item.type === "service" ? "Service" : "Product"}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-700">
+                        <span className="text-white">
                           ${item.price.toFixed(2)} x {item.quantity}
                         </span>
                         <Button
@@ -586,7 +602,7 @@ export function InvoicesPageContent({
                   }
                   value={newItem.type}
                 >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -610,7 +626,7 @@ export function InvoicesPageContent({
                   }}
                   value={newItem.id}
                 >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
                     <SelectValue placeholder={`Select ${newItem.type}`} />
                   </SelectTrigger>
                   <SelectContent>
@@ -635,7 +651,7 @@ export function InvoicesPageContent({
                   placeholder="Quantity"
                   value={newItem.quantity}
                   onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) || 1 })}
-                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-white/50 backdrop-blur-sm"
+                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
                 />
                 <Button
                   type="button"
@@ -655,7 +671,7 @@ export function InvoicesPageContent({
           <DialogFooter>
             <Button
               onClick={handleEditInvoice}
-              className="bg-roseDark hover:bg-roseMedium text-white"
+              className="bg-[#FFD700] text-black"
             >
               Save Changes
             </Button>
