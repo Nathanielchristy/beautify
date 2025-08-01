@@ -1,7 +1,7 @@
 "use client"
 
 import { useState,useMemo } from "react"
-import { LogOut, Home, Calendar, Users, BarChart3 } from "lucide-react"
+import { LogOut, Home, Calendar, Users, BarChart3} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
@@ -46,6 +46,7 @@ const bottomNavItems = [
   { id: "inventory", label: "Inventory", icon: Package },
   { id: "invoices", label: "Invoices", icon: FileText },
   { id: "reports", label: "Reports", icon: BarChart3 },
+  { id: "logout", label: "Logout", icon: LogOut },
 ]
 
 interface DashboardProps {
@@ -684,15 +685,21 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               return (
                 <button
                   key={item.id}
-                  onClick={() => handleTabChange(item.id)}
-                   className={`flex-1 min-w-0 flex flex-col items-center justify-center space-y-1 p-2 rounded-md transition-all duration-200 ${
+                  onClick={() => {
+                    if (item.id === "logout") {
+                      setShowLogoutConfirm(true)
+                    } else {
+                      handleTabChange(item.id)
+                    }
+                  }}
+                  className={`flex-1 min-w-0 flex flex-col items-center justify-center space-y-1 p-2 rounded-md transition-all duration-200 ${
                     activeTab === item.id
                       ? "bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-zs shadow-md"
                       : "text-white hover:bg-black/50"
                   }`}
                 >
-                  <Icon className="h-5 w-5" strokeWidth={2} />
-                  <span className="text-xs font-medium">{item.label}</span>
+                  <Icon className={`h-6 w-6 ${activeTab === item.id ? "text-black" : "text-white"}`}strokeWidth={2}/>
+                  {/* <span className="text-xs font-medium">{item.label}</span> */}
                 </button>
               )
             })}
