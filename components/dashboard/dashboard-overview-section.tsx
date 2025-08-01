@@ -83,7 +83,7 @@ export function DashboardOverviewSection({
           Welcome back to GABI
         </h1>
         <p className="text-sm text-[#ffc01f]">
-          Here's what's happening with your beauty business today.
+          Here&apos;s what&apos;s happening with your beauty business today.
         </p>
       </div>
     </div>
@@ -109,7 +109,7 @@ export function DashboardOverviewSection({
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-roseDark-DEFAULT mb-1">Today's Bookings</p>
+                <p className="text-sm font-medium text-roseDark-DEFAULT mb-1">Today&apos;s Bookings</p>
                 <p className="text-2xl font-bold text-roseDeep-DEFAULT">{todayBookings}</p>
                 <p className="text-xs text-roseDark-DEFAULT mt-1">Scheduled today</p>
               </div>

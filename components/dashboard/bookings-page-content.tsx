@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast" // Import toast from react-hot-toast
 import type { Booking } from "@/types"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
+import { DatePicker } from "@/components/ui/date-picker"
+import { format } from "date-fns"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { mockClients, mockServices, mockStaff } from "@/data/mockData"
@@ -41,8 +43,7 @@ export function BookingsPageContent({
     serviceName: "",
     staffId: "",
     staffName: "",
-    date: "",
-    time: "",
+    date: null,
     status: "Pending",
     notes: "",
   })
@@ -70,9 +71,8 @@ export function BookingsPageContent({
       serviceName: "",
       staffId: "",
       staffName: "",
-      date: "",
-      time: "",
-      status: "",
+      date: null,
+      status: "Pending",
       notes: "",
     })
     setIsAddBookingDialogOpen(false)
@@ -156,7 +156,6 @@ export function BookingsPageContent({
                 <TableHead>Service</TableHead>
                 <TableHead>Staff</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Time</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -167,8 +166,7 @@ export function BookingsPageContent({
                   <TableCell className="font-medium">{booking.clientName}</TableCell>
                   <TableCell>{booking.serviceName}</TableCell>
                   <TableCell>{booking.staffName}</TableCell>
-                  <TableCell>{booking.date}</TableCell>
-                  <TableCell>{booking.time}</TableCell>
+                  <TableCell>{booking.date ? format(booking.date, "PPP") : "N/A"}</TableCell>
                   <TableCell>{booking.status}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
@@ -271,25 +269,12 @@ export function BookingsPageContent({
                 <Label htmlFor="date" className="text-right">
                   Date
                 </Label>
-                <Input
-                  id="date"
-                  type="date"
-                  value={newBooking.date}
-                  onChange={(e) => setNewBooking({ ...newBooking, date: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="time" className="text-right">
-                  Time
-                </Label>
-                <Input
-                  id="time"
-                  type="time"
-                  value={newBooking.time}
-                  onChange={(e) => setNewBooking({ ...newBooking, time: e.target.value })}
-                  className="col-span-3"
-                />
+                <div className="col-span-3">
+                  <DatePicker
+                    date={newBooking.date}
+                    setDate={(date) => setNewBooking({ ...newBooking, date: date || null })}
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="status" className="text-right">
@@ -410,29 +395,16 @@ export function BookingsPageContent({
                 <Label htmlFor="edit-date" className="text-right">
                   Date
                 </Label>
-                <Input
-                  id="edit-date"
-                  type="date"
-                  value={currentBooking?.date || ""}
-                  onChange={(e) =>
-                    setCurrentBooking(currentBooking ? { ...currentBooking, date: e.target.value } : null)
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="edit-time" className="text-right">
-                  Time
-                </Label>
-                <Input
-                  id="edit-time"
-                  type="time"
-                  value={currentBooking?.time || ""}
-                  onChange={(e) =>
-                    setCurrentBooking(currentBooking ? { ...currentBooking, time: e.target.value } : null)
-                  }
-                  className="col-span-3"
-                />
+                <div className="col-span-3">
+                  <DatePicker
+                    date={currentBooking?.date || null}
+                    setDate={(date) =>
+                      setCurrentBooking(
+                        currentBooking ? { ...currentBooking, date: date || null } : null,
+                      )
+                    }
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="edit-status" className="text-right">

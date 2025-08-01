@@ -44,8 +44,8 @@ export interface Booking {
   serviceName: string
   staffId: string
   staffName: string
-  date: string
-  time: string
+  date: Date | null
+  time?: string
   status: "pending" | "confirmed" | "completed" | "cancelled"
   notes?: string
   price: number
