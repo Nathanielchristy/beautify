@@ -44,15 +44,15 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
             {sidebarItems.map((item) => {
               const Icon = item.icon
               return (
-                <SidebarMenuItem key={item.id} className="bg-black/80">
+                <SidebarMenuItem key={item.id} className="bg-white">
                   <SidebarMenuButton
                     asChild
                     isActive={activeTab === item.id}
                     onClick={() => handleTabChange(item.id)}
                     className="flex items-center gap-3"
-                    style={activeTab === item.id ? { backgroundColor: '#FFDE59', color: 'white' } : {}}
+                    style={activeTab === item.id ? { backgroundColor: 'white', color: 'black' } : {}}
                   >
-                    <a href="#" className="flex items-center gap-3" style={activeTab === item.id ? { backgroundColor: '#FFDE59', color: 'black' } : {}}>
+                    <a href="#" className="flex items-center gap-3" style={activeTab === item.id ? { backgroundColor: 'white', color: 'black' } : {}}>
                       <Icon className="h-4 w-4" />
                       <span>{item.label}</span>
                     </a>
@@ -64,7 +64,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem className="bg-black">
+            <SidebarMenuItem className="bg-white">
               <SidebarMenuButton
                 asChild
                 onClick={() => setShowLogoutConfirm(true)}
