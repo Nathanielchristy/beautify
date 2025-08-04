@@ -52,7 +52,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
                     className={`flex items-center gap-3 hover:bg-gray-100 hover:text-black ${activeTab === item.id ? "bg-gray-200" : ""}`}
                   >
                     <a href="#" className="flex items-center gap-3">
-                      <Icon className="h-4 w-4 text-primary" />
+                      <Icon className="h-4 w-4 text-gold" />
                       <span>{item.label}</span>
                     </a>
                   </SidebarMenuButton>
@@ -70,7 +70,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
                 className="flex items-center gap-3 hover:bg-gray-100 hover:text-black"
               >
                 <a href="#" className="flex items-center gap-3">
-                  <LogOut className="h-4 w-4 text-primary" />
+                  <LogOut className="h-4 w-4 text-gold" />
                   <span>Logout</span>
                 </a>
               </SidebarMenuButton>
