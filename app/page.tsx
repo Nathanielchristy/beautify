@@ -19,7 +19,7 @@ export default function App() {
   }
 
   return (
-    <div className="bg-black/50 min-h-screen"style={{backgroundImage: 'url("/5459923.jpg")'}}>
+    <div className="bg-black/90 min-h-screen"style={{backgroundImage: 'url("/5459923.jpg")'}}>
       {isLoggedIn ? (
         <BeautyWellnessDashboard onLogout={handleLogout} userEmail={userEmail} />
       ) : (

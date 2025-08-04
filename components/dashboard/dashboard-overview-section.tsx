@@ -79,10 +79,10 @@ export function DashboardOverviewSection({
 
       {/* Content */}
       <div className="relative z-10">
-        <h1 className="text-3xl font-semibold mb-2 text-[#ffc01f]">
+        <h1 className="text-3xl font-semibold mb-2 text-white">
           Welcome back to GABI
         </h1>
-        <p className="text-sm text-[#ffc01f]">
+        <p className="text-sm text-white">
           Here's what's happening with your beauty business today.
         </p>
       </div>
@@ -94,9 +94,9 @@ export function DashboardOverviewSection({
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-roseDark-DEFAULT mb-1">Total Clients</p>
-                <p className="text-2xl font-bold text-roseDeep-DEFAULT">{clients.length}</p>
-                <p className="text-xs text-roseDark-DEFAULT mt-1">Active clients</p>
+                <p className="text-sm font-medium text-white">Total Clients</p>
+                <p className="text-2xl font-bold text-white">{clients.length}</p>
+                <p className="text-xs text-white">Active clients</p>
               </div>
               <div className="w-12 h-12 bg-roseDark-DEFAULT rounded-xl flex items-center justify-center">
                 <Users className="w-6 h-6 text-white" strokeWidth={2} />
@@ -109,9 +109,9 @@ export function DashboardOverviewSection({
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-roseDark-DEFAULT mb-1">Today's Bookings</p>
-                <p className="text-2xl font-bold text-roseDeep-DEFAULT">{todayBookings}</p>
-                <p className="text-xs text-roseDark-DEFAULT mt-1">Scheduled today</p>
+                <p className="text-sm font-medium text-white">Today's Bookings</p>
+                <p className="text-2xl font-bold text-white">{todayBookings}</p>
+                <p className="text-xs text-white">Scheduled today</p>
               </div>
               <div className="w-12 h-12 bg-roseMedium-DEFAULT rounded-xl flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-white" strokeWidth={2} />
@@ -124,9 +124,9 @@ export function DashboardOverviewSection({
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-success-DEFAULT mb-1">Revenue</p>
-                <p className="text-2xl font-bold text-success-DEFAULT">${totalRevenue.toFixed(0)}</p>
-                <p className="text-xs text-success-DEFAULT mt-1">This month</p>
+                <p className="text-sm font-medium text-white">Revenue</p>
+                <p className="text-2xl font-bold text-white">${totalRevenue.toFixed(0)}</p>
+                <p className="text-xs text-white">This month</p>
               </div>
               <div className="w-12 h-12 bg-success-DEFAULT rounded-xl flex items-center justify-center">
                 <DollarSign className="w-6 h-6 text-white" strokeWidth={2} />
@@ -139,9 +139,9 @@ export function DashboardOverviewSection({
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-info-DEFAULT mb-1">Active Staff</p>
-                <p className="text-2xl font-bold text-info-DEFAULT">{activeStaffCount}</p>
-                <p className="text-xs text-info-DEFAULT mt-1">Available today</p>
+                <p className="text-sm font-medium text-white">Active Staff</p>
+                <p className="text-2xl font-bold text-white">{activeStaffCount}</p>
+                <p className="text-xs text-white">Available today</p>
               </div>
               <div className="w-12 h-12 bg-info-DEFAULT rounded-xl flex items-center justify-center">
                 <UserCheck className="w-6 h-6 text-white" strokeWidth={2} />
