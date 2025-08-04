@@ -42,7 +42,7 @@ const sidebarVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white text-black",
+        default: "bg-background text-foreground",
         inset:
           "top-4 h-[calc(100vh-2rem)] rounded-xl border data-[side=left]:left-4 data-[side=right]:right-4",
       },
@@ -201,9 +201,9 @@ const sidebarMenuButtonVariants = cva(
   {
     variants: {
       isActive: {
-        true: "bg-gray-200 text-black",
+        true: "bg-primary text-primary-foreground",
         false:
-          "text-black hover:bg-gray-100",
+          "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
       },
       size: {
         default: "h-10",
