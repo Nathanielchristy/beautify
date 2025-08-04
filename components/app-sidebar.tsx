@@ -49,7 +49,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
                     asChild
                     isActive={activeTab === item.id}
                     onClick={() => handleTabChange(item.id)}
-                    className={`flex items-center gap-3 hover:bg-gray-100 ${activeTab === item.id ? "bg-gray-200" : ""}`}
+                    className={`flex items-center gap-3 hover:bg-gray-100 hover:text-black ${activeTab === item.id ? "bg-gray-200" : ""}`}
                   >
                     <a href="#" className="flex items-center gap-3">
                       <Icon className="h-4 w-4 text-primary" />
@@ -67,7 +67,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
               <SidebarMenuButton
                 asChild
                 onClick={() => setShowLogoutConfirm(true)}
-                className="flex items-center gap-3 hover:bg-gray-100"
+                className="flex items-center gap-3 hover:bg-gray-100 hover:text-black"
               >
                 <a href="#" className="flex items-center gap-3">
                   <LogOut className="h-4 w-4 text-primary" />
