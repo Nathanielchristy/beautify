@@ -34,7 +34,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
   return (
     <div className="hidden lg:block">
       <Sidebar>
-        <SidebarHeader className="items-center bg-black/80">
+        <SidebarHeader>
           <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
             <Image src="/gabi_logo.webp" alt="Glow Look Logo" width={100} height={100} className="h-30 w-30" />
           </a>
@@ -44,15 +44,14 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
             {sidebarItems.map((item) => {
               const Icon = item.icon
               return (
-                <SidebarMenuItem key={item.id} className="bg-white">
+                <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     asChild
                     isActive={activeTab === item.id}
                     onClick={() => handleTabChange(item.id)}
                     className="flex items-center gap-3"
-                    style={activeTab === item.id ? { backgroundColor: 'white', color: 'black' } : {}}
                   >
-                    <a href="#" className="flex items-center gap-3" style={activeTab === item.id ? { backgroundColor: 'white', color: 'black' } : {}}>
+                    <a href="#" className="flex items-center gap-3">
                       <Icon className="h-4 w-4" />
                       <span>{item.label}</span>
                     </a>
@@ -64,7 +63,7 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem className="bg-white">
+            <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
                 onClick={() => setShowLogoutConfirm(true)}
