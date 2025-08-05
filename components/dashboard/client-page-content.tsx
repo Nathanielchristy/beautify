@@ -196,8 +196,8 @@ export function ClientPageContent({
           <div className="hidden sm:block">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Client</TableHead>
+                <TableRow> 
+                  <TableHead >Client</TableHead>
                   <TableHead>Contact</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Services</TableHead>
@@ -208,12 +208,12 @@ export function ClientPageContent({
               </TableHeader>
               <TableBody>
                 {filteredClients.map((client) => (
-                  <TableRow key={client.id} className="hover:bg-roseBackground-DEFAULT/50">
+                  <TableRow key={client.id} className="hover:bg-gray-500/50">
                     <TableCell>
                       <div className="flex items-center space-x-3">
                         <Avatar className="w-10 h-10">
                           <AvatarImage src={client.avatar || "/placeholder.svg"} />
-                          <AvatarFallback className="bg-roseLight-DEFAULT text-roseDeep-DEFAULT">
+                          <AvatarFallback className="bg-white text-black">
                             {client.name.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
@@ -223,27 +223,27 @@ export function ClientPageContent({
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{client.phone}</TableCell>
+                    <TableCell className="text-white">{client.phone}</TableCell>
                     <TableCell>
                       <Badge
                         className={
                           client.status === "active"
-                            ? "bg-success-light text-success-DEFAULT"
-                            : "bg-[#FFD700] text-black"
+                            ? "bg-success-light text-white"
+                            : "bg-[#dbdbd6] text-black"
                         }
                       >
                         {client.status}
                       </Badge>
                     </TableCell>
-                    <TableCell>{client.servicesCount}</TableCell>
-                    <TableCell>${client.totalSpent}</TableCell>
-                    <TableCell>{client.lastVisit}</TableCell>
+                    <TableCell className="text-white">{client.servicesCount}</TableCell>
+                    <TableCell className="text-white">${client.totalSpent}</TableCell>
+                    <TableCell className="text-white">{client.lastVisit}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="rounded-xl bg-transparent border-roseLight-DEFAULT hover:bg-roseLight-DEFAULT/30"
+                          className="rounded-xl border-gold text-white hover:bg-[#ffd700]/10 transition-all"
                           onClick={() => {
                             setSelectedItem(client)
                             setIsViewDetailsOpen(true)
@@ -251,18 +251,11 @@ export function ClientPageContent({
                         >
                           <Eye className="h-4 w-4 mr-1" strokeWidth={2} />
                         </Button>
+
                         <Button
                           variant="outline"
                           size="sm"
-                          className="rounded-xl text-danger-DEFAULT border-danger-light hover:bg-danger-light/30 bg-transparent"
-                          onClick={() => openDeleteConfirm("client", client.id, client.name)}
-                        >
-                          <Trash2 className="h-4 w-4 mr-1" strokeWidth={2} />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="rounded-xl text-primary-DEFAULT border-primary-light hover:bg-primary-light/30 bg-transparent"
+                          className="rounded-xl border-gold text-white hover:bg-[#ffde59]/10 transition-all"
                           onClick={() => {
                             setCurrentClient(client)
                             setIsEditClientDialogOpen(true)
@@ -270,7 +263,19 @@ export function ClientPageContent({
                         >
                           <Edit className="h-4 w-4 mr-1" strokeWidth={2} />
                         </Button>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-xl border-gold text-white hover:bg-[#ffd6d6]/10 transition-all"
+                          onClick={() => openDeleteConfirm("client", client.id, client.name)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" strokeWidth={2} />
+                        </Button>
+
+
                       </div>
+
                     </TableCell>
                   </TableRow>
                 ))}
