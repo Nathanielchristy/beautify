@@ -69,20 +69,20 @@ export function DashboardOverviewSection({
 
   return (
     <div className="space-y-6">
-    <div className="relative rounded-2xl p-6 text-white overflow-hidden shadow-xl bg-gradient-to-r from-[#0a0a0a] via-[#111] to-[#0a0a0a]">
+    <div className="relative rounded-2xl p-6 text-foreground overflow-hidden shadow-xl bg-card">
       {/* Soft Gold Glow Accents */}
-      <div className="absolute -top-6 -right-6 w-32 h-32 bg-[#d4af37]/20 rounded-full blur-2xl"></div>
-      <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#d4af37]/20 rounded-full blur-2xl"></div>
+      <div className="absolute -top-6 -right-6 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
+      <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl"></div>
 
       {/* Gold Gradient Stripe */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#d4af37]/5 to-transparent pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/5 to-transparent pointer-events-none"></div>
 
       {/* Content */}
       <div className="relative z-10">
-        <h1 className="text-3xl font-semibold mb-2 text-white">
+        <h1 className="text-3xl font-semibold mb-2">
           Welcome back to GABI
         </h1>
-        <p className="text-sm text-white">
+        <p className="text-sm text-muted-foreground">
           Here's what's happening with your beauty business today.
         </p>
       </div>
@@ -90,61 +90,61 @@ export function DashboardOverviewSection({
 
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseLight-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-white">Total Clients</p>
-                <p className="text-2xl font-bold text-white">{clients.length}</p>
-                <p className="text-xs text-white">Active clients</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Clients</p>
+                <p className="text-2xl font-bold">{clients.length}</p>
+                <p className="text-xs text-muted-foreground">Active clients</p>
               </div>
-              <div className="w-12 h-12 bg-roseDark-DEFAULT rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" strokeWidth={2} />
+              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-roseMedium-DEFAULT border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-white">Today's Bookings</p>
-                <p className="text-2xl font-bold text-white">{todayBookings}</p>
-                <p className="text-xs text-white">Scheduled today</p>
+                <p className="text-sm font-medium text-muted-foreground">Today's Bookings</p>
+                <p className="text-2xl font-bold">{todayBookings}</p>
+                <p className="text-xs text-muted-foreground">Scheduled today</p>
               </div>
-              <div className="w-12 h-12 bg-roseMedium-DEFAULT rounded-xl flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-white" strokeWidth={2} />
+              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-success-light border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-white">Revenue</p>
-                <p className="text-2xl font-bold text-white">${totalRevenue.toFixed(0)}</p>
-                <p className="text-xs text-white">This month</p>
+                <p className="text-sm font-medium text-muted-foreground">Revenue</p>
+                <p className="text-2xl font-bold">${totalRevenue.toFixed(0)}</p>
+                <p className="text-xs text-muted-foreground">This month</p>
               </div>
-              <div className="w-12 h-12 bg-success-DEFAULT rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-white" strokeWidth={2} />
+              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-roseBackground-DEFAULT to-info-light border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-2xl">
+        <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-white">Active Staff</p>
-                <p className="text-2xl font-bold text-white">{activeStaffCount}</p>
-                <p className="text-xs text-white">Available today</p>
+                <p className="text-sm font-medium text-muted-foreground">Active Staff</p>
+                <p className="text-2xl font-bold">{activeStaffCount}</p>
+                <p className="text-xs text-muted-foreground">Available today</p>
               </div>
-              <div className="w-12 h-12 bg-info-DEFAULT rounded-xl flex items-center justify-center">
-                <UserCheck className="w-6 h-6 text-white" strokeWidth={2} />
+              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                <UserCheck className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
               </div>
             </div>
           </CardContent>
@@ -153,11 +153,11 @@ export function DashboardOverviewSection({
 
       {/* Recent Sales Chart - Moved before the other cards */}
 <div className="grid grid-cols-1 gap-6">
-  <Card className="bg-[#0d0d0d] border border-[#d4af37]/30 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl">
+  <Card>
     <CardContent className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-[#d4af37]">Recent Sales</h3>
-        <div className="text-sm text-[#999999]">Last 7 days</div>
+        <h3 className="text-lg font-semibold text-primary">Recent Sales</h3>
+        <div className="text-sm text-muted-foreground">Last 7 days</div>
       </div>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
@@ -165,59 +165,53 @@ export function DashboardOverviewSection({
             data={salesData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
             <XAxis 
               dataKey="date" 
-              stroke="#d4af37"
+              className="stroke-muted-foreground"
               fontSize={12}
             />
             <YAxis 
-              stroke="#d4af37"
+              className="stroke-muted-foreground"
               fontSize={12}
               tickFormatter={(value) => `$${value}`}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#1a1a1a',
-                border: '1px solid #d4af37',
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
                 borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(212, 175, 55, 0.4)',
-                color: '#fff'
+                color: 'hsl(var(--card-foreground))'
               }}
-              formatter={(value, name) => [
-                name === 'sales' ? `$${value}` : value,
-                name === 'sales' ? 'Sales' : 'Bookings'
-              ]}
-              labelStyle={{ color: '#d4af37' }}
-              itemStyle={{ color: '#fff' }}
+              labelStyle={{ color: 'hsl(var(--primary))' }}
             />
             <Line
               type="monotone"
               dataKey="sales"
-              stroke="#d4af37"
+              className="stroke-primary"
               strokeWidth={3}
-              dot={{ fill: '#d4af37', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: '#d4af37', strokeWidth: 2 }}
+              dot={{ className: 'fill-primary', r: 4 }}
+              activeDot={{ r: 6, className: 'stroke-primary' }}
             />
             <Line
               type="monotone"
               dataKey="bookings"
-              stroke="#facc15" // gold-yellow for contrast
+              className="stroke-secondary-foreground"
               strokeWidth={2}
-              dot={{ fill: '#facc15', strokeWidth: 2, r: 3 }}
-              activeDot={{ r: 5, stroke: '#facc15', strokeWidth: 2 }}
+              dot={{ className: 'fill-secondary-foreground', r: 3 }}
+              activeDot={{ r: 5, className: 'stroke-secondary-foreground' }}
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
       <div className="flex items-center justify-center gap-6 mt-4">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#d4af37] rounded-full"></div>
-          <span className="text-sm text-gray-300">Sales ($)</span>
+          <div className="w-3 h-3 bg-primary rounded-full"></div>
+          <span className="text-sm text-muted-foreground">Sales ($)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-[#facc15] rounded-full"></div>
-          <span className="text-sm text-gray-300">Bookings</span>
+          <div className="w-3 h-3 bg-secondary-foreground rounded-full"></div>
+          <span className="text-sm text-muted-foreground">Bookings</span>
         </div>
       </div>
     </CardContent>
