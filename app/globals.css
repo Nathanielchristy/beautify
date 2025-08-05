@@ -5,38 +5,38 @@
 
 @layer base {
 :root {
-  --background: 0 0% 100%;             /* White background */
+  --background: 220 20% 12%;             /* Dark Blue background */
   --foreground: 60 100% 50%;         /* Yellow foreground */
 
-  --card: 0 0% 98%;
+  --card: 220 20% 15%;
   --card-foreground: 60 100% 50%;
 
-  --popover: 0 0% 98%;
+  --popover: 220 20% 15%;
   --popover-foreground: 60 100% 50%;
 
   --gold: 60 100% 50%;               /* Main Yellow */
   --gold-dark: 60 100% 40%;
   --gold-light: 60 100% 60%;
-  --gold-foreground: 0 0% 0%;       /* Black on yellow */
+  --gold-foreground: 220 20% 12%;       /* Dark Blue on yellow */
 
   --primary: var(--gold);
   --primary-foreground: var(--gold-foreground);
 
-  --secondary: 0 0% 95%;
+  --secondary: 220 20% 20%;
   --secondary-foreground: var(--gold);
 
-  --muted: 0 0% 90%;
-  --muted-foreground: 60 100% 30%;
+  --muted: 220 20% 25%;
+  --muted-foreground: 60 100% 40%;
 
-  --accent: 0 0% 85%;
+  --accent: 220 20% 30%;
   --accent-foreground: var(--gold);
 
   --destructive: 0 100% 50%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 60 100% 70%;             /* Light yellow border */
-  --input: 0 0% 95%;
-  --ring: var(--gold);
+  --border: 60 100% 30%;             /* Yellow border */
+  --input: 220 20% 20%;
+  --ring: var(--gold-light);
 
   --radius: 0.5rem;
 }
