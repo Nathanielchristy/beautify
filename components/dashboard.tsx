@@ -186,7 +186,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
       hireDate: new Date().toISOString().split("T")[0],
       isActive: true,
       totalRevenue: 0,
-      color: "bg-roseLight-DEFAULT text-roseDeep-DEFAULT", // Default color for new staff
+      color: "bg-primary text-primary-foreground", // Default color for new staff
     }
 
     setStaff([...staff, staffMember])
@@ -226,7 +226,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
       description: newService.description || "",
       isActive: true,
       icon: "✨",
-      color: "bg-roseLight-DEFAULT text-roseDeep-DEFAULT", // Default color for new service
+      color: "bg-primary text-primary-foreground", // Default color for new service
     }
 
     setServices([...services, service])
@@ -678,7 +678,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         />
         <main className="flex-1 overflow-auto p-4 sm:p-6 pb-24 lg:pb-6">{renderContent()}</main>
         {/* Mobile Bottom Navigation - Keep this as it's a separate navigation */}
-        <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-black/90 backdrop-blur-xl border-t border-[#f5d76e]/30 px-2 py-2 shadow-lg z-50">
+        <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-background/90 backdrop-blur-xl border-t border-border px-2 py-2 shadow-lg z-50">
           <div className="flex w-full justify-between items-center gap-1">
             {bottomNavItems.map((item) => {
               const Icon = item.icon
@@ -694,11 +694,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   }}
                   className={`flex-1 min-w-0 flex flex-col items-center justify-center space-y-1 p-2 rounded-md transition-all duration-200 ${
                     activeTab === item.id
-                      ? "bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-zs shadow-md"
-                      : "text-white hover:bg-black/50"
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "text-foreground hover:bg-accent"
                   }`}
                 >
-                  <Icon className={`h-6 w-6 ${activeTab === item.id ? "text-black" : "text-white"}`}strokeWidth={2}/>
+                  <Icon className={`h-6 w-6 ${activeTab === item.id ? "text-primary-foreground" : "text-foreground"}`}strokeWidth={2}/>
                   {/* <span className="text-xs font-medium">{item.label}</span> */}
                 </button>
               )
@@ -710,10 +710,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
       {/* All Modals */}
       {/* Logout Confirmation Modal */}
       <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Confirm Logout</DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogTitle>Confirm Logout</DialogTitle>
+            <DialogDescription>
               Are you sure you want to logout? You will need to sign in again to access the dashboard.
             </DialogDescription>
           </DialogHeader>
@@ -721,12 +721,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             <Button
               variant="outline"
               onClick={() => setShowLogoutConfirm(false)}
-              className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-white rounded-xl bg-[#FFA500]"
+              variant="destructive"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4 mr-2" strokeWidth={2} />
@@ -738,16 +737,16 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Client Modal */}
       <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Add New Client</DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogTitle>Add New Client</DialogTitle>
+            <DialogDescription>
               Enter client information to add them to your system.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="clientName" className="text-white font-medium">
+              <Label htmlFor="clientName">
                 Full Name *
               </Label>
               <Input
@@ -755,11 +754,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter client name"
                 value={newClient.name || ""}
                 onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="clientEmail" className="text-white font-medium">
+              <Label htmlFor="clientEmail">
                 Email *
               </Label>
               <Input
@@ -768,11 +766,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="client@example.com"
                 value={newClient.email || ""}
                 onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="clientPhone" className="text-white font-medium">
+              <Label htmlFor="clientPhone">
                 Phone Number *
               </Label>
               <Input
@@ -780,11 +777,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="(555) 123-4567"
                 value={newClient.phone || ""}
                 onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="clientNotes" className="text-white font-medium">
+              <Label htmlFor="clientNotes">
                 Notes
               </Label>
               <Textarea
@@ -792,7 +788,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Additional notes..."
                 value={newClient.notes || ""}
                 onChange={(e) => setNewClient({ ...newClient, notes: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 mt-4">
@@ -802,12 +797,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsAddClientOpen(false)
                   setNewClient({})
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
                 onClick={handleAddClient}
               >
                 Add Client
@@ -819,14 +812,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Staff Modal */}
       <Dialog open={isAddStaffOpen} onOpenChange={setIsAddStaffOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Add Staff Member</DialogTitle>
-            <DialogDescription className="text-white">Enter staff member information.</DialogDescription>
+            <DialogTitle>Add Staff Member</DialogTitle>
+            <DialogDescription>Enter staff member information.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="staffName" className="text-white font-medium">
+              <Label htmlFor="staffName">
                 Full Name *
               </Label>
               <Input
@@ -834,11 +827,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter staff name"
                 value={newStaff.name || ""}
                 onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="staffEmail" className="text-white font-medium">
+              <Label htmlFor="staffEmail">
                 Email *
               </Label>
               <Input
@@ -847,11 +839,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="staff@beautify.com"
                 value={newStaff.email || ""}
                 onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="staffPhone" className="text-white font-medium">
+              <Label htmlFor="staffPhone">
                 Phone Number
               </Label>
               <Input
@@ -859,15 +850,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="(555) 123-4567"
                 value={newStaff.phone || ""}
                 onChange={(e) => setNewStaff({ ...newStaff, phone: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="staffSpecialty" className="text-white font-medium">
+              <Label htmlFor="staffSpecialty">
                 Specialty *
               </Label>
               <Select onValueChange={(value) => setNewStaff({ ...newStaff, specialty: value })}>
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select specialty" />
                 </SelectTrigger>
                 <SelectContent>
@@ -879,7 +869,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               </Select>
             </div>
             <div>
-              <Label htmlFor="staffAvailability" className="text-white font-medium">
+              <Label htmlFor="staffAvailability">
                 Working Days
               </Label>
               <Input
@@ -887,7 +877,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="e.g., Mon-Fri"
                 value={newStaff.availability || ""}
                 onChange={(e) => setNewStaff({ ...newStaff, availability: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
@@ -897,12 +886,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsAddStaffOpen(false)
                   setNewStaff({})
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
                 onClick={handleAddStaff}
               >
                 Add Staff
@@ -914,14 +901,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Service Modal */}
       <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Add New Service</DialogTitle>
-            <DialogDescription className="text-white">Create a new service offering.</DialogDescription>
+            <DialogTitle>Add New Service</DialogTitle>
+            <DialogDescription>Create a new service offering.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="serviceName" className="text-white font-medium">
+              <Label htmlFor="serviceName">
                 Service Name *
               </Label>
               <Input
@@ -929,15 +916,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter service name"
                 value={newService.name || ""}
                 onChange={(e) => setNewService({ ...newService, name: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="serviceCategory" className="text-white font-medium">
+              <Label htmlFor="serviceCategory">
                 Category *
               </Label>
               <Select onValueChange={(value) => setNewService({ ...newService, category: value })}>
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -951,7 +937,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="servicePrice" className="text-white font-medium">
+                <Label htmlFor="servicePrice">
                   Price *
                 </Label>
                 <Input
@@ -960,11 +946,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   placeholder="0.00"
                   value={newService.price || ""}
                   onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
               <div>
-                <Label htmlFor="serviceDuration" className="text-white font-medium">
+                <Label htmlFor="serviceDuration">
                   Duration (min) *
                 </Label>
                 <Input
@@ -973,12 +958,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   placeholder="60"
                   value={newService.duration || ""}
                   onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
             </div>
             <div>
-              <Label htmlFor="serviceDescription" className="text-white font-medium">
+              <Label htmlFor="serviceDescription">
                 Description
               </Label>
               <Textarea
@@ -986,7 +970,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Service description..."
                 value={newService.description || ""}
                 onChange={(e) => setNewService({ ...newService, description: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
@@ -996,12 +979,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsAddServiceOpen(false)
                   setNewService({})
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-black rounded-xl"
                 onClick={handleAddService}
               >
                 Add Service
@@ -1013,14 +994,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Edit Service Modal */}
       <Dialog open={isEditServiceOpen} onOpenChange={setIsEditServiceOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Edit Service</DialogTitle>
-            <DialogDescription className="text-white">Update service information.</DialogDescription>
+            <DialogTitle>Edit Service</DialogTitle>
+            <DialogDescription>Update service information.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="editServiceName" className="text-white font-medium">
+              <Label htmlFor="editServiceName">
                 Service Name *
               </Label>
               <Input
@@ -1028,11 +1009,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter service name"
                 value={editingService?.name || ""}
                 onChange={(e) => setEditingService(editingService ? { ...editingService, name: e.target.value } : null)}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="editServiceCategory" className="text-white font-medium">
+              <Label htmlFor="editServiceCategory">
                 Category *
               </Label>
               <Select
@@ -1041,7 +1021,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setEditingService(editingService ? { ...editingService, category: value } : null)
                 }
               >
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1055,7 +1035,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="editServicePrice" className="text-white font-medium">
+                <Label htmlFor="editServicePrice">
                   Price *
                 </Label>
                 <Input
@@ -1066,11 +1046,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   onChange={(e) =>
                     setEditingService(editingService ? { ...editingService, price: Number(e.target.value) } : null)
                   }
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
               <div>
-                <Label htmlFor="editServiceDuration" className="text-white font-medium">
+                <Label htmlFor="editServiceDuration">
                   Duration (min) *
                 </Label>
                 <Input
@@ -1081,12 +1060,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   onChange={(e) =>
                     setEditingService(editingService ? { ...editingService, duration: Number(e.target.value) } : null)
                   }
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
             </div>
             <div>
-              <Label htmlFor="editServiceDescription" className="text-white font-medium">
+              <Label htmlFor="editServiceDescription">
                 Description
               </Label>
               <Textarea
@@ -1096,7 +1074,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 onChange={(e) =>
                   setEditingService(editingService ? { ...editingService, description: e.target.value } : null)
                 }
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
@@ -1106,12 +1083,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsEditServiceOpen(false)
                   setEditingService(null)
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
                 onClick={handleEditService}
               >
                 Update Service
@@ -1123,14 +1098,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Category Modal */}
       <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Add New Category</DialogTitle>
-            <DialogDescription className="text-white">Create a new service category.</DialogDescription>
+            <DialogTitle>Add New Category</DialogTitle>
+            <DialogDescription>Create a new service category.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="categoryName" className="text-white font-medium">
+              <Label htmlFor="categoryName">
                 Category Name *
               </Label>
               <Input
@@ -1138,7 +1113,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter category name"
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
@@ -1148,12 +1122,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsAddCategoryOpen(false)
                   setNewCategory("")
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-black rounded-xl"
                 onClick={handleAddCategory}
               >
                 Add Category
@@ -1165,18 +1137,18 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Booking Modal */}
       <Dialog open={isAddBookingOpen} onOpenChange={setIsAddBookingOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Create New Booking</DialogTitle>
-            <DialogDescription className="text-white">Schedule a new appointment.</DialogDescription>
+            <DialogTitle>Create New Booking</DialogTitle>
+            <DialogDescription>Schedule a new appointment.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="bookingClient" className="text-white font-medium">
+              <Label htmlFor="bookingClient">
                 Client *
               </Label>
               <Select onValueChange={(value) => setNewBooking({ ...newBooking, clientId: value })}>
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select client" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1189,11 +1161,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               </Select>
             </div>
             <div>
-              <Label htmlFor="bookingService" className="text-white font-medium">
+              <Label htmlFor="bookingService">
                 Service *
               </Label>
               <Select onValueChange={(value) => setNewBooking({ ...newBooking, serviceId: value })}>
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select service" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1206,11 +1178,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               </Select>
             </div>
             <div>
-              <Label htmlFor="bookingStaff" className="text-white font-medium">
+              <Label htmlFor="bookingStaff">
                 Staff Member *
               </Label>
               <Select onValueChange={(value) => setNewBooking({ ...newBooking, staffId: value })}>
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select staff member" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1224,7 +1196,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="bookingDate" className="text-white font-medium">
+                <Label htmlFor="bookingDate">
                   Date *
                 </Label>
                 <Input
@@ -1232,11 +1204,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   type="date"
                   value={newBooking.date || ""}
                   onChange={(e) => setNewBooking({ ...newBooking, date: e.target.value })}
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
               <div>
-                <Label className="text-white font-medium">Time Slot *</Label>
+                <Label>Time Slot *</Label>
                 <div className="grid grid-cols-1 gap-2 mt-1">
                   <Select
                     onValueChange={(value) => {
@@ -1244,7 +1215,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                       setNewBooking({ ...newBooking, timeFrom, timeTo })
                     }}
                   >
-                    <SelectTrigger className="rounded-xl  bg-black/50 backdrop-blur-sm">
+                    <SelectTrigger>
                       <SelectValue placeholder="Select time slot" />
                     </SelectTrigger>
                     <SelectContent>
@@ -1266,7 +1237,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               </div>
             </div>
             <div>
-              <Label htmlFor="bookingNotes" className="text-white font-medium">
+              <Label htmlFor="bookingNotes">
                 Notes
               </Label>
               <Textarea
@@ -1274,7 +1245,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Additional notes..."
                 value={newBooking.notes || ""}
                 onChange={(e) => setNewBooking({ ...newBooking, notes: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
@@ -1284,12 +1254,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsAddBookingOpen(false)
                   setNewBooking({})
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-black rounded-xl"
                 onClick={handleAddBooking}
               >
                 Create Booking
@@ -1301,14 +1269,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Add Inventory Item Modal */}
       <Dialog open={isAddInventoryOpen} onOpenChange={setIsAddInventoryOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Add Inventory Item</DialogTitle>
-            <DialogDescription className="text-white">Add a new product to inventory.</DialogDescription>
+            <DialogTitle>Add Inventory Item</DialogTitle>
+            <DialogDescription>Add a new product to inventory.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="inventoryName" className="text-white font-medium">
+              <Label htmlFor="inventoryName">
                 Product Name *
               </Label>
               <Input
@@ -1316,15 +1284,14 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter product name"
                 value={newInventoryItem.name || ""}
                 onChange={(e) => setNewInventoryItem({ ...newInventoryItem, name: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div>
-              <Label htmlFor="inventoryCategory" className="text-white font-medium">
+              <Label htmlFor="inventoryCategory">
                 Category *
               </Label>
               <Select onValueChange={(value) => setNewInventoryItem({ ...newInventoryItem, category: value })}>
-                <SelectTrigger className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm">
+                <SelectTrigger>
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1337,7 +1304,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               </Select>
             </div>
             <div>
-              <Label htmlFor="inventorySupplier" className="text-white font-medium">
+              <Label htmlFor="inventorySupplier">
                 Supplier *
               </Label>
               <Input
@@ -1345,12 +1312,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter supplier name"
                 value={newInventoryItem.supplier || ""}
                 onChange={(e) => setNewInventoryItem({ ...newInventoryItem, supplier: e.target.value })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="inventoryQuantity" className="text-white font-medium">
+                <Label htmlFor="inventoryQuantity">
                   Initial Quantity
                 </Label>
                 <Input
@@ -1359,11 +1325,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   placeholder="0"
                   value={newInventoryItem.quantity || ""}
                   onChange={(e) => setNewInventoryItem({ ...newInventoryItem, quantity: Number(e.target.value) })}
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
               <div>
-                <Label htmlFor="inventoryReorder" className="text-white font-medium">
+                <Label htmlFor="inventoryReorder">
                   Reorder Level
                 </Label>
                 <Input
@@ -1372,12 +1337,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   placeholder="5"
                   value={newInventoryItem.reorderLevel || ""}
                   onChange={(e) => setNewInventoryItem({ ...newInventoryItem, reorderLevel: Number(e.target.value) })}
-                  className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                 />
               </div>
             </div>
             <div>
-              <Label htmlFor="inventoryPrice" className="text-white font-medium">
+              <Label htmlFor="inventoryPrice">
                 Unit Price
               </Label>
               <Input
@@ -1387,7 +1351,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="0.00"
                 value={newInventoryItem.unitPrice || ""}
                 onChange={(e) => setNewInventoryItem({ ...newInventoryItem, unitPrice: Number(e.target.value) })}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
@@ -1397,12 +1360,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   setIsAddInventoryOpen(false)
                   setNewInventoryItem({})
                 }}
-                className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
                 onClick={handleAddInventoryItem}
               >
                 Add Item
@@ -1414,10 +1375,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Create Invoice Modal */}
       <Dialog open={isCreateInvoiceOpen} onOpenChange={setIsCreateInvoiceOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Create Invoice</DialogTitle>
-            <DialogDescription className="text-white">Generate invoice from completed bookings.</DialogDescription>
+            <DialogTitle>Create Invoice</DialogTitle>
+            <DialogDescription>Generate invoice from completed bookings.</DialogDescription>
           </DialogHeader>
           <div className="flex justify-end space-x-3 pt-4">
             <Button
@@ -1425,12 +1386,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               onClick={() => {
                 setIsCreateInvoiceOpen(false)
               }}
-              className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
               onClick={handleCreateInvoice}
             >
               Create Invoice
@@ -1441,10 +1400,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* View Details Modal */}
       <Dialog open={isViewDetailsOpen} onOpenChange={setIsViewDetailsOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">View Details</DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogTitle>View Details</DialogTitle>
+            <DialogDescription>
               Details for {selectedItem?.name || selectedItem?.clientName || selectedItem?.id}
             </DialogDescription>
           </DialogHeader>
@@ -1452,35 +1411,31 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             {activeTab === "clients" && (
               <>
                 <div>
-                  <Label className="text-white font-medium">Full Name</Label>
+                  <Label>Full Name</Label>
                   <Input
                     value={selectedItem?.name || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Email</Label>
+                  <Label>Email</Label>
                   <Input
                     value={selectedItem?.email || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Phone Number</Label>
+                  <Label>Phone Number</Label>
                   <Input
                     value={selectedItem?.phone || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Notes</Label>
+                  <Label>Notes</Label>
                   <Textarea
                     value={selectedItem?.notes || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
               </>
@@ -1489,35 +1444,31 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             {activeTab === "staff" && (
               <>
                 <div>
-                  <Label className="text-white font-medium">Full Name</Label>
+                  <Label>Full Name</Label>
                   <Input
                     value={selectedItem?.name || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Email</Label>
+                  <Label>Email</Label>
                   <Input
                     value={selectedItem?.email || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Specialty</Label>
+                  <Label>Specialty</Label>
                   <Input
                     value={selectedItem?.specialty || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Availability</Label>
+                  <Label>Availability</Label>
                   <Input
                     value={selectedItem?.availability || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
               </>
@@ -1526,51 +1477,45 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             {activeTab === "bookings" && (
               <>
                 <div>
-                  <Label className="text-white font-medium">Client Name</Label>
+                  <Label>Client Name</Label>
                   <Input
                     value={selectedItem?.clientName || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Service Name</Label>
+                  <Label>Service Name</Label>
                   <Input
                     value={selectedItem?.serviceName || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Staff Name</Label>
+                  <Label>Staff Name</Label>
                   <Input
                     value={selectedItem?.staffName || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Date</Label>
+                  <Label>Date</Label>
                   <Input
                     value={selectedItem?.date || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Time</Label>
+                  <Label>Time</Label>
                   <Input
                     value={selectedItem?.time || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Status</Label>
+                  <Label>Status</Label>
                   <Input
                     value={selectedItem?.status || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
               </>
@@ -1579,51 +1524,45 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             {activeTab === "invoices" && (
               <>
                 <div>
-                  <Label className="text-white font-medium">Invoice ID</Label>
+                  <Label>Invoice ID</Label>
                   <Input
                     value={selectedItem?.id || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Client Name</Label>
+                  <Label>Client Name</Label>
                   <Input
                     value={selectedItem?.clientName || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Total</Label>
+                  <Label>Total</Label>
                   <Input
                     value={selectedItem?.total || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Status</Label>
+                  <Label>Status</Label>
                   <Input
                     value={selectedItem?.status || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Date</Label>
+                  <Label>Date</Label>
                   <Input
                     value={selectedItem?.date || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
                 <div>
-                  <Label className="text-white font-medium">Due Date</Label>
+                  <Label>Due Date</Label>
                   <Input
                     value={selectedItem?.dueDate || ""}
                     readOnly
-                    className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
                   />
                 </div>
               </>
@@ -1633,7 +1572,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             <Button
               variant="outline"
               onClick={() => setIsViewDetailsOpen(false)}
-              className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
             >
               Close
             </Button>
@@ -1643,16 +1581,16 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Update Quantity Modal */}
       <Dialog open={isUpdateQuantityOpen} onOpenChange={setIsUpdateQuantityOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Update Quantity</DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogTitle>Update Quantity</DialogTitle>
+            <DialogDescription>
               Update the quantity for {selectedInventoryItem?.name}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="newQuantity" className="text-white font-medium">
+              <Label htmlFor="newQuantity">
                 New Quantity
               </Label>
               <Input
@@ -1661,7 +1599,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 placeholder="Enter new quantity"
                 value={newQuantity}
                 onChange={(e) => setNewQuantity(e.target.value)}
-                className="mt-1 rounded-xl  bg-black/50 backdrop-blur-sm"
               />
             </div>
           </div>
@@ -1672,12 +1609,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 setIsUpdateQuantityOpen(false)
                 setNewQuantity("")
               }}
-              className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
               onClick={handleQuantityUpdate}
             >
               Update Quantity
@@ -1688,10 +1623,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Delete Confirmation Modal */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Confirm Delete</DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogTitle>Confirm Delete</DialogTitle>
+            <DialogDescription>
               Are you sure you want to delete {deleteItem?.name}? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
@@ -1699,12 +1634,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             <Button
               variant="outline"
               onClick={() => setIsDeleteConfirmOpen(false)}
-              className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-black rounded-xl bg-[#FFD700]"
+              variant="destructive"
               onClick={handleConfirmDelete}
             >
               Delete
@@ -1715,10 +1649,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
       {/* Manage Order Modal */}
       <Dialog open={isManageOrderOpen} onOpenChange={setIsManageOrderOpen}>
-        <DialogContent className="sm:max-w-lg mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Manage Service Order</DialogTitle>
-            <DialogDescription className="text-white">
+            <DialogTitle>Manage Service Order</DialogTitle>
+            <DialogDescription>
               Drag and drop to reorder services for {selectedCategory === "all" ? "all categories" : selectedCategory}
             </DialogDescription>
           </DialogHeader>
@@ -1734,35 +1668,35 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`bg-black border  transition-all duration-200 rounded-xl ${
+                            className={`border transition-all duration-200 rounded-xl ${
                               snapshot.isDragging
-                                ? "shadow-lg scale-105 rotate-2 bg-gradient-to-r from-roseBackground-DEFAULT to-roseLight-DEFAULT"
+                                ? "shadow-lg scale-105 rotate-2 bg-accent"
                                 : "hover:shadow-md cursor-grab active:cursor-grabbing"
                             }`}
                           >
                             <CardContent className="p-3">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-roseLight-DEFAULT rounded-lg flex items-center justify-center text-roseDeep-DEFAULT font-bold text-sm">
+                                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
                                     {index + 1}
                                   </div>
                                   <div>
-                                    <h4 className="font-semibold text-white">{service.name}</h4>
-                                    <p className="text-sm text-white">
+                                    <h4 className="font-semibold">{service.name}</h4>
+                                    <p className="text-sm text-muted-foreground">
                                       {service.category} • ${service.price}
                                     </p>
                                   </div>
                                 </div>
-                                <div className="flex items-center space-x-2 text-gray-400">
+                                <div className="flex items-center space-x-2 text-muted-foreground">
                                   <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
                                   </div>
                                   <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                                    <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
                                   </div>
                                 </div>
                               </div>
@@ -1784,12 +1718,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                 setIsManageOrderOpen(false)
                 setReorderingServices([])
               }}
-              className="rounded-xl  hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-roseDark-DEFAULT to-roseMedium-DEFAULT hover:from-roseDeep-DEFAULT hover:to-roseDark-DEFAULT text-white rounded-xl"
               onClick={handleSaveOrder}
             >
               Save Order

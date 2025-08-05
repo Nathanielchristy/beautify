@@ -96,29 +96,27 @@ export function CalendarPageContent({
   }
 
   return (
-    <Card className="bg-black/80 backdrop-blur border border-gold/30 shadow-xl rounded-2xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-gold to-yellow-600 text-[#FFD700] shadow-md">
+    <Card>
+        <CardHeader>
             <div className="flex items-center justify-between">
             <CardTitle className="flex items-center space-x-2 text-lg font-bold">
-                <Calendar className="w-5 h-5 text-[#FFD700]" />
+                <Calendar className="w-5 h-5" />
                 <span>Calendar View</span>
             </CardTitle>
             <div className="flex items-center space-x-2">
                 <Button
                 variant="ghost"
                 size="sm"
-                className="text-[#FFD700] hover:bg-black/20 rounded-xl"
                 onClick={() => navigate("prev")}
                 >
                 <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span className="font-semibold text-base text-[#FFD700] min-w-48 text-center">
+                <span className="font-semibold text-base min-w-48 text-center">
                 {formatMonthYear(currentDate)}
                 </span>
                 <Button
                 variant="ghost"
                 size="sm"
-                className="text-[#FFD700] hover:bg-black/20 rounded-xl"
                 onClick={() => navigate("next")}
                 >
                 <ChevronRight className="h-4 w-4" />
@@ -136,9 +134,9 @@ export function CalendarPageContent({
             {calendarView === "month" && (
             <>
                 {/* Weekdays Header */}
-                <div className="grid grid-cols-7 bg-gradient-to-r from-black via-zinc-900 to-black text-gold font-semibold">
+                <div className="grid grid-cols-7 bg-muted text-muted-foreground font-semibold">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                    <div key={day} className="p-3 text-center border border-gold/20">
+                    <div key={day} className="p-3 text-center border">
                     {day}
                     </div>
                 ))}
@@ -163,28 +161,28 @@ export function CalendarPageContent({
                 const isWeekend = i % 7 === 0 || i % 7 === 6
 
                 if (!isValidDay) {
-                    return <div key={i} className="min-h-32 bg-black border border-gold/10" />
+                    return <div key={i} className="min-h-32 bg-muted-foreground/10 border" />
                 }
 
                 return (
                     <div
                     key={i}
-                    className={`min-h-32 p-2 border border-gold/10 transition-all duration-200 group cursor-pointer ${
-                        isWeekend ? "bg-black/70" : "bg-black"
+                    className={`min-h-32 p-2 border transition-all duration-200 group cursor-pointer ${
+                        isWeekend ? "bg-accent/50" : "bg-background"
                     } ${
                         isCurrentDay
-                        ? "ring-2 ring-gold bg-gradient-to-br from-yellow-600 to-yellow-800"
+                        ? "ring-2 ring-primary bg-primary/20"
                         : isSelected
-                        ? "ring-2 ring-gold/70 bg-zinc-900"
+                        ? "ring-2 ring-primary/70 bg-accent"
                         : ""
-                    } hover:bg-gradient-to-br hover:from-gold/10 hover:to-black`}
+                    } hover:bg-accent`}
                     onClick={() => handleDateClick(dayNumber)}
                     >
-                    <div className={`flex items-center justify-between mb-2 ${isCurrentDay ? "text-black" : "text-gold/70"}`}>
+                    <div className={`flex items-center justify-between mb-2 ${isCurrentDay ? "text-primary-foreground" : "text-foreground"}`}>
                         <span
                         className={`text-sm font-bold ${
                             isCurrentDay || isSelected
-                            ? "bg-gold text-black rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                            ? "bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs"
                             : ""
                         }`}
                         >
@@ -192,8 +190,8 @@ export function CalendarPageContent({
                         </span>
                         {dayBookings.length > 0 && (
                         <div className="flex items-center space-x-1">
-                            <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full animate-pulse" />
-                            <span className="text-xs font-medium text-gold/60">{dayBookings.length}</span>
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                            <span className="text-xs font-medium text-muted-foreground">{dayBookings.length}</span>
                         </div>
                         )}
                     </div>
@@ -202,16 +200,16 @@ export function CalendarPageContent({
                     <div className="space-y-1">
                         {dayBookings.slice(0, 3).map((booking) => {
                         const statusColors = {
-                            completed: "from-green-500 to-green-300",
-                            confirmed: "from-blue-600 to-blue-400",
-                            pending: "from-yellow-500 to-yellow-300",
-                            cancelled: "from-red-500 to-red-300",
+                            completed: "bg-green-500 text-white",
+                            confirmed: "bg-blue-600 text-white",
+                            pending: "bg-yellow-500 text-black",
+                            cancelled: "bg-red-500 text-white",
                         }
 
                         return (
                             <div
                             key={booking.id}
-                            className={`text-xs p-2 rounded-lg text-black font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 bg-gradient-to-r ${
+                            className={`text-xs p-2 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 ${
                                 statusColors[booking.status] || statusColors.pending
                             }`}
                             onClick={(e) => {
@@ -229,7 +227,7 @@ export function CalendarPageContent({
 
                         {dayBookings.length > 3 && (
                         <div
-                            className="text-xs text-center p-1 bg-gradient-to-r from-gold to-yellow-600 text-black rounded-lg font-medium hover:from-yellow-700 hover:to-yellow-800"
+                            className="text-xs text-center p-1 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90"
                             onClick={(e) => {
                             e.stopPropagation()
                             toast({
@@ -244,7 +242,7 @@ export function CalendarPageContent({
 
                         {dayBookings.length === 0 && (
                         <div
-                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs text-center p-2 border-2 border-dashed border-gold/40 text-gold/60 hover:border-gold hover:text-gold"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs text-center p-2 border-2 border-dashed border-primary/40 text-primary/60 hover:border-primary hover:text-primary"
                             onClick={(e) => {
                             e.stopPropagation()
                             handleDateClick(dayNumber)
@@ -262,16 +260,16 @@ export function CalendarPageContent({
             </div>
 
             {/* Legend */}
-            <div className="p-4 bg-black border-t border-gold/20">
-            <div className="flex items-center justify-center space-x-6 text-sm text-gold/60">
+            <div className="p-4 bg-background border-t">
+            <div className="flex items-center justify-center space-x-6 text-sm text-muted-foreground">
                 {[
-                ["Completed", "from-green-400 to-green-600"],
-                ["Confirmed", "from-blue-400 to-blue-600"],
-                ["Pending", "from-yellow-400 to-yellow-600"],
-                ["Cancelled", "from-red-400 to-red-600"],
-                ].map(([label, gradient]) => (
+                ["Completed", "bg-green-500"],
+                ["Confirmed", "bg-blue-600"],
+                ["Pending", "bg-yellow-500"],
+                ["Cancelled", "bg-red-500"],
+                ].map(([label, color]) => (
                 <div key={label} className="flex items-center space-x-2">
-                    <div className={`w-3 h-3 bg-gradient-to-r ${gradient} rounded-full`} />
+                    <div className={`w-3 h-3 ${color} rounded-full`} />
                     <span>{label}</span>
                 </div>
                 ))}
