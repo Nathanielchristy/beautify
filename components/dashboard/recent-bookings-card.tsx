@@ -16,8 +16,8 @@ export function RecentBookingsCard({ bookings, setSelectedItem, setIsViewDetails
   return (
     <Card className="lg:col-span-2 bg-black/95 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
-          <Clock className="w-5 h-5 text-roseDark-DEFAULT" strokeWidth={2} />
+        <CardTitle className="flex items-center space-x-2 text-white">
+          <Clock className="w-5 h-5 text-white" strokeWidth={2} />
           <span>Recent Bookings</span>
         </CardTitle>
       </CardHeader>

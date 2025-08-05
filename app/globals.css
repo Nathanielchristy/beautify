@@ -2,75 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
-:root {
-  --background: 220 20% 12%;             /* Dark Blue background */
-  --foreground: 48 100% 50%;         /* Gold foreground */
+  :root {
+    --background: 220 20% 12%;
+    --foreground: 48 100% 66%;         /* Gold foreground */
 
-  --card: 220 20% 15%;
-  --card-foreground: 48 100% 50%;
+    --card: 220 20% 15%;
+    --card-foreground: 48 100% 66%;
 
-  --popover: 220 20% 15%;
-  --popover-foreground: 48 100% 50%;
+    --popover: 220 20% 15%;
+    --popover-foreground: 48 100% 66%;
 
-  --gold: 48 100% 50%;               /* Main Gold */
-  --gold-dark: 48 100% 40%;
-  --gold-light: 48 100% 60%;
-  --gold-foreground: 220 20% 12%;       /* Dark Blue on gold */
+    --gold: 48 100% 66%;               /* Main Gold (#FFDE59) */
+    --gold-dark: 48 100% 56%;
+    --gold-light: 48 100% 76%;
+    --gold-foreground: 220 20% 12%;
 
-  --primary: var(--gold);
-  --primary-foreground: var(--gold-foreground);
+    --primary: var(--gold);
+    --primary-foreground: var(--gold-foreground);
 
-  --secondary: 220 20% 20%;
-  --secondary-foreground: var(--gold);
+    --secondary: 220 20% 20%;
+    --secondary-foreground: var(--gold);
 
-  --muted: 220 20% 25%;
-  --muted-foreground: 48 100% 40%;
+    --muted: 220 20% 25%;
+    --muted-foreground: 48 100% 56%;
 
-  --accent: 220 20% 30%;
-  --accent-foreground: var(--gold);
+    --accent: 220 20% 30%;
+    --accent-foreground: var(--gold);
 
-  --destructive: 0 100% 50%;
-  --destructive-foreground: 0 0% 100%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-  --border: 48 100% 30%;             /* Gold border */
-  --input: 220 20% 20%;
-  --ring: var(--gold-light);
+    --border: 48 100% 56%;
+    --input: 220 20% 20%;
+    --ring: var(--gold-light);
 
-  --radius: 0.5rem;
-}
+    --radius: 0.5rem;
+  }
 
-.dark {
-  --background: 0 0% 0% / 0.6;              /* Black background */
-  --foreground: 48 100% 60%;          /* Gold foreground */
+  .dark {
+    --background: 0 0% 0% / 0.6;
+    --foreground: 48 100% 76%;
 
-  --card: 0 0% 5%;
-  --card-foreground: 48 100% 60%;
+    --card: 0 0% 5%;
+    --card-foreground: 48 100% 76%;
 
-  --popover: 0 0% 10%;
-  --popover-foreground: 48 100% 60%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 48 100% 76%;
 
-  --primary: var(--gold);
-  --primary-foreground: 0 0% 0% / 0.6;      /* Black on gold */
+    --primary: var(--gold);
+    --primary-foreground: 0 0% 0% / 0.6;
 
-  --secondary: 0 0% 15%;
-  --secondary-foreground: var(--gold);
+    --secondary: 0 0% 15%;
+    --secondary-foreground: var(--gold);
 
-  --muted: 0 0% 20%;
-  --muted-foreground: 48 100% 50%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 48 100% 66%;
 
-  --accent: 0 0% 25%;
-  --accent-foreground: var(--gold);
+    --accent: 0 0% 25%;
+    --accent-foreground: var(--gold);
 
-  --destructive: 0 100% 50%;
-  --destructive-foreground: 0 0% 100%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-  --border: 48 100% 30%;
-  --input: 0 0% 20%;
-  --ring: var(--gold-light);
-}
-
+    --border: 48 100% 56%;
+    --input: 0 0% 20%;
+    --ring: var(--gold-light);
+  }
 }
 
 @layer base {

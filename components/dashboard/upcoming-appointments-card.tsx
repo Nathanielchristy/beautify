@@ -25,8 +25,8 @@ export function UpcomingAppointmentsCard({
   return (
     <Card className="lg:col-span-1 bg-black/95 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
       <CardHeader>
-        <CardTitle className="flex items-center space-x-2 text-roseDark-DEFAULT">
-          <CalendarCheck className="w-5 h-5 text-roseDark-DEFAULT" strokeWidth={2} />
+        <CardTitle className="flex items-center space-x-2 text-white">
+          <CalendarCheck className="w-5 h-5 text-white" strokeWidth={2} />
           <span>Upcoming Appointments</span>
         </CardTitle>
       </CardHeader>

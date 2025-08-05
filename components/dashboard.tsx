@@ -725,7 +725,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               Cancel
             </Button>
             <Button
-              variant="destructive"
+              variant="default"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4 mr-2" strokeWidth={2} />

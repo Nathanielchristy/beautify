@@ -22,7 +22,7 @@ interface TopBarProps {
 
 export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopBarProps) {
   return (
-    <header className="bg-black/50 backdrop-blur-xl border-b border-[#d4af37]/20 px-4 sm:px-6 py-4 shadow-md">
+    <header className="bg-gray backdrop-blur-xl border-b border-[#d4af37]/20 px-4 sm:px-6 py-4 shadow-md">
       <div className="flex items-center justify-between">
         {/* Title Section */}
         <div className="flex items-center space-x-4">
@@ -38,15 +38,12 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
 
           {/* Mobile View Logo + Breadcrumb */}
           <div className="lg:hidden flex items-center gap-2">
-            <Image src="/gabi_logo.webp" alt="GAbi Logo" width={32} height={32} />
+            <Image src="/gabi_logo.webp" alt="GAbi Logo" width={70} height={70} />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#" className="text-[#d4af37]">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="capitalize text-white">{activeTab}</BreadcrumbPage>
+                  <BreadcrumbPage className="capitalize text-[#d4af37]">{activeTab}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -56,14 +53,14 @@ export function TopBar({ activeTab, isDarkMode, setIsDarkMode, userEmail }: TopB
         {/* Actions Section */}
         <div className="flex items-center space-x-3">
           {/* Dark Mode Toggle */}
-          <Button
+          {/* <Button
             variant="outline"
             size="sm"
             className="rounded-xl border-[#d4af37]/50 bg-transparent hover:bg-[#d4af37]/10 text-[#d4af37]"
             onClick={() => setIsDarkMode(!isDarkMode)}
           >
             {isDarkMode ? <Sun className="h-4 w-4" strokeWidth={2} /> : <Moon className="h-4 w-4" strokeWidth={2} />}
-          </Button>
+          </Button> */}
 
           {/* Notifications */}
           <Button

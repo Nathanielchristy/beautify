@@ -85,7 +85,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
             variant,
             state: open ? "open" : "closed",
           }),
-          "group/sidebar-wrapper"
+          "group/sidebar-wrapper flex flex-col h-screen py-4"
         )}
         data-side={localSide ?? side}
         {...props}
