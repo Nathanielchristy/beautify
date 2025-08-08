@@ -232,7 +232,7 @@ const getBookingsForDate = (date: Date, day: number) => {
                           return (
                             <div
                               key={booking.id}
-                              className={`text-xs p-2 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 bg-white ${
+                              className={`bg-[#c6c3bc] text-xs p-2 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 ${
                                 statusColors[booking.status] || statusColors.pending
                               }`}
                               onClick={(e) => {
