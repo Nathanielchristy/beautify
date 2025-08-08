@@ -363,7 +363,7 @@ export function ClientPageContent({
               <Label htmlFor="clientNotes">
                 Notes
               </Label>
-              <Textarea
+              <Input
                 id="clientNotes"
                 placeholder="Additional notes..."
                 value={newClient.notes || ""}
