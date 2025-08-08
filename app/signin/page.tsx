@@ -50,9 +50,9 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   }
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden relative">
+    <main className="min-h-screen h-screen w-full overflow-hidden relative ">
       {/* Video Element */}
-      <video
+      {/* <video
         autoPlay
         loop
         muted
@@ -62,26 +62,30 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
       >
         <source src="/background-video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video> */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#060606]/80 via-[#060606]/60 to-[#060606]/90"></div>
       <div className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-8">
-        <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-16 xl:gap-24">
+        <div className="w-full flex flex-col lg:flex-row min-h-screen items-center justify-center lg:items-stretch lg:justify-stretch">
+
 
           {/* Left side - Woman image */}
-          <div className="hidden lg:flex lg:w-1/2 lg:max-w-[705px] lg:h-[500px] xl:h-[600px] 2xl:h-[685px] flex-shrink-0 lg:order-1">
-            {/* <Image
-              src="/women-grey.png"
+          <div className="hidden lg:flex w-full lg:w-1/2 h-full">
+            <Image
+              src="/lady.png"
               alt="Woman with styled hair"
-              width={705}
-              height={685}
-              className="object-cover w-full h-full rounded-lg shadow-2xl"
+              fill
+              className="object-cover w-full h-full"
               priority
-            /> */}
+            />
           </div>
 
           {/* Right side - Login form area */}
-          <div className="flex flex-col items-center justify-center flex-shrink-0 lg:order-2 lg:w-1/2 lg:max-w-[700px] relative w-full">
+          <div className="flex flex-col items-center justify-center w-full px-4 relative">
 
+
+
+            {/* Form container */}
+            <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-[500px] xs:min-h-[550px] sm:min-h-[600px] md:min-h-[650px] lg:min-h-[688px] rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-[#FFDE59] bg-white/[0.03] shadow-[0_5px_40px_0_rgba(255,222,89,0.60)] backdrop-blur-sm flex flex-col items-center justify-center p-6 xs:p-7 sm:p-8 md:p-10 lg:p-12 xl:p-16 pt-16 xs:pt-18 sm:pt-20 md:pt-22 lg:pt-24 xl:pt-28">
             {/* Logo positioned above the form */}
             <div className="absolute -top-4 xs:-top-5 sm:-top-6 md:-top-8 lg:-top-16 xl:-top-20 left-1/2 transform -translate-x-1/2 z-10">
               <Image
@@ -92,10 +96,6 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                 className="object-cover w-28 h-28 xs:w-32 xs:h-32 sm:w-36 sm:h-36 md:w-32 md:h-32 lg:w-40 lg:h-40 xl:w-48 xl:h-48 2xl:w-64 2xl:h-64 pt-10"
               />
             </div>
-
-            {/* Form container */}
-            <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-[500px] xs:min-h-[550px] sm:min-h-[600px] md:min-h-[650px] lg:min-h-[688px] rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-[#FFDE59] bg-white/[0.03] shadow-[0_5px_40px_0_rgba(255,222,89,0.60)] backdrop-blur-sm flex flex-col items-center justify-center p-6 xs:p-7 sm:p-8 md:p-10 lg:p-12 xl:p-16 pt-16 xs:pt-18 sm:pt-20 md:pt-22 lg:pt-24 xl:pt-28">
-
               {/* Email Input */}
               <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-3 sm:mb-4 md:mb-5">
                 <Input

@@ -42,7 +42,7 @@ export function StaffPageContent({
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Staff Management</h2>
-          <p className="text-gray-600">Manage your team members</p>
+          <p className="text-white">Manage your team members</p>
         </div>
         <Button
           className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
@@ -64,14 +64,14 @@ export function StaffPageContent({
               <div className="flex items-center space-x-4 mb-4">
                 <Avatar className="w-16 h-16 border-2 border-yellow-500 shadow-md">
                   <AvatarImage src={member.avatar || "/placeholder.svg"} />
-                  <AvatarFallback className="bg-gradient-to-br from-yellow-600 to-yellow-400 text-black font-bold text-lg">
+                  <AvatarFallback className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] text-black font-bold text-lg">
                     {member.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1">
                   <h3 className="font-semibold text-yellow-300 text-lg">{member.name}</h3>
-                  <Badge className="bg-yellow-500 text-black font-medium shadow-sm">
+                  <Badge className="bg-white text-black font-medium shadow-sm">
                     {member.specialty}
                   </Badge>
                 </div>

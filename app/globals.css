@@ -3,42 +3,44 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 220 20% 12%;
-    --foreground: 48 100% 66%;         /* Gold foreground */
+:root {
+  --background: 220 20% 12%;
 
-    --card: 220 20% 15%;
-    --card-foreground: 48 100% 66%;
+  --foreground: 40 11% 76%;         /* Changed to #c6c3bc */
 
-    --popover: 220 20% 15%;
-    --popover-foreground: 48 100% 66%;
+  --card: 220 20% 15%;
+  --card-foreground: 40 11% 76%;    /* Changed */
 
-    --gold: 48 100% 66%;               /* Main Gold (#FFDE59) */
-    --gold-dark: 48 100% 56%;
-    --gold-light: 48 100% 76%;
-    --gold-foreground: 220 20% 12%;
+  --popover: 220 20% 15%;
+  --popover-foreground: 40 11% 76%; /* Changed */
 
-    --primary: var(--gold);
-    --primary-foreground: var(--gold-foreground);
+  --gold: 48 100% 66%;               /* Main Gold (#FFDE59) */
+  --gold-dark: 48 100% 56%;
+  --gold-light: 48 100% 76%;
+  --gold-foreground: 220 20% 12%;
 
-    --secondary: 220 20% 20%;
-    --secondary-foreground: var(--gold);
+  --primary: var(--gold);
+  --primary-foreground: var(--gold-foreground);
 
-    --muted: 220 20% 25%;
-    --muted-foreground: 48 100% 56%;
+  --secondary: 220 20% 20%;
+  --secondary-foreground: var(--gold);
 
-    --accent: 220 20% 30%;
-    --accent-foreground: var(--gold);
+  --muted: 220 20% 25%;
+  --muted-foreground: 48 100% 56%;
 
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 100%;
+  --accent: 220 20% 30%;
+  --accent-foreground: var(--gold);
 
-    --border: 48 100% 56%;
-    --input: 220 20% 20%;
-    --ring: var(--gold-light);
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
 
-    --radius: 0.5rem;
-  }
+  --border: 48 100% 56%;
+  --input: 220 20% 20%;
+  --ring: var(--gold-light);
+
+  --radius: 0.5rem;
+}
+
 
   .dark {
     --background: 0 0% 0% / 0.6;
@@ -70,6 +72,15 @@
     --ring: var(--gold-light);
   }
 }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
 
 @layer base {
   * {
