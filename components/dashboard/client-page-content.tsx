@@ -10,44 +10,81 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Search, Filter, Phone, Calendar, Eye, Trash2, Plus, Users, Edit } from "lucide-react"
 import type { Client } from "@/types"
 import { useDebounce } from "@/hooks/use-debounce" // Assuming this hook exists or will be created
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+
+import { useEffect, type Dispatch, type SetStateAction } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { Textarea } from "@/components/ui/textarea"
 
 interface ClientPageContentProps {
   clients: Client[]
-  setIsAddClientOpen: (isOpen: boolean) => void
+  setClients: Dispatch<SetStateAction<Client[]>>
+  initialAction: string | null
+  setInitialAction: (action: string | null) => void
   setSelectedItem: (item: any) => void
   setIsViewDetailsOpen: (isOpen: boolean) => void
   openDeleteConfirm: (type: string, id: string, name: string) => void
 }
 
 export function ClientPageContent({
-  clients: initialClients,
-  setIsAddClientOpen,
+  clients,
+  setClients,
+  initialAction,
+  setInitialAction,
   setSelectedItem,
   setIsViewDetailsOpen,
   openDeleteConfirm,
 }: ClientPageContentProps) {
-  const [clients, setClients] = useState<Client[]>(initialClients)
-  const [isAddClientDialogOpen, setIsAddClientDialogOpen] = useState(false)
+  const [isAddClientOpen, setIsAddClientOpen] = useState(false)
   const [isEditClientDialogOpen, setIsEditClientDialogOpen] = useState(false)
   const [currentClient, setCurrentClient] = useState<Client | null>(null)
-  const [newClient, setNewClient] = useState<Omit<Client, "id">>({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    notes: "",
-    status:"active",
-  })
+  const [newClient, setNewClient] = useState<Partial<Client>>({})
   const [clientSearch, setClientSearch] = useState("")
   const debouncedClientSearch = useDebounce(clientSearch, 300)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    if (initialAction === "add") {
+      setIsAddClientOpen(true)
+      setInitialAction(null)
+    }
+  }, [initialAction, setInitialAction])
+
+  // Generate unique ID
+  const generateId = () => Math.random().toString(36).substr(2, 9)
 
   const handleAddClient = () => {
-    const id = (clients.length + 1).toString()
-    setClients([...clients, { id, ...newClient }])
-    setNewClient({ name: "", email: "", phone: "", address: "", notes: "", status: "active" })
-    setIsAddClientDialogOpen(false)
+    if (!newClient.name || !newClient.email || !newClient.phone) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const client: Client = {
+      id: generateId(),
+      name: newClient.name,
+      email: newClient.email,
+      phone: newClient.phone,
+      avatar: `/placeholder.svg?height=40&width=40&text=${newClient.name?.charAt(0)}`,
+      firstVisit: new Date().toISOString().split("T")[0],
+      servicesCount: 0,
+      totalSpent: 0,
+      lastVisit: new Date().toISOString().split("T")[0],
+      notes: newClient.notes || "",
+      status: "active",
+    }
+
+    setClients([...clients, client])
+    setNewClient({})
+    setIsAddClientOpen(false)
+    toast({
+      title: "Success",
+      description: "Client added successfully",
+    })
   }
 
   const handleEditClient = () => {
@@ -56,10 +93,6 @@ export function ClientPageContent({
       setCurrentClient(null)
       setIsEditClientDialogOpen(false)
     }
-  }
-
-  const handleDeleteClient = (id: string) => {
-    setClients(clients.filter((client) => client.id !== id))
   }
 
   const filteredClients = useMemo(() => {
@@ -284,78 +317,78 @@ export function ClientPageContent({
         </CardContent>
       </Card>
 
-      {/* Add Client Dialog */}
-      <Dialog open={isAddClientDialogOpen} onOpenChange={setIsAddClientDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+      {/* Add Client Modal */}
+      <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Add New Client</DialogTitle>
+            <DialogDescription>
+              Enter client information to add them to your system.
+            </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="clientName">
+                Full Name *
               </Label>
               <Input
-                id="name"
-                value={newClient.name}
+                id="clientName"
+                placeholder="Enter client name"
+                value={newClient.name || ""}
                 onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                className="col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
+            <div>
+              <Label htmlFor="clientEmail">
+                Email *
               </Label>
               <Input
-                id="email"
+                id="clientEmail"
                 type="email"
-                value={newClient.email}
+                placeholder="client@example.com"
+                value={newClient.email || ""}
                 onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-                className="col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                Phone
+            <div>
+              <Label htmlFor="clientPhone">
+                Phone Number *
               </Label>
               <Input
-                id="phone"
-                value={newClient.phone}
+                id="clientPhone"
+                placeholder="(555) 123-4567"
+                value={newClient.phone || ""}
                 onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                className="col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="address" className="text-right">
-                Address
-              </Label>
-              <Input
-                id="address"
-                value={newClient.address}
-                onChange={(e) => setNewClient({ ...newClient, address: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="notes" className="text-right">
+            <div>
+              <Label htmlFor="clientNotes">
                 Notes
               </Label>
-              <Input
-                id="notes"
-                value={newClient.notes}
+              <Textarea
+                id="clientNotes"
+                placeholder="Additional notes..."
+                value={newClient.notes || ""}
                 onChange={(e) => setNewClient({ ...newClient, notes: e.target.value })}
-                className="col-span-3"
               />
             </div>
+            <div className="flex justify-end space-x-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddClientOpen(false)
+                  setNewClient({})
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddClient}
+              >
+                Add Client
+              </Button>
+            </div>
           </div>
-          <DialogFooter>
-            <Button
-              onClick={handleAddClient}
-              className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
-            >
-              Add Client
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 

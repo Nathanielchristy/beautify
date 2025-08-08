@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, type Dispatch, type SetStateAction } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -8,10 +8,17 @@ import { Badge } from "@/components/ui/badge"
 import { Star, Eye, Trash2, Plus } from "lucide-react"
 import type { Staff } from "@/types"
 import { useDebounce } from "@/hooks/use-debounce"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useToast } from "@/hooks/use-toast"
 
 interface StaffPageContentProps {
   staff: Staff[]
-  setIsAddStaffOpen: (isOpen: boolean) => void
+  setStaff: Dispatch<SetStateAction<Staff[]>>
+  initialAction: string | null
+  setInitialAction: (action: string | null) => void
   setSelectedItem: (item: any) => void
   setIsViewDetailsOpen: (isOpen: boolean) => void
   openDeleteConfirm: (type: string, id: string, name: string) => void
@@ -19,13 +26,62 @@ interface StaffPageContentProps {
 
 export function StaffPageContent({
   staff,
-  setIsAddStaffOpen,
+  setStaff,
+  initialAction,
+  setInitialAction,
   setSelectedItem,
   setIsViewDetailsOpen,
   openDeleteConfirm,
 }: StaffPageContentProps) {
   const [staffSearch, setStaffSearch] = useState("")
   const debouncedStaffSearch = useDebounce(staffSearch, 300)
+  const [isAddStaffOpen, setIsAddStaffOpen] = useState(false)
+  const [newStaff, setNewStaff] = useState<Partial<Staff>>({})
+  const { toast } = useToast()
+
+  useEffect(() => {
+    if (initialAction === "add") {
+      setIsAddStaffOpen(true)
+      setInitialAction(null)
+    }
+  }, [initialAction, setInitialAction])
+
+  // Generate unique ID
+  const generateId = () => Math.random().toString(36).substr(2, 9)
+
+  const handleAddStaff = () => {
+    if (!newStaff.name || !newStaff.email || !newStaff.specialty) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const staffMember: Staff = {
+      id: generateId(),
+      name: newStaff.name,
+      email: newStaff.email,
+      phone: newStaff.phone || "",
+      avatar: `/placeholder.svg?height=40&width=40&text=${newStaff.name?.charAt(0)}`,
+      specialty: newStaff.specialty,
+      availability: newStaff.availability || "Mon-Fri",
+      rating: 5.0,
+      hireDate: new Date().toISOString().split("T")[0],
+      isActive: true,
+      totalRevenue: 0,
+      color: "bg-primary text-primary-foreground", // Default color for new staff
+    }
+
+    setStaff([...staff, staffMember])
+    setNewStaff({})
+    setIsAddStaffOpen(false)
+    toast({
+      title: "Success",
+      description: "Staff member added successfully",
+    })
+  }
 
   const filteredStaff = useMemo(() => {
     if (!debouncedStaffSearch.trim()) return staff
@@ -125,6 +181,95 @@ export function StaffPageContent({
           </Card>
         ))}
       </div>
+
+      {/* Add Staff Modal */}
+      <Dialog open={isAddStaffOpen} onOpenChange={setIsAddStaffOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Staff Member</DialogTitle>
+            <DialogDescription>Enter staff member information.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="staffName">
+                Full Name *
+              </Label>
+              <Input
+                id="staffName"
+                placeholder="Enter staff name"
+                value={newStaff.name || ""}
+                onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="staffEmail">
+                Email *
+              </Label>
+              <Input
+                id="staffEmail"
+                type="email"
+                placeholder="staff@beautify.com"
+                value={newStaff.email || ""}
+                onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="staffPhone">
+                Phone Number
+              </Label>
+              <Input
+                id="staffPhone"
+                placeholder="(555) 123-4567"
+                value={newStaff.phone || ""}
+                onChange={(e) => setNewStaff({ ...newStaff, phone: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="staffSpecialty">
+                Specialty *
+              </Label>
+              <Select onValueChange={(value) => setNewStaff({ ...newStaff, specialty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select specialty" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hair Stylist">Hair Stylist</SelectItem>
+                  <SelectItem value="Esthetician">Esthetician</SelectItem>
+                  <SelectItem value="Nail Technician">Nail Technician</SelectItem>
+                  <SelectItem value="Massage Therapist">Massage Therapist</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="staffAvailability">
+                Working Days
+              </Label>
+              <Input
+                id="staffAvailability"
+                placeholder="e.g., Mon-Fri"
+                value={newStaff.availability || ""}
+                onChange={(e) => setNewStaff({ ...newStaff, availability: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddStaffOpen(false)
+                  setNewStaff({})
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddStaff}
+              >
+                Add Staff
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

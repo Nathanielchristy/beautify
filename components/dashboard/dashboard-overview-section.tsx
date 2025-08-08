@@ -13,10 +13,7 @@ interface DashboardOverviewSectionProps {
   bookings: Booking[]
   invoices: Invoice[]
   staff: Staff[]
-  setIsAddBookingOpen: (isOpen: boolean) => void
-  setIsAddClientOpen: (isOpen: boolean) => void
-  setIsAddServiceOpen: (isOpen: boolean) => void
-  setIsCreateInvoiceOpen: (isOpen: boolean) => void
+  handleQuickAction: (tab: string, action: string) => void
   setSelectedItem: (item: any) => void
   setIsViewDetailsOpen: (isOpen: boolean) => void
 }
@@ -26,10 +23,7 @@ export function DashboardOverviewSection({
   bookings,
   invoices,
   staff,
-  setIsAddBookingOpen,
-  setIsAddClientOpen,
-  setIsAddServiceOpen,
-  setIsCreateInvoiceOpen,
+  handleQuickAction,
   setSelectedItem,
   setIsViewDetailsOpen,
 }: DashboardOverviewSectionProps) {
@@ -224,12 +218,7 @@ export function DashboardOverviewSection({
           setSelectedItem={setSelectedItem}
           setIsViewDetailsOpen={setIsViewDetailsOpen}
         />
-        <QuickActionsCard
-          setIsAddBookingOpen={setIsAddBookingOpen}
-          setIsAddClientOpen={setIsAddClientOpen}
-          setIsAddServiceOpen={setIsAddServiceOpen}
-          setIsCreateInvoiceOpen={setIsCreateInvoiceOpen}
-        />
+        <QuickActionsCard handleQuickAction={handleQuickAction} />
         <UpcomingAppointmentsCard
           bookings={bookings}
           setSelectedItem={setSelectedItem}

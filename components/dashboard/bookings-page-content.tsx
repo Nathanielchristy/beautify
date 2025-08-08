@@ -1,88 +1,111 @@
 "use client"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, type Dispatch, type SetStateAction } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar, Plus, ChevronLeft, ChevronRight, Edit, Trash2, Search } from "lucide-react"
-import { toast } from "react-hot-toast" // Import toast from react-hot-toast
-import type { Booking } from "@/types"
+import type { Booking, Client, Service, Staff } from "@/types"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { mockClients, mockServices, mockStaff } from "@/data/mockData"
+import { useToast } from "@/hooks/use-toast"
+import { Textarea } from "@/components/ui/textarea"
 
 interface BookingsPageContentProps {
   bookings: Booking[]
-  setIsAddBookingOpen: (isOpen: boolean) => void
+  setBookings: Dispatch<SetStateAction<Booking[]>>
+  clients: Client[]
+  services: Service[]
+  staff: Staff[]
+  initialAction: string | null
+  setInitialAction: (action: string | null) => void
   setSelectedItem: (item: any) => void
   setIsViewDetailsOpen: (isOpen: boolean) => void
   handleUpdateBookingStatus: (id: string, status: Booking["status"]) => void
-  setBookings: (bookings: Booking[]) => void // Declare setBookings in props
 }
 
 export function BookingsPageContent({
   bookings,
-  setIsAddBookingOpen,
+  setBookings,
+  clients,
+  services,
+  staff,
+  initialAction,
+  setInitialAction,
   setSelectedItem,
   setIsViewDetailsOpen,
   handleUpdateBookingStatus,
-  setBookings, // Use setBookings from props
 }: BookingsPageContentProps) {
-  const [isAddBookingDialogOpen, setIsAddBookingDialogOpen] = useState(false)
+  const [isAddBookingOpen, setIsAddBookingOpen] = useState(false)
   const [isEditBookingDialogOpen, setIsEditBookingDialogOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null)
   const [currentBooking, setCurrentBooking] = useState<Booking | null>(null)
-  const [newBooking, setNewBooking] = useState<Omit<Booking, "id">>({
-    clientId: "",
-    clientName: "",
-    serviceId: "",
-    serviceName: "",
-    staffId: "",
-    staffName: "",
-    date: "",
-    time: "",
-    status: "Pending",
-    notes: "",
-  })
+  const [newBooking, setNewBooking] = useState<Partial<Booking>>({})
   const [searchTerm, setSearchTerm] = useState("")
-  const handleAddBooking = () => {
-    const id = (bookings.length + 1).toString()
-    const client = mockClients.find((c) => c.id === newBooking.clientId)
-    const service = mockServices.find((s) => s.id === newBooking.serviceId)
-    const staff = mockStaff.find((s) => s.id === newBooking.staffId)
+  const { toast } = useToast()
 
-    setBookings([
-      ...bookings,
-      {
-        id,
-        ...newBooking,
-        clientName: client?.name || "",
-        serviceName: service?.name || "",
-        staffName: staff?.name || "",
-      },
-    ])
-    setNewBooking({
-      clientId: "",
-      clientName: "",
-      serviceId: "",
-      serviceName: "",
-      staffId: "",
-      staffName: "",
-      date: "",
-      time: "",
-      status: "",
-      notes: "",
+  useEffect(() => {
+    if (initialAction === "add") {
+      setIsAddBookingOpen(true)
+      setInitialAction(null)
+    }
+  }, [initialAction, setInitialAction])
+
+  // Generate unique ID
+  const generateId = () => Math.random().toString(36).substr(2, 9)
+
+  const handleAddBooking = () => {
+    if (
+      !newBooking.clientId ||
+      !newBooking.serviceId ||
+      !newBooking.staffId ||
+      !newBooking.date ||
+      !newBooking.timeFrom ||
+      !newBooking.timeTo
+    ) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const client = clients.find((c) => c.id === newBooking.clientId)
+    const service = services.find((s) => s.id === newBooking.serviceId)
+    const staffMember = staff.find((s) => s.id === newBooking.staffId)
+
+    const booking: Booking = {
+      id: generateId(),
+      clientId: newBooking.clientId,
+      clientName: client?.name || "",
+      serviceId: newBooking.serviceId,
+      serviceName: service?.name || "",
+      staffId: newBooking.staffId,
+      staffName: staffMember?.name || "",
+      date: newBooking.date,
+      time: `${newBooking.timeFrom} - ${newBooking.timeTo}`,
+      status: "pending",
+      price: service?.price || 0,
+      notes: newBooking.notes || "",
+    }
+
+    setBookings([...bookings, booking])
+    setNewBooking({})
+    setIsAddBookingOpen(false)
+    toast({
+      title: "Success",
+      description: "Booking created successfully",
     })
-    setIsAddBookingDialogOpen(false)
   }
 
   const handleEditBooking = () => {
     if (currentBooking) {
-      const client = mockClients.find((c) => c.id === currentBooking.clientId)
-      const service = mockServices.find((s) => s.id === currentBooking.serviceId)
-      const staff = mockStaff.find((s) => s.id === currentBooking.staffId)
+      const client = clients.find((c) => c.id === currentBooking.clientId)
+      const service = services.find((s) => s.id === currentBooking.serviceId)
+      const staffMember = staff.find((s) => s.id === currentBooking.staffId)
 
       setBookings(
         bookings.map((booking) =>
@@ -91,7 +114,7 @@ export function BookingsPageContent({
                 ...currentBooking,
                 clientName: client?.name || "",
                 serviceName: service?.name || "",
-                staffName: staff?.name || "",
+                staffName: staffMember?.name || "",
               }
             : booking,
         ),
@@ -199,141 +222,140 @@ export function BookingsPageContent({
           </Table>
         </div>
 
-        {/* Add Booking Dialog */}
-        <Dialog open={isAddBookingDialogOpen} onOpenChange={setIsAddBookingDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add New Booking</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="client" className="text-right">
-                  Client
-                </Label>
-                <Select
-                  onValueChange={(value) => setNewBooking({ ...newBooking, clientId: value })}
-                  value={newBooking.clientId}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a client" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mockClients.map((client) => (
-                      <SelectItem key={client.id} value={client.id}>
-                        {client.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="service" className="text-right">
-                  Service
-                </Label>
-                <Select
-                  onValueChange={(value) => setNewBooking({ ...newBooking, serviceId: value })}
-                  value={newBooking.serviceId}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a service" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mockServices.map((service) => (
-                      <SelectItem key={service.id} value={service.id}>
-                        {service.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="staff" className="text-right">
-                  Staff
-                </Label>
-                <Select
-                  onValueChange={(value) => setNewBooking({ ...newBooking, staffId: value })}
-                  value={newBooking.staffId}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select staff" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mockStaff.map((staff) => (
-                      <SelectItem key={staff.id} value={staff.id}>
-                        {staff.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="date" className="text-right">
-                  Date
+      {/* Add Booking Modal */}
+      <Dialog open={isAddBookingOpen} onOpenChange={setIsAddBookingOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Booking</DialogTitle>
+            <DialogDescription>Schedule a new appointment.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="bookingClient">
+                Client *
+              </Label>
+              <Select onValueChange={(value) => setNewBooking({ ...newBooking, clientId: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select client" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clients.map((client) => (
+                    <SelectItem key={client.id} value={client.id}>
+                      {client.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="bookingService">
+                Service *
+              </Label>
+              <Select onValueChange={(value) => setNewBooking({ ...newBooking, serviceId: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select service" />
+                </SelectTrigger>
+                <SelectContent>
+                  {services.map((service) => (
+                    <SelectItem key={service.id} value={service.id}>
+                      {service.name} - ${service.price}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="bookingStaff">
+                Staff Member *
+              </Label>
+              <Select onValueChange={(value) => setNewBooking({ ...newBooking, staffId: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select staff member" />
+                </SelectTrigger>
+                <SelectContent>
+                  {staff.map((member) => (
+                    <SelectItem key={member.id} value={member.id}>
+                      {member.name} - {member.specialty}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="bookingDate">
+                  Date *
                 </Label>
                 <Input
-                  id="date"
+                  id="bookingDate"
                   type="date"
-                  value={newBooking.date}
+                  value={newBooking.date || ""}
                   onChange={(e) => setNewBooking({ ...newBooking, date: e.target.value })}
-                  className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="time" className="text-right">
-                  Time
-                </Label>
-                <Input
-                  id="time"
-                  type="time"
-                  value={newBooking.time}
-                  onChange={(e) => setNewBooking({ ...newBooking, time: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="status" className="text-right">
-                  Status
-                </Label>
-                <Select
-                  onValueChange={(value) => setNewBooking({ ...newBooking, status: value as Booking["status"] })}
-                  value={newBooking.status}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Confirmed">Confirmed</SelectItem>
-                    <SelectItem value="Pending">Pending</SelectItem>
-                    <SelectItem value="Cancelled">Cancelled</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="notes" className="text-right">
-                  Notes
-                </Label>
-                <Input
-                  id="notes"
-                  value={newBooking.notes}
-                  onChange={(e) => setNewBooking({ ...newBooking, notes: e.target.value })}
-                  className="col-span-3"
-                />
+              <div>
+                <Label>Time Slot *</Label>
+                <div className="grid grid-cols-1 gap-2 mt-1">
+                  <Select
+                    onValueChange={(value) => {
+                      const [timeFrom, timeTo] = value.split("-")
+                      setNewBooking({ ...newBooking, timeFrom, timeTo })
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select time slot" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="09:00-10:00">9:00 AM - 10:00 AM</SelectItem>
+                      <SelectItem value="10:00-11:00">10:00 AM - 11:00 AM</SelectItem>
+                      <SelectItem value="11:00-12:00">11:00 AM - 12:00 PM</SelectItem>
+                      <SelectItem value="12:00-13:00">12:00 PM - 1:00 PM</SelectItem>
+                      <SelectItem value="13:00-14:00">1:00 PM - 2:00 PM</SelectItem>
+                      <SelectItem value="14:00-15:00">2:00 PM - 3:00 PM</SelectItem>
+                      <SelectItem value="15:00-16:00">3:00 PM - 4:00 PM</SelectItem>
+                      <SelectItem value="16:00-17:00">4:00 PM - 5:00 PM</SelectItem>
+                      <SelectItem value="17:00-18:00">5:00 PM - 6:00 PM</SelectItem>
+                      <SelectItem value="18:00-19:00">6:00 PM - 7:00 PM</SelectItem>
+                      <SelectItem value="19:00-20:00">7:00 PM - 8:00 PM</SelectItem>
+                      <SelectItem value="20:00-21:00">8:00 PM - 9:00 PM</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-            <DialogFooter>
+            <div>
+              <Label htmlFor="bookingNotes">
+                Notes
+              </Label>
+              <Textarea
+                id="bookingNotes"
+                placeholder="Additional notes..."
+                value={newBooking.notes || ""}
+                onChange={(e) => setNewBooking({ ...newBooking, notes: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddBookingOpen(false)
+                  setNewBooking({})
+                }}
+              >
+                Cancel
+              </Button>
               <Button
                 onClick={handleAddBooking}
-                className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
               >
-                Add Booking
+                Create Booking
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-        {/* Edit Booking Dialog */}
-        <Dialog open={isEditBookingDialogOpen} onOpenChange={setIsEditBookingDialogOpen}>
+      {/* Edit Booking Dialog */}
+      <Dialog open={isEditBookingDialogOpen} onOpenChange={setIsEditBookingDialogOpen}>
           <DialogContent className="sm:max-w-[425px] bg-black/95">
             <DialogHeader>
               <DialogTitle>Edit Booking</DialogTitle>
@@ -353,7 +375,7 @@ export function BookingsPageContent({
                     <SelectValue placeholder="Select a client" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockClients.map((client) => (
+                    {clients.map((client) => (
                       <SelectItem key={client.id} value={client.id}>
                         {client.name}
                       </SelectItem>
@@ -375,7 +397,7 @@ export function BookingsPageContent({
                     <SelectValue placeholder="Select a service" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockServices.map((service) => (
+                    {services.map((service) => (
                       <SelectItem key={service.id} value={service.id}>
                         {service.name}
                       </SelectItem>
@@ -397,7 +419,7 @@ export function BookingsPageContent({
                     <SelectValue placeholder="Select staff" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockStaff.map((staff) => (
+                    {staff.map((staff) => (
                       <SelectItem key={staff.id} value={staff.id}>
                         {staff.name}
                       </SelectItem>
@@ -481,7 +503,7 @@ export function BookingsPageContent({
           </DialogContent>
         </Dialog>
 
-        {/* Delete Confirmation Dialog */}
+      {/* Delete Confirmation Dialog */}
         <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
           <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
             <DialogHeader>

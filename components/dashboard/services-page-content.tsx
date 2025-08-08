@@ -1,75 +1,212 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, type Dispatch, type SetStateAction } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Search, Filter, Plus, Edit, Eye, Settings, Trash2, MoreHorizontal } from "lucide-react"
 import type { Service } from "@/types"
 import { useDebounce } from "@/hooks/use-debounce"
+import { useToast } from "@/hooks/use-toast"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd"
 
 interface ServicesPageContentProps {
   services: Service[]
-  serviceCategories: string[]
+  setServices: Dispatch<SetStateAction<Service[]>>
   selectedCategory: string
   setSelectedCategory: (category: string) => void
-  setIsAddCategoryOpen: (isOpen: boolean) => void
-  setIsAddServiceOpen: (isOpen: boolean) => void
-  setEditingService: (service: Service | null) => void
-  setIsEditServiceOpen: (isOpen: boolean) => void
   openDeleteConfirm: (type: string, id: string, name: string) => void
-  setIsManageOrderOpen: (isOpen: boolean) => void
-  setReorderingServices: (services: Service[]) => void
+  initialAction: string | null
+  setInitialAction: (action: string | null) => void
 }
 
 export function ServicesPageContent({
-  services: initialServices,
-  serviceCategories,
+  services,
+  setServices,
   selectedCategory,
   setSelectedCategory,
-  setIsAddCategoryOpen,
-  setIsAddServiceOpen,
-  setEditingService,
-  setIsEditServiceOpen,
   openDeleteConfirm,
-  setIsManageOrderOpen,
-  setReorderingServices,
+  initialAction,
+  setInitialAction,
 }: ServicesPageContentProps) {
-  const [services, setServices] = useState<Service[]>(initialServices)
-  const [isAddServiceDialogOpen, setIsAddServiceDialogOpen] = useState(false)
-  const [isEditServiceDialogOpen, setIsEditServiceDialogOpen] = useState(false)
-  const [currentService, setCurrentService] = useState<Service | null>(null)
-  const [newService, setNewService] = useState<Omit<Service, "id">>({
-    name: "",
-    description: "",
-    price: 0,
-    duration: "",
-    category: "",
-  })
+  const [isAddServiceOpen, setIsAddServiceOpen] = useState(false)
+  const [isEditServiceOpen, setIsEditServiceOpen] = useState(false)
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false)
+  const [isManageOrderOpen, setIsManageOrderOpen] = useState(false)
+  const [editingService, setEditingService] = useState<Service | null>(null)
+  const [newService, setNewService] = useState<Partial<Service>>({})
+  const [newCategory, setNewCategory] = useState("")
+  const [reorderingServices, setReorderingServices] = useState<Service[]>([])
   const [serviceSearch, setServiceSearch] = useState("")
   const debouncedServiceSearch = useDebounce(serviceSearch, 300)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    if (initialAction === "add") {
+      setIsAddServiceOpen(true)
+      setInitialAction(null)
+    }
+  }, [initialAction, setInitialAction])
+
+    // Generate unique ID
+  const generateId = () => Math.random().toString(36).substr(2, 9)
+
+  const serviceCategories = useMemo(() => {
+    const categories = services.map((service) => service.category)
+    return [...new Set(categories)]
+  }, [services])
 
   const handleAddService = () => {
-    const id = (services.length + 1).toString()
-    setServices([...services, { id, ...newService }])
-    setNewService({ name: "", description: "", price: 0, duration: "", category: "" })
-    setIsAddServiceDialogOpen(false)
-  }
-
-  const handleEditService = () => {
-    if (currentService) {
-      setServices(services.map((service) => (service.id === currentService.id ? currentService : service)))
-      setCurrentService(null)
-      setIsEditServiceDialogOpen(false)
+    if (!newService.name || !newService.category || !newService.price || !newService.duration) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
     }
+
+    const service: Service = {
+      id: generateId(),
+      name: newService.name,
+      category: newService.category,
+      price: Number(newService.price),
+      duration: Number(newService.duration),
+      description: newService.description || "",
+      isActive: true,
+      icon: "✨",
+      color: "bg-primary text-primary-foreground", // Default color for new service
+    }
+
+    setServices([...services, service])
+    setNewService({})
+    setIsAddServiceOpen(false)
+    toast({
+      title: "Success",
+      description: "Service added successfully",
+    })
   }
 
   const handleDeleteService = (id: string) => {
     setServices(services.filter((service) => service.id !== id))
+    toast({
+      title: "Success",
+      description: "Service deleted successfully",
+    })
+  }
+
+  const handleEditService = () => {
+    if (
+      !editingService ||
+      !editingService.name ||
+      !editingService.category ||
+      !editingService.price ||
+      !editingService.duration
+    ) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const updatedService: Service = {
+      ...editingService,
+      price: Number(editingService.price),
+      duration: Number(editingService.duration),
+    }
+
+    setServices(services.map((service) => (service.id === editingService.id ? updatedService : service)))
+    setEditingService(null)
+    setIsEditServiceOpen(false)
+    toast({
+      title: "Success",
+      description: "Service updated successfully",
+    })
+  }
+
+  const handleAddCategory = () => {
+    if (!newCategory.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a category name",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (serviceCategories.includes(newCategory)) {
+      toast({
+        title: "Error",
+        description: "Category already exists",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // This is a bit of a hack, we should be updating the categories in a more robust way
+    const newService = {
+        id: generateId(),
+        name: "New Service",
+        category: newCategory,
+        price: 0,
+        duration: 0,
+        description: "",
+        isActive: false,
+        icon: "✨",
+        color: "bg-primary text-primary-foreground",
+    }
+    setServices([...services, newService])
+
+    setNewCategory("")
+    setIsAddCategoryOpen(false)
+    toast({
+      title: "Success",
+      description: "Category added successfully",
+    })
+  }
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return
+
+    const items = Array.from(reorderingServices)
+    const [reorderedItem] = items.splice(result.source.index, 1)
+    items.splice(result.destination.index, 0, reorderedItem)
+
+    setReorderingServices(items)
+  }
+
+  const handleSaveOrder = () => {
+    const reorderedIds = new Set(reorderingServices.map(s => s.id));
+    const newServices: Service[] = [];
+    let reorderedInserted = false;
+
+    for (const service of services) {
+      if (reorderedIds.has(service.id)) {
+        if (!reorderedInserted) {
+          newServices.push(...reorderingServices);
+          reorderedInserted = true;
+        }
+      } else {
+        newServices.push(service);
+      }
+    }
+
+    setServices(newServices);
+    setIsManageOrderOpen(false)
+    setReorderingServices([])
+
+    toast({
+      title: "Success",
+      description: "Service order updated successfully",
+    })
   }
 
   const getServiceCountByCategory = (category: string) => {
@@ -369,168 +506,324 @@ export function ServicesPageContent({
           </div>
         </div>
 
-        {/* Add Service Dialog */}
-        <Dialog open={isAddServiceDialogOpen} onOpenChange={setIsAddServiceDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add New Service</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
+      {/* Add Service Modal */}
+      <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Service</DialogTitle>
+            <DialogDescription>Create a new service offering.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="serviceName">
+                Service Name *
+              </Label>
+              <Input
+                id="serviceName"
+                placeholder="Enter service name"
+                value={newService.name || ""}
+                onChange={(e) => setNewService({ ...newService, name: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="serviceCategory">
+                Category *
+              </Label>
+              <Select onValueChange={(value) => setNewService({ ...newService, category: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {serviceCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="servicePrice">
+                  Price *
                 </Label>
                 <Input
-                  id="name"
-                  value={newService.name}
-                  onChange={(e) => setNewService({ ...newService, name: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Input
-                  id="description"
-                  value={newService.description}
-                  onChange={(e) => setNewService({ ...newService, description: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="price" className="text-right">
-                  Price
-                </Label>
-                <Input
-                  id="price"
+                  id="servicePrice"
                   type="number"
-                  value={newService.price}
-                  onChange={(e) => setNewService({ ...newService, price: Number.parseFloat(e.target.value) })}
-                  className="col-span-3"
+                  placeholder="0.00"
+                  value={newService.price || ""}
+                  onChange={(e) => setNewService({ ...newService, price: e.target.value })}
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="duration" className="text-right">
-                  Duration
+              <div>
+                <Label htmlFor="serviceDuration">
+                  Duration (min) *
                 </Label>
                 <Input
-                  id="duration"
-                  value={newService.duration}
+                  id="serviceDuration"
+                  type="number"
+                  placeholder="60"
+                  value={newService.duration || ""}
                   onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="category" className="text-right">
-                  Category
-                </Label>
-                <Input
-                  id="category"
-                  value={newService.category}
-                  onChange={(e) => setNewService({ ...newService, category: e.target.value })}
-                  className="col-span-3"
                 />
               </div>
             </div>
-            <DialogFooter>
+            <div>
+              <Label htmlFor="serviceDescription">
+                Description
+              </Label>
+              <Textarea
+                id="serviceDescription"
+                placeholder="Service description..."
+                value={newService.description || ""}
+                onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddServiceOpen(false)
+                  setNewService({})
+                }}
+              >
+                Cancel
+              </Button>
               <Button
                 onClick={handleAddService}
-                className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
               >
                 Add Service
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-        {/* Edit Service Dialog */}
-        <Dialog open={isEditServiceDialogOpen} onOpenChange={setIsEditServiceDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Edit Service</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="edit-name" className="text-right">
-                  Name
+      {/* Edit Service Modal */}
+      <Dialog open={isEditServiceOpen} onOpenChange={setIsEditServiceOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Service</DialogTitle>
+            <DialogDescription>Update service information.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="editServiceName">
+                Service Name *
+              </Label>
+              <Input
+                id="editServiceName"
+                placeholder="Enter service name"
+                value={editingService?.name || ""}
+                onChange={(e) => setEditingService(editingService ? { ...editingService, name: e.target.value } : null)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="editServiceCategory">
+                Category *
+              </Label>
+              <Select
+                value={editingService?.category || ""}
+                onValueChange={(value) =>
+                  setEditingService(editingService ? { ...editingService, category: value } : null)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {serviceCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="editServicePrice">
+                  Price *
                 </Label>
                 <Input
-                  id="edit-name"
-                  value={currentService?.name || ""}
-                  onChange={(e) =>
-                    setCurrentService(currentService ? { ...currentService, name: e.target.value } : null)
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="edit-description" className="text-right">
-                  Description
-                </Label>
-                <Input
-                  id="edit-description"
-                  value={currentService?.description || ""}
-                  onChange={(e) =>
-                    setCurrentService(currentService ? { ...currentService, description: e.target.value } : null)
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="edit-price" className="text-right">
-                  Price
-                </Label>
-                <Input
-                  id="edit-price"
+                  id="editServicePrice"
                   type="number"
-                  value={currentService?.price || 0}
+                  placeholder="0.00"
+                  value={editingService?.price || ""}
                   onChange={(e) =>
-                    setCurrentService(
-                      currentService ? { ...currentService, price: Number.parseFloat(e.target.value) } : null,
-                    )
+                    setEditingService(editingService ? { ...editingService, price: Number(e.target.value) } : null)
                   }
-                  className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="edit-duration" className="text-right">
-                  Duration
+              <div>
+                <Label htmlFor="editServiceDuration">
+                  Duration (min) *
                 </Label>
                 <Input
-                  id="edit-duration"
-                  value={currentService?.duration || ""}
+                  id="editServiceDuration"
+                  type="number"
+                  placeholder="60"
+                  value={editingService?.duration || ""}
                   onChange={(e) =>
-                    setCurrentService(currentService ? { ...currentService, duration: e.target.value } : null)
+                    setEditingService(editingService ? { ...editingService, duration: Number(e.target.value) } : null)
                   }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="edit-category" className="text-right">
-                  Category
-                </Label>
-                <Input
-                  id="edit-category"
-                  value={currentService?.category || ""}
-                  onChange={(e) =>
-                    setCurrentService(currentService ? { ...currentService, category: e.target.value } : null)
-                  }
-                  className="col-span-3"
                 />
               </div>
             </div>
-            <DialogFooter>
+            <div>
+              <Label htmlFor="editServiceDescription">
+                Description
+              </Label>
+              <Textarea
+                id="editServiceDescription"
+                placeholder="Service description..."
+                value={editingService?.description || ""}
+                onChange={(e) =>
+                  setEditingService(editingService ? { ...editingService, description: e.target.value } : null)
+                }
+              />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsEditServiceOpen(false)
+                  setEditingService(null)
+                }}
+              >
+                Cancel
+              </Button>
               <Button
                 onClick={handleEditService}
-                className="bg-roseDark hover:bg-roseMedium text-roseBackground-foreground"
               >
-                Save Changes
+                Update Service
               </Button>
-            </DialogFooter>
-          </DialogContent>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Category Modal */}
+      <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Category</DialogTitle>
+            <DialogDescription>Create a new service category.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="categoryName">
+                Category Name *
+              </Label>
+              <Input
+                id="categoryName"
+                placeholder="Enter category name"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddCategoryOpen(false)
+                  setNewCategory("")
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddCategory}
+              >
+                Add Category
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+        {/* Manage Order Modal */}
+        <Dialog open={isManageOrderOpen} onOpenChange={setIsManageOrderOpen}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Manage Service Order</DialogTitle>
+                    <DialogDescription>
+                        Drag and drop to reorder services for {selectedCategory === "all" ? "all categories" : selectedCategory}
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="mt-4 max-h-96 overflow-y-auto">
+                    <DragDropContext onDragEnd={handleDragEnd}>
+                        <Droppable droppableId="services">
+                            {(provided) => (
+                                <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
+                                    {reorderingServices.map((service, index) => (
+                                        <Draggable key={service.id} draggableId={service.id} index={index}>
+                                            {(provided, snapshot) => (
+                                                <Card
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    className={`border transition-all duration-200 rounded-xl ${snapshot.isDragging
+                                                            ? "shadow-lg scale-105 rotate-2 bg-accent"
+                                                            : "hover:shadow-md cursor-grab active:cursor-grabbing"
+                                                        }`}
+                                                >
+                                                    <CardContent className="p-3">
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="flex items-center space-x-3">
+                                                                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
+                                                                    {index + 1}
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="font-semibold">{service.name}</h4>
+                                                                    <p className="text-sm text-muted-foreground">
+                                                                        {service.category} • ${service.price}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2 text-muted-foreground">
+                                                                <div className="flex flex-col space-y-1">
+                                                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                                                </div>
+                                                                <div className="flex flex-col space-y-1">
+                                                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </div>
+                <div className="flex justify-end space-x-3 pt-4">
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            setIsManageOrderOpen(false)
+                            setReorderingServices([])
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleSaveOrder}
+                    >
+                        Save Order
+                    </Button>
+                </div>
+            </DialogContent>
         </Dialog>
-      </div>
+        </div>
     </div>
   )
 }

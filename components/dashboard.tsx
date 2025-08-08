@@ -6,10 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd"
 import { Card, CardContent } from "@/components/ui/card"
 
 // Import types and mock data
@@ -70,41 +67,15 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
   // Modal states
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
-  const [isAddClientOpen, setIsAddClientOpen] = useState(false)
-  const [isAddStaffOpen, setIsAddStaffOpen] = useState(false)
-  const [isAddServiceOpen, setIsAddServiceOpen] = useState(false)
-  const [isEditServiceOpen, setIsEditServiceOpen] = useState(false)
-  const [isAddBookingOpen, setIsAddBookingOpen] = useState(false)
-  const [isAddInventoryOpen, setIsAddInventoryOpen] = useState(false)
-  const [isCreateInvoiceOpen, setIsCreateInvoiceOpen] = useState(false)
   const [isViewDetailsOpen, setIsViewDetailsOpen] = useState(false)
-  const [isUpdateQuantityOpen, setIsUpdateQuantityOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
-  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false)
-  const [isManageOrderOpen, setIsManageOrderOpen] = useState(false)
-  const [reorderingServices, setReorderingServices] = useState<Service[]>([])
 
   // Item states
-  const [selectedInventoryItem, setSelectedInventoryItem] = useState<InventoryItem | null>(null)
   const [deleteItem, setDeleteItem] = useState<{ type: string; id: string; name: string } | null>(null)
   const [selectedItem, setSelectedItem] = useState<any>(null)
-  const [editingService, setEditingService] = useState<Service | null>(null)
 
   // Form states
-  const [newClient, setNewClient] = useState<Partial<Client>>({})
-  const [newStaff, setNewStaff] = useState<Partial<Staff>>({})
-  const [newService, setNewService] = useState<Partial<Service>>({})
-  const [newBooking, setNewBooking] = useState<Partial<Booking>>({})
-  const [newInventoryItem, setNewInventoryItem] = useState<Partial<InventoryItem>>({})
-  const [newQuantity, setNewQuantity] = useState("")
-  const [newCategory, setNewCategory] = useState("")
   const { toast } = useToast()
-
-  // Service categories state
-  const serviceCategories = useMemo(() => {
-    const categories = services.map((service) => service.category)
-    return [...new Set(categories)]
-  }, [services])
 
   const [selectedCategory, setSelectedCategory] = useState("all")
 
@@ -113,46 +84,16 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
     onLogout()
   }
 
+  const [initialAction, setInitialAction] = useState<string | null>(null)
+
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId)
     setIsMobileMenuOpen(false)
   }
 
-  // Generate unique ID
-  const generateId = () => Math.random().toString(36).substr(2, 9)
-
-  // Client functions
-  const handleAddClient = () => {
-    if (!newClient.name || !newClient.email || !newClient.phone) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const client: Client = {
-      id: generateId(),
-      name: newClient.name,
-      email: newClient.email,
-      phone: newClient.phone,
-      avatar: `/placeholder.svg?height=40&width=40&text=${newClient.name?.charAt(0)}`,
-      firstVisit: new Date().toISOString().split("T")[0],
-      servicesCount: 0,
-      totalSpent: 0,
-      lastVisit: new Date().toISOString().split("T")[0],
-      notes: newClient.notes || "",
-      status: "active",
-    }
-
-    setClients([...clients, client])
-    setNewClient({})
-    setIsAddClientOpen(false)
-    toast({
-      title: "Success",
-      description: "Client added successfully",
-    })
+  const handleQuickAction = (tab: string, action: string) => {
+    setActiveTab(tab)
+    setInitialAction(action)
   }
 
   const handleDeleteClient = (id: string) => {
@@ -160,41 +101,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
     toast({
       title: "Success",
       description: "Client deleted successfully",
-    })
-  }
-
-  // Staff functions
-  const handleAddStaff = () => {
-    if (!newStaff.name || !newStaff.email || !newStaff.specialty) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const staffMember: Staff = {
-      id: generateId(),
-      name: newStaff.name,
-      email: newStaff.email,
-      phone: newStaff.phone || "",
-      avatar: `/placeholder.svg?height=40&width=40&text=${newStaff.name?.charAt(0)}`,
-      specialty: newStaff.specialty,
-      availability: newStaff.availability || "Mon-Fri",
-      rating: 5.0,
-      hireDate: new Date().toISOString().split("T")[0],
-      isActive: true,
-      totalRevenue: 0,
-      color: "bg-primary text-primary-foreground", // Default color for new staff
-    }
-
-    setStaff([...staff, staffMember])
-    setNewStaff({})
-    setIsAddStaffOpen(false)
-    toast({
-      title: "Success",
-      description: "Staff member added successfully",
     })
   }
 
@@ -206,38 +112,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
     })
   }
 
-  // Service functions
-  const handleAddService = () => {
-    if (!newService.name || !newService.category || !newService.price || !newService.duration) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const service: Service = {
-      id: generateId(),
-      name: newService.name,
-      category: newService.category,
-      price: Number(newService.price),
-      duration: Number(newService.duration),
-      description: newService.description || "",
-      isActive: true,
-      icon: "✨",
-      color: "bg-primary text-primary-foreground", // Default color for new service
-    }
-
-    setServices([...services, service])
-    setNewService({})
-    setIsAddServiceOpen(false)
-    toast({
-      title: "Success",
-      description: "Service added successfully",
-    })
-  }
-
   const handleDeleteService = (id: string) => {
     setServices(services.filter((service) => service.id !== id))
     toast({
@@ -246,275 +120,11 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
     })
   }
 
-  const handleEditService = () => {
-    if (
-      !editingService ||
-      !editingService.name ||
-      !editingService.category ||
-      !editingService.price ||
-      !editingService.duration
-    ) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const updatedService: Service = {
-      ...editingService,
-      price: Number(editingService.price),
-      duration: Number(editingService.duration),
-    }
-
-    setServices(services.map((service) => (service.id === editingService.id ? updatedService : service)))
-    setEditingService(null)
-    setIsEditServiceOpen(false)
-    toast({
-      title: "Success",
-      description: "Service updated successfully",
-    })
-  }
-
-  const handleAddCategory = () => {
-    if (!newCategory.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a category name",
-        variant: "destructive",
-      })
-      return
-    }
-
-    if (serviceCategories.includes(newCategory)) {
-      toast({
-        title: "Error",
-        description: "Category already exists",
-        variant: "destructive",
-      })
-      return
-    }
-
-    setServiceCategories([...serviceCategories, newCategory])
-    setNewCategory("")
-    setIsAddCategoryOpen(false)
-    toast({
-      title: "Success",
-      description: "Category added successfully",
-    })
-  }
-
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return
-
-    const items = Array.from(reorderingServices)
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem)
-
-    setReorderingServices(items)
-  }
-
-  const handleSaveOrder = () => {
-    const reorderedIds = new Set(reorderingServices.map(s => s.id));
-    const newServices: Service[] = [];
-    let reorderedInserted = false;
-    
-    for (const service of services) {
-      if (reorderedIds.has(service.id)) {
-        if (!reorderedInserted) {
-          newServices.push(...reorderingServices);
-          reorderedInserted = true;
-        }
-      } else {
-        newServices.push(service);
-      }
-    }
-    
-    setServices(newServices);
-    setIsManageOrderOpen(false)
-    setReorderingServices([])
-
-    toast({
-      title: "Success",
-      description: "Service order updated successfully",
-    })
-  }
-
-  // Booking functions
-  const handleAddBooking = () => {
-    if (
-      !newBooking.clientId ||
-      !newBooking.serviceId ||
-      !newBooking.staffId ||
-      !newBooking.date ||
-      !newBooking.timeFrom ||
-      !newBooking.timeTo
-    ) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const client = clients.find((c) => c.id === newBooking.clientId)
-    const service = services.find((s) => s.id === newBooking.serviceId)
-    const staffMember = staff.find((s) => s.id === newBooking.staffId)
-
-    const booking: Booking = {
-      id: generateId(),
-      clientId: newBooking.clientId,
-      clientName: client?.name || "",
-      serviceId: newBooking.serviceId,
-      serviceName: service?.name || "",
-      staffId: newBooking.staffId,
-      staffName: staffMember?.name || "",
-      date: newBooking.date,
-      time: `${newBooking.timeFrom} - ${newBooking.timeTo}`,
-      status: "pending",
-      price: service?.price || 0,
-      notes: newBooking.notes || "",
-    }
-
-    setBookings([...bookings, booking])
-    setNewBooking({})
-    setIsAddBookingOpen(false)
-    toast({
-      title: "Success",
-      description: "Booking created successfully",
-    })
-  }
-
-  const handleUpdateBookingStatus = (id: string, status: Booking["status"]) => {
+  const handleUpdateBookingStatus = (id:string, status: Booking["status"]) => {
     setBookings(bookings.map((booking) => (booking.id === id ? { ...booking, status } : booking)))
     toast({
       title: "Success",
       description: `Booking status updated to ${status}`,
-    })
-  }
-
-  // Inventory functions
-  const handleAddInventoryItem = () => {
-    if (!newInventoryItem.name || !newInventoryItem.category || !newInventoryItem.supplier) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const quantity = Number(newInventoryItem.quantity) || 0
-    const reorderLevel = Number(newInventoryItem.reorderLevel) || 0
-
-    let status: InventoryItem["status"] = "in-stock"
-    if (quantity === 0) status = "out-of-stock"
-    else if (quantity <= reorderLevel) status = "low-stock"
-
-    const item: InventoryItem = {
-      id: generateId(),
-      name: newInventoryItem.name,
-      category: newInventoryItem.category,
-      quantity,
-      supplier: newInventoryItem.supplier,
-      reorderLevel,
-      unitPrice: Number(newInventoryItem.unitPrice) || 0,
-      lastRestocked: new Date().toISOString().split("T")[0],
-      status,
-    }
-
-    setInventory([...inventory, item])
-    setNewInventoryItem({})
-    setIsAddInventoryOpen(false)
-    toast({
-      title: "Success",
-      description: "Inventory item added successfully",
-    })
-  }
-
-  const handleUpdateInventoryQuantity = (id: string, newQuantity: number) => {
-    setInventory(
-      inventory.map((item) => {
-        if (item.id === id) {
-          let status: InventoryItem["status"] = "in-stock"
-          if (newQuantity === 0) status = "out-of-stock"
-          else if (newQuantity <= item.reorderLevel) status = "low-stock"
-
-          return { ...item, quantity: newQuantity, status }
-        }
-        return item
-      }),
-    )
-    toast({
-      title: "Success",
-      description: "Inventory updated successfully",
-    })
-  }
-
-  const openUpdateQuantityModal = (item: InventoryItem) => {
-    setSelectedInventoryItem(item)
-    setNewQuantity(item.quantity.toString())
-    setIsUpdateQuantityOpen(true)
-  }
-
-  const handleQuantityUpdate = () => {
-    if (!selectedInventoryItem || !newQuantity || isNaN(Number(newQuantity))) {
-      toast({
-        title: "Error",
-        description: "Please enter a valid quantity",
-        variant: "destructive",
-      })
-      return
-    }
-
-    handleUpdateInventoryQuantity(selectedInventoryItem.id, Number(newQuantity))
-    setIsUpdateQuantityOpen(false)
-    setSelectedInventoryItem(null)
-    setNewQuantity("")
-  }
-
-  // Invoice functions
-  const handleCreateInvoice = () => {
-    const completedBookings = bookings.filter(
-      (b) => b.status === "completed" && !invoices.find((i) => i.bookingId === b.id),
-    )
-
-    if (completedBookings.length === 0) {
-      toast({
-        title: "Info",
-        description: "No completed bookings available for invoicing",
-      })
-      return
-    }
-
-    const booking = completedBookings[0]
-    const invoice: Invoice = {
-      id: `INV-${String(invoices.length + 1).padStart(3, "0")}`,
-      clientId: booking.clientId,
-      clientName: booking.clientName,
-      bookingId: booking.id,
-      total: booking.price,
-      status: "pending",
-      date: new Date().toISOString().split("T")[0],
-      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-      items: [
-        {
-          serviceId: booking.serviceId,
-          serviceName: booking.serviceName,
-          quantity: 1,
-          price: booking.price,
-          total: booking.price,
-        },
-      ],
-    }
-
-    setInvoices([...invoices, invoice])
-    setIsCreateInvoiceOpen(false)
-    toast({
-      title: "Success",
-      description: "Invoice created successfully",
     })
   }
 
@@ -559,10 +169,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             bookings={bookings}
             invoices={invoices}
             staff={staff}
-            setIsAddBookingOpen={setIsAddBookingOpen}
-            setIsAddClientOpen={setIsAddClientOpen}
-            setIsAddServiceOpen={setIsAddServiceOpen}
-            setIsCreateInvoiceOpen={setIsCreateInvoiceOpen}
+            handleQuickAction={handleQuickAction}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
           />
@@ -571,7 +178,9 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         return (
           <ClientPageContent
             clients={clients}
-            setIsAddClientOpen={setIsAddClientOpen}
+            setClients={setClients}
+            initialAction={initialAction}
+            setInitialAction={setInitialAction}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             openDeleteConfirm={openDeleteConfirm}
@@ -581,7 +190,9 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         return (
           <StaffPageContent
             staff={staff}
-            setIsAddStaffOpen={setIsAddStaffOpen}
+            setStaff={setStaff}
+            initialAction={initialAction}
+            setInitialAction={setInitialAction}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             openDeleteConfirm={openDeleteConfirm}
@@ -591,34 +202,33 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         return (
           <ServicesPageContent
             services={services}
-            serviceCategories={serviceCategories}
+            setServices={setServices}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
-            setIsAddCategoryOpen={setIsAddCategoryOpen}
-            setIsAddServiceOpen={setIsAddServiceOpen}
-            setEditingService={setEditingService}
-            setIsEditServiceOpen={setIsEditServiceOpen}
             openDeleteConfirm={openDeleteConfirm}
-            setIsManageOrderOpen={setIsManageOrderOpen}
-            setReorderingServices={setReorderingServices}
+            initialAction={initialAction}
+            setInitialAction={setInitialAction}
           />
         )
       case "bookings":
         return (
           <BookingsPageContent
             bookings={bookings}
-            setIsAddBookingOpen={setIsAddBookingOpen}
+            setBookings={setBookings}
+            clients={clients}
+            services={services}
+            staff={staff}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             handleUpdateBookingStatus={handleUpdateBookingStatus}
-            setBookings={setBookings}
+            initialAction={initialAction}
+            setInitialAction={setInitialAction}
           />
         )
       case "calendar":
         return (
           <CalendarPageContent
             bookings={bookings}
-            setIsAddBookingOpen={setIsAddBookingOpen}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             handleUpdateBookingStatus={handleUpdateBookingStatus}
@@ -629,9 +239,8 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         return (
           <InventoryPageContent
             inventory={inventory}
-            setIsAddInventoryOpen={setIsAddInventoryOpen}
-            openUpdateQuantityModal={openUpdateQuantityModal}
-            handleUpdateInventoryQuantity={handleUpdateInventoryQuantity}
+            setInventory={setInventory}
+            openDeleteConfirm={openDeleteConfirm}
           />
         )
       case "invoices":
@@ -639,10 +248,12 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
           <InvoicesPageContent
             invoices={invoices}
             setInvoices={setInvoices}
-            setIsCreateInvoiceOpen={setIsCreateInvoiceOpen}
+            bookings={bookings}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             handleUpdateInvoiceStatus={handleUpdateInvoiceStatus}
+            initialAction={initialAction}
+            setInitialAction={setInitialAction}
           />
         )
       case "reports":
@@ -654,10 +265,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             bookings={bookings}
             invoices={invoices}
             staff={staff}
-            setIsAddBookingOpen={setIsAddBookingOpen}
-            setIsAddClientOpen={setIsAddClientOpen}
-            setIsAddServiceOpen={setIsAddServiceOpen}
-            setIsCreateInvoiceOpen={setIsCreateInvoiceOpen}
+            handleQuickAction={handleQuickAction}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
           />
@@ -730,669 +338,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             >
               <LogOut className="h-4 w-4 mr-2" strokeWidth={2} />
               Logout
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Client Modal */}
-      <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Client</DialogTitle>
-            <DialogDescription>
-              Enter client information to add them to your system.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="clientName">
-                Full Name *
-              </Label>
-              <Input
-                id="clientName"
-                placeholder="Enter client name"
-                value={newClient.name || ""}
-                onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="clientEmail">
-                Email *
-              </Label>
-              <Input
-                id="clientEmail"
-                type="email"
-                placeholder="client@example.com"
-                value={newClient.email || ""}
-                onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="clientPhone">
-                Phone Number *
-              </Label>
-              <Input
-                id="clientPhone"
-                placeholder="(555) 123-4567"
-                value={newClient.phone || ""}
-                onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="clientNotes">
-                Notes
-              </Label>
-              <Textarea
-                id="clientNotes"
-                placeholder="Additional notes..."
-                value={newClient.notes || ""}
-                onChange={(e) => setNewClient({ ...newClient, notes: e.target.value })}
-              />
-            </div>
-            <div className="flex justify-end space-x-3 mt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddClientOpen(false)
-                  setNewClient({})
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddClient}
-              >
-                Add Client
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Staff Modal */}
-      <Dialog open={isAddStaffOpen} onOpenChange={setIsAddStaffOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Staff Member</DialogTitle>
-            <DialogDescription>Enter staff member information.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="staffName">
-                Full Name *
-              </Label>
-              <Input
-                id="staffName"
-                placeholder="Enter staff name"
-                value={newStaff.name || ""}
-                onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="staffEmail">
-                Email *
-              </Label>
-              <Input
-                id="staffEmail"
-                type="email"
-                placeholder="staff@beautify.com"
-                value={newStaff.email || ""}
-                onChange={(e) => setNewStaff({ ...newStaff, email: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="staffPhone">
-                Phone Number
-              </Label>
-              <Input
-                id="staffPhone"
-                placeholder="(555) 123-4567"
-                value={newStaff.phone || ""}
-                onChange={(e) => setNewStaff({ ...newStaff, phone: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="staffSpecialty">
-                Specialty *
-              </Label>
-              <Select onValueChange={(value) => setNewStaff({ ...newStaff, specialty: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select specialty" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Hair Stylist">Hair Stylist</SelectItem>
-                  <SelectItem value="Esthetician">Esthetician</SelectItem>
-                  <SelectItem value="Nail Technician">Nail Technician</SelectItem>
-                  <SelectItem value="Massage Therapist">Massage Therapist</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="staffAvailability">
-                Working Days
-              </Label>
-              <Input
-                id="staffAvailability"
-                placeholder="e.g., Mon-Fri"
-                value={newStaff.availability || ""}
-                onChange={(e) => setNewStaff({ ...newStaff, availability: e.target.value })}
-              />
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddStaffOpen(false)
-                  setNewStaff({})
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddStaff}
-              >
-                Add Staff
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Service Modal */}
-      <Dialog open={isAddServiceOpen} onOpenChange={setIsAddServiceOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Service</DialogTitle>
-            <DialogDescription>Create a new service offering.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="serviceName">
-                Service Name *
-              </Label>
-              <Input
-                id="serviceName"
-                placeholder="Enter service name"
-                value={newService.name || ""}
-                onChange={(e) => setNewService({ ...newService, name: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="serviceCategory">
-                Category *
-              </Label>
-              <Select onValueChange={(value) => setNewService({ ...newService, category: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {serviceCategories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="servicePrice">
-                  Price *
-                </Label>
-                <Input
-                  id="servicePrice"
-                  type="number"
-                  placeholder="0.00"
-                  value={newService.price || ""}
-                  onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="serviceDuration">
-                  Duration (min) *
-                </Label>
-                <Input
-                  id="serviceDuration"
-                  type="number"
-                  placeholder="60"
-                  value={newService.duration || ""}
-                  onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="serviceDescription">
-                Description
-              </Label>
-              <Textarea
-                id="serviceDescription"
-                placeholder="Service description..."
-                value={newService.description || ""}
-                onChange={(e) => setNewService({ ...newService, description: e.target.value })}
-              />
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddServiceOpen(false)
-                  setNewService({})
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddService}
-              >
-                Add Service
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Service Modal */}
-      <Dialog open={isEditServiceOpen} onOpenChange={setIsEditServiceOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Service</DialogTitle>
-            <DialogDescription>Update service information.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="editServiceName">
-                Service Name *
-              </Label>
-              <Input
-                id="editServiceName"
-                placeholder="Enter service name"
-                value={editingService?.name || ""}
-                onChange={(e) => setEditingService(editingService ? { ...editingService, name: e.target.value } : null)}
-              />
-            </div>
-            <div>
-              <Label htmlFor="editServiceCategory">
-                Category *
-              </Label>
-              <Select
-                value={editingService?.category || ""}
-                onValueChange={(value) =>
-                  setEditingService(editingService ? { ...editingService, category: value } : null)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {serviceCategories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="editServicePrice">
-                  Price *
-                </Label>
-                <Input
-                  id="editServicePrice"
-                  type="number"
-                  placeholder="0.00"
-                  value={editingService?.price || ""}
-                  onChange={(e) =>
-                    setEditingService(editingService ? { ...editingService, price: Number(e.target.value) } : null)
-                  }
-                />
-              </div>
-              <div>
-                <Label htmlFor="editServiceDuration">
-                  Duration (min) *
-                </Label>
-                <Input
-                  id="editServiceDuration"
-                  type="number"
-                  placeholder="60"
-                  value={editingService?.duration || ""}
-                  onChange={(e) =>
-                    setEditingService(editingService ? { ...editingService, duration: Number(e.target.value) } : null)
-                  }
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="editServiceDescription">
-                Description
-              </Label>
-              <Textarea
-                id="editServiceDescription"
-                placeholder="Service description..."
-                value={editingService?.description || ""}
-                onChange={(e) =>
-                  setEditingService(editingService ? { ...editingService, description: e.target.value } : null)
-                }
-              />
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsEditServiceOpen(false)
-                  setEditingService(null)
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleEditService}
-              >
-                Update Service
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Category Modal */}
-      <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Category</DialogTitle>
-            <DialogDescription>Create a new service category.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="categoryName">
-                Category Name *
-              </Label>
-              <Input
-                id="categoryName"
-                placeholder="Enter category name"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-              />
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddCategoryOpen(false)
-                  setNewCategory("")
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddCategory}
-              >
-                Add Category
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Booking Modal */}
-      <Dialog open={isAddBookingOpen} onOpenChange={setIsAddBookingOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New Booking</DialogTitle>
-            <DialogDescription>Schedule a new appointment.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="bookingClient">
-                Client *
-              </Label>
-              <Select onValueChange={(value) => setNewBooking({ ...newBooking, clientId: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select client" />
-                </SelectTrigger>
-                <SelectContent>
-                  {clients.map((client) => (
-                    <SelectItem key={client.id} value={client.id}>
-                      {client.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="bookingService">
-                Service *
-              </Label>
-              <Select onValueChange={(value) => setNewBooking({ ...newBooking, serviceId: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select service" />
-                </SelectTrigger>
-                <SelectContent>
-                  {services.map((service) => (
-                    <SelectItem key={service.id} value={service.id}>
-                      {service.name} - ${service.price}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="bookingStaff">
-                Staff Member *
-              </Label>
-              <Select onValueChange={(value) => setNewBooking({ ...newBooking, staffId: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select staff member" />
-                </SelectTrigger>
-                <SelectContent>
-                  {staff.map((member) => (
-                    <SelectItem key={member.id} value={member.id}>
-                      {member.name} - {member.specialty}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="bookingDate">
-                  Date *
-                </Label>
-                <Input
-                  id="bookingDate"
-                  type="date"
-                  value={newBooking.date || ""}
-                  onChange={(e) => setNewBooking({ ...newBooking, date: e.target.value })}
-                />
-              </div>
-              <div>
-                <Label>Time Slot *</Label>
-                <div className="grid grid-cols-1 gap-2 mt-1">
-                  <Select
-                    onValueChange={(value) => {
-                      const [timeFrom, timeTo] = value.split("-")
-                      setNewBooking({ ...newBooking, timeFrom, timeTo })
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select time slot" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="09:00-10:00">9:00 AM - 10:00 AM</SelectItem>
-                      <SelectItem value="10:00-11:00">10:00 AM - 11:00 AM</SelectItem>
-                      <SelectItem value="11:00-12:00">11:00 AM - 12:00 PM</SelectItem>
-                      <SelectItem value="12:00-13:00">12:00 PM - 1:00 PM</SelectItem>
-                      <SelectItem value="13:00-14:00">1:00 PM - 2:00 PM</SelectItem>
-                      <SelectItem value="14:00-15:00">2:00 PM - 3:00 PM</SelectItem>
-                      <SelectItem value="15:00-16:00">3:00 PM - 4:00 PM</SelectItem>
-                      <SelectItem value="16:00-17:00">4:00 PM - 5:00 PM</SelectItem>
-                      <SelectItem value="17:00-18:00">5:00 PM - 6:00 PM</SelectItem>
-                      <SelectItem value="18:00-19:00">6:00 PM - 7:00 PM</SelectItem>
-                      <SelectItem value="19:00-20:00">7:00 PM - 8:00 PM</SelectItem>
-                      <SelectItem value="20:00-21:00">8:00 PM - 9:00 PM</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="bookingNotes">
-                Notes
-              </Label>
-              <Textarea
-                id="bookingNotes"
-                placeholder="Additional notes..."
-                value={newBooking.notes || ""}
-                onChange={(e) => setNewBooking({ ...newBooking, notes: e.target.value })}
-              />
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddBookingOpen(false)
-                  setNewBooking({})
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddBooking}
-              >
-                Create Booking
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Inventory Item Modal */}
-      <Dialog open={isAddInventoryOpen} onOpenChange={setIsAddInventoryOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Inventory Item</DialogTitle>
-            <DialogDescription>Add a new product to inventory.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="inventoryName">
-                Product Name *
-              </Label>
-              <Input
-                id="inventoryName"
-                placeholder="Enter product name"
-                value={newInventoryItem.name || ""}
-                onChange={(e) => setNewInventoryItem({ ...newInventoryItem, name: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="inventoryCategory">
-                Category *
-              </Label>
-              <Select onValueChange={(value) => setNewInventoryItem({ ...newInventoryItem, category: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Hair Care">Hair Care</SelectItem>
-                  <SelectItem value="Skin Care">Skin Care</SelectItem>
-                  <SelectItem value="Nail Care">Nail Care</SelectItem>
-                  <SelectItem value="Spa">Spa</SelectItem>
-                  <SelectItem value="Tools">Tools</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="inventorySupplier">
-                Supplier *
-              </Label>
-              <Input
-                id="inventorySupplier"
-                placeholder="Enter supplier name"
-                value={newInventoryItem.supplier || ""}
-                onChange={(e) => setNewInventoryItem({ ...newInventoryItem, supplier: e.target.value })}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="inventoryQuantity">
-                  Initial Quantity
-                </Label>
-                <Input
-                  id="inventoryQuantity"
-                  type="number"
-                  placeholder="0"
-                  value={newInventoryItem.quantity || ""}
-                  onChange={(e) => setNewInventoryItem({ ...newInventoryItem, quantity: Number(e.target.value) })}
-                />
-              </div>
-              <div>
-                <Label htmlFor="inventoryReorder">
-                  Reorder Level
-                </Label>
-                <Input
-                  id="inventoryReorder"
-                  type="number"
-                  placeholder="5"
-                  value={newInventoryItem.reorderLevel || ""}
-                  onChange={(e) => setNewInventoryItem({ ...newInventoryItem, reorderLevel: Number(e.target.value) })}
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="inventoryPrice">
-                Unit Price
-              </Label>
-              <Input
-                id="inventoryPrice"
-                type="number"
-                step="0.01"
-                placeholder="0.00"
-                value={newInventoryItem.unitPrice || ""}
-                onChange={(e) => setNewInventoryItem({ ...newInventoryItem, unitPrice: Number(e.target.value) })}
-              />
-            </div>
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddInventoryOpen(false)
-                  setNewInventoryItem({})
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleAddInventoryItem}
-              >
-                Add Item
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Create Invoice Modal */}
-      <Dialog open={isCreateInvoiceOpen} onOpenChange={setIsCreateInvoiceOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create Invoice</DialogTitle>
-            <DialogDescription>Generate invoice from completed bookings.</DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsCreateInvoiceOpen(false)
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleCreateInvoice}
-            >
-              Create Invoice
             </Button>
           </div>
         </DialogContent>
@@ -1579,48 +524,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         </DialogContent>
       </Dialog>
 
-      {/* Update Quantity Modal */}
-      <Dialog open={isUpdateQuantityOpen} onOpenChange={setIsUpdateQuantityOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Update Quantity</DialogTitle>
-            <DialogDescription>
-              Update the quantity for {selectedInventoryItem?.name}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="newQuantity">
-                New Quantity
-              </Label>
-              <Input
-                id="newQuantity"
-                type="number"
-                placeholder="Enter new quantity"
-                value={newQuantity}
-                onChange={(e) => setNewQuantity(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsUpdateQuantityOpen(false)
-                setNewQuantity("")
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleQuantityUpdate}
-            >
-              Update Quantity
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       {/* Delete Confirmation Modal */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
         <DialogContent>
@@ -1647,88 +550,6 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         </DialogContent>
       </Dialog>
 
-      {/* Manage Order Modal */}
-      <Dialog open={isManageOrderOpen} onOpenChange={setIsManageOrderOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Manage Service Order</DialogTitle>
-            <DialogDescription>
-              Drag and drop to reorder services for {selectedCategory === "all" ? "all categories" : selectedCategory}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="mt-4 max-h-96 overflow-y-auto">
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable droppableId="services">
-                {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
-                    {reorderingServices.map((service, index) => (
-                      <Draggable key={service.id} draggableId={service.id} index={index}>
-                        {(provided, snapshot) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`border transition-all duration-200 rounded-xl ${
-                              snapshot.isDragging
-                                ? "shadow-lg scale-105 rotate-2 bg-accent"
-                                : "hover:shadow-md cursor-grab active:cursor-grabbing"
-                            }`}
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
-                                    {index + 1}
-                                  </div>
-                                  <div>
-                                    <h4 className="font-semibold">{service.name}</h4>
-                                    <p className="text-sm text-muted-foreground">
-                                      {service.category} • ${service.price}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center space-x-2 text-muted-foreground">
-                                  <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                  </div>
-                                  <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </div>
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsManageOrderOpen(false)
-                setReorderingServices([])
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSaveOrder}
-            >
-              Save Order
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </SidebarProvider>
   )
 }

@@ -2,13 +2,12 @@
 
 import { Input } from "@/components/ui/input"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, type Dispatch, type SetStateAction } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Edit, Package, Search, Trash2 } from "lucide-react"
-import type { InventoryItem, Product } from "@/types"
-import { mockInventory } from "@/data/mockData"
+import type { InventoryItem } from "@/types"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import {
   Dialog,
@@ -16,61 +15,112 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/hooks/use-toast"
 
 interface InventoryPageContentProps {
   inventory: InventoryItem[]
-  setIsAddInventoryOpen: (isOpen: boolean) => void
-  openUpdateQuantityModal: (item: InventoryItem) => void
-  handleUpdateInventoryQuantity: (id: string, newQuantity: number) => void
+  setInventory: Dispatch<SetStateAction<InventoryItem[]>>
+  openDeleteConfirm: (type: string, id: string, name: string) => void
 }
 
 export function InventoryPageContent({
-  inventory: initialInventory,
-  setIsAddInventoryOpen,
-  openUpdateQuantityModal,
-  handleUpdateInventoryQuantity,
+  inventory,
+  setInventory,
+  openDeleteConfirm,
 }: InventoryPageContentProps) {
-  const [inventory, setInventory] = useState<Product[]>(mockInventory)
-  const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false)
-  const [isEditProductDialogOpen, setIsEditProductDialogOpen] = useState(false)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [productToDelete, setProductToDelete] = useState<string | null>(null)
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
-  const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
-    name: "",
-    description: "",
-    quantity: 0,
-    price: 0,
-    supplier: "",
-    category: "",
-  })
+  const [isAddInventoryOpen, setIsAddInventoryOpen] = useState(false)
+  const [isUpdateQuantityOpen, setIsUpdateQuantityOpen] = useState(false)
+  const [selectedInventoryItem, setSelectedInventoryItem] = useState<InventoryItem | null>(null)
+  const [newInventoryItem, setNewInventoryItem] = useState<Partial<InventoryItem>>({})
+  const [newQuantity, setNewQuantity] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [inventoryStatusFilter, setInventoryStatusFilter] = useState("all")
+  const { toast } = useToast()
 
-  const handleAddProduct = () => {
-    const id = (inventory.length + 1).toString()
-    setInventory([...inventory, { id, ...newProduct }])
-    setNewProduct({ name: "", description: "", quantity: 0, price: 0, supplier: "", category: "" })
-    setIsAddProductDialogOpen(false)
+  // Generate unique ID
+  const generateId = () => Math.random().toString(36).substr(2, 9)
+
+  const handleAddInventoryItem = () => {
+    if (!newInventoryItem.name || !newInventoryItem.category || !newInventoryItem.supplier) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const quantity = Number(newInventoryItem.quantity) || 0
+    const reorderLevel = Number(newInventoryItem.reorderLevel) || 0
+
+    let status: InventoryItem["status"] = "in-stock"
+    if (quantity === 0) status = "out-of-stock"
+    else if (quantity <= reorderLevel) status = "low-stock"
+
+    const item: InventoryItem = {
+      id: generateId(),
+      name: newInventoryItem.name,
+      category: newInventoryItem.category,
+      quantity,
+      supplier: newInventoryItem.supplier,
+      reorderLevel,
+      unitPrice: Number(newInventoryItem.unitPrice) || 0,
+      lastRestocked: new Date().toISOString().split("T")[0],
+      status,
+    }
+
+    setInventory([...inventory, item])
+    setNewInventoryItem({})
+    setIsAddInventoryOpen(false)
+    toast({
+      title: "Success",
+      description: "Inventory item added successfully",
+    })
   }
 
-  const handleEditProduct = () => {
-    if (currentProduct) {
-      setInventory(inventory.map((product) => (product.id === currentProduct.id ? currentProduct : product)))
-      setCurrentProduct(null)
-      setIsEditProductDialogOpen(false)
-    }
+  const handleUpdateInventoryQuantity = (id: string, newQuantity: number) => {
+    setInventory(
+      inventory.map((item) => {
+        if (item.id === id) {
+          let status: InventoryItem["status"] = "in-stock"
+          if (newQuantity === 0) status = "out-of-stock"
+          else if (newQuantity <= item.reorderLevel) status = "low-stock"
+
+          return { ...item, quantity: newQuantity, status }
+        }
+        return item
+      }),
+    )
+    toast({
+      title: "Success",
+      description: "Inventory updated successfully",
+    })
   }
 
-  const handleDeleteProduct = () => {
-    if (productToDelete) {
-      setInventory(inventory.filter((product) => product.id !== productToDelete))
-      setProductToDelete(null)
+  const openUpdateQuantityModal = (item: InventoryItem) => {
+    setSelectedInventoryItem(item)
+    setNewQuantity(item.quantity.toString())
+    setIsUpdateQuantityOpen(true)
+  }
+
+  const handleQuantityUpdate = () => {
+    if (!selectedInventoryItem || !newQuantity || isNaN(Number(newQuantity))) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid quantity",
+        variant: "destructive",
+      })
+      return
     }
-    setIsDeleteDialogOpen(false)
+
+    handleUpdateInventoryQuantity(selectedInventoryItem.id, Number(newQuantity))
+    setIsUpdateQuantityOpen(false)
+    setSelectedInventoryItem(null)
+    setNewQuantity("")
   }
 
   const filteredInventory = useMemo(() => {
@@ -95,7 +145,7 @@ export function InventoryPageContent({
         </div>
         <Button
           className="bg-gradient-to-r from-white to-[#f9f9f9] hover:from-[#f0f0f0] hover:to-[#e6e6e6] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-          onClick={() => setIsAddProductDialogOpen(true)}
+          onClick={() => setIsAddInventoryOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
           Add Item
@@ -160,8 +210,7 @@ export function InventoryPageContent({
                           variant="outline"
                           size="icon"
                           onClick={() => {
-                            setCurrentProduct(product)
-                            setIsEditProductDialogOpen(true)
+                            openUpdateQuantityModal(product)
                           }}
                         >
                           <Edit className="h-4 w-4" />
@@ -170,8 +219,7 @@ export function InventoryPageContent({
                           variant="outline"
                           size="icon"
                           onClick={() => {
-                            setProductToDelete(product.id)
-                            setIsDeleteDialogOpen(true)
+                            openDeleteConfirm("inventory", product.id, product.name)
                           }}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -186,221 +234,151 @@ export function InventoryPageContent({
         </CardContent>
       </Card>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+      {/* Add Inventory Item Modal */}
+      <Dialog open={isAddInventoryOpen} onOpenChange={setIsAddInventoryOpen}>
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Confirm Delete</DialogTitle>
-            <p className="text-white">
-              Are you sure you want to delete this product? This action cannot be undone.
-            </p>
+            <DialogTitle>Add Inventory Item</DialogTitle>
+            <DialogDescription>Add a new product to inventory.</DialogDescription>
           </DialogHeader>
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="inventoryName">
+                Product Name *
+              </Label>
+              <Input
+                id="inventoryName"
+                placeholder="Enter product name"
+                value={newInventoryItem.name || ""}
+                onChange={(e) => setNewInventoryItem({ ...newInventoryItem, name: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="inventoryCategory">
+                Category *
+              </Label>
+              <Select onValueChange={(value) => setNewInventoryItem({ ...newInventoryItem, category: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Hair Care">Hair Care</SelectItem>
+                  <SelectItem value="Skin Care">Skin Care</SelectItem>
+                  <SelectItem value="Nail Care">Nail Care</SelectItem>
+                  <SelectItem value="Spa">Spa</SelectItem>
+                  <SelectItem value="Tools">Tools</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="inventorySupplier">
+                Supplier *
+              </Label>
+              <Input
+                id="inventorySupplier"
+                placeholder="Enter supplier name"
+                value={newInventoryItem.supplier || ""}
+                onChange={(e) => setNewInventoryItem({ ...newInventoryItem, supplier: e.target.value })}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="inventoryQuantity">
+                  Initial Quantity
+                </Label>
+                <Input
+                  id="inventoryQuantity"
+                  type="number"
+                  placeholder="0"
+                  value={newInventoryItem.quantity || ""}
+                  onChange={(e) => setNewInventoryItem({ ...newInventoryItem, quantity: Number(e.target.value) })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="inventoryReorder">
+                  Reorder Level
+                </Label>
+                <Input
+                  id="inventoryReorder"
+                  type="number"
+                  placeholder="5"
+                  value={newInventoryItem.reorderLevel || ""}
+                  onChange={(e) => setNewInventoryItem({ ...newInventoryItem, reorderLevel: Number(e.target.value) })}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="inventoryPrice">
+                Unit Price
+              </Label>
+              <Input
+                id="inventoryPrice"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={newInventoryItem.unitPrice || ""}
+                onChange={(e) => setNewInventoryItem({ ...newInventoryItem, unitPrice: Number(e.target.value) })}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddInventoryOpen(false)
+                  setNewInventoryItem({})
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddInventoryItem}
+              >
+                Add Item
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Update Quantity Modal */}
+      <Dialog open={isUpdateQuantityOpen} onOpenChange={setIsUpdateQuantityOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Quantity</DialogTitle>
+            <DialogDescription>
+              Update the quantity for {selectedInventoryItem?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="newQuantity">
+                New Quantity
+              </Label>
+              <Input
+                id="newQuantity"
+                type="number"
+                placeholder="Enter new quantity"
+                value={newQuantity}
+                onChange={(e) => setNewQuantity(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end space-x-3 pt-4">
             <Button
               variant="outline"
               onClick={() => {
-                setIsDeleteDialogOpen(false)
-                setProductToDelete(null)
+                setIsUpdateQuantityOpen(false)
+                setNewQuantity("")
               }}
-              className="rounded-xl hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-black rounded-xl bg-[#FFD700]"
-              onClick={handleDeleteProduct}
+              onClick={handleQuantityUpdate}
             >
-              Delete
+              Update Quantity
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Product Dialog */}
-      <Dialog open={isAddProductDialogOpen} onOpenChange={setIsAddProductDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] bg-black/90">
-          <DialogHeader>
-            <DialogTitle>Add New Product</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                value={newProduct.name}
-                onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Description
-              </Label>
-              <Input
-                id="description"
-                value={newProduct.description}
-                onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="quantity" className="text-right">
-                Quantity
-              </Label>
-              <Input
-                id="quantity"
-                type="number"
-                value={newProduct.quantity}
-                onChange={(e) => setNewProduct({ ...newProduct, quantity: Number.parseInt(e.target.value) })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="price" className="text-right">
-                Price
-              </Label>
-              <Input
-                id="price"
-                type="number"
-                value={newProduct.price}
-                onChange={(e) => setNewProduct({ ...newProduct, price: Number.parseFloat(e.target.value) })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="supplier" className="text-right">
-                Supplier
-              </Label>
-              <Input
-                id="supplier"
-                value={newProduct.supplier}
-                onChange={(e) => setNewProduct({ ...newProduct, supplier: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="category" className="text-right">
-                Category
-              </Label>
-              <Input
-                id="category"
-                value={newProduct.category}
-                onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              onClick={handleAddProduct}
-              className="bg-[#FFD700] text-black"
-            >
-              Add Product
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Product Dialog */}
-      <Dialog open={isEditProductDialogOpen} onOpenChange={setIsEditProductDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] bg-black/95">
-          <DialogHeader>
-            <DialogTitle>Edit Product</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="edit-name"
-                value={currentProduct?.name || ""}
-                onChange={(e) => setCurrentProduct(currentProduct ? { ...currentProduct, name: e.target.value } : null)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-description" className="text-right">
-                Description
-              </Label>
-              <Input
-                id="edit-description"
-                value={currentProduct?.description || ""}
-                onChange={(e) =>
-                  setCurrentProduct(currentProduct ? { ...currentProduct, description: e.target.value } : null)
-                }
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-quantity" className="text-right">
-                Quantity
-              </Label>
-              <Input
-                id="edit-quantity"
-                type="number"
-                value={currentProduct?.quantity || 0}
-                onChange={(e) =>
-                  setCurrentProduct(
-                    currentProduct ? { ...currentProduct, quantity: Number.parseInt(e.target.value) } : null,
-                  )
-                }
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-price" className="text-right">
-                Price
-              </Label>
-              <Input
-                id="edit-price"
-                type="number"
-                value={currentProduct?.price || 0}
-                onChange={(e) =>
-                  setCurrentProduct(
-                    currentProduct ? { ...currentProduct, price: Number.parseFloat(e.target.value) } : null,
-                  )
-                }
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-supplier" className="text-right">
-                Supplier
-              </Label>
-              <Input
-                id="edit-supplier"
-                value={currentProduct?.supplier || ""}
-                onChange={(e) =>
-                  setCurrentProduct(currentProduct ? { ...currentProduct, supplier: e.target.value } : null)
-                }
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-category" className="text-right">
-                Category
-              </Label>
-              <Input
-                id="edit-category"
-                value={currentProduct?.category || ""}
-                onChange={(e) =>
-                  setCurrentProduct(currentProduct ? { ...currentProduct, category: e.target.value } : null)
-                }
-                className="col-span-3"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              onClick={handleEditProduct}
-              className="bg-[#FFD700] text-black"
-            >
-              Save Changes
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

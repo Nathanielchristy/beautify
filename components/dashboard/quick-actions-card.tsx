@@ -5,17 +5,11 @@ import { Button } from "@/components/ui/button"
 import { TrendingUp, Plus, FileText } from "lucide-react"
 
 interface QuickActionsCardProps {
-  setIsAddBookingOpen: (isOpen: boolean) => void
-  setIsAddClientOpen: (isOpen: boolean) => void
-  setIsAddServiceOpen: (isOpen: boolean) => void
-  setIsCreateInvoiceOpen: (isOpen: boolean) => void
+  handleQuickAction: (tab: string, action: string) => void
 }
 
 export function QuickActionsCard({
-  setIsAddBookingOpen,
-  setIsAddClientOpen,
-  setIsAddServiceOpen,
-  setIsCreateInvoiceOpen,
+  handleQuickAction,
 }: QuickActionsCardProps) {
   return (
     <Card className="bg-black/95 backdrop-blur-sm border-0 shadow-lg rounded-2xl">
@@ -28,7 +22,7 @@ export function QuickActionsCard({
       <CardContent className="space-y-3">
         <Button
           className="w-full bg-gradient-to-r from-white to-gray-200 hover:from-gray-100 hover:to-gray-300 text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-          onClick={() => setIsAddBookingOpen(true)}
+          onClick={() => handleQuickAction("bookings", "add")}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
           New Booking
@@ -36,7 +30,7 @@ export function QuickActionsCard({
         <Button
           variant="outline"
           className="w-full border-white text-white hover:bg-gold rounded-xl bg-transparent"
-          onClick={() => setIsAddClientOpen(true)}
+          onClick={() => handleQuickAction("clients", "add")}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
           Add Client
@@ -44,7 +38,7 @@ export function QuickActionsCard({
         <Button
           variant="outline"
           className="w-full border-white text-white hover:bg-gold rounded-xl bg-transparent"
-          onClick={() => setIsAddServiceOpen(true)}
+          onClick={() => handleQuickAction("services", "add")}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
           Add Service
@@ -52,7 +46,7 @@ export function QuickActionsCard({
         <Button
           variant="outline"
           className="w-full border-white text-white hover:bg-gold rounded-xl bg-transparent"
-          onClick={() => setIsCreateInvoiceOpen(true)}
+          onClick={() => handleQuickAction("invoices", "add")}
         >
           <FileText className="h-4 w-4 mr-2" strokeWidth={2} />
           Create Invoice

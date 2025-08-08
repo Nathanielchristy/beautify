@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, type Dispatch, type SetStateAction } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FileText, Plus, Edit, Trash2, Search } from "lucide-react"
-import type { Invoice, InvoiceItem } from "@/types"
+import type { Invoice, InvoiceItem, Booking } from "@/types"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import {
   Dialog,
@@ -13,122 +13,99 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { mockClients, mockServices, mockInventory } from "@/data/mockData"
+import { useToast } from "@/hooks/use-toast"
 
 interface InvoicesPageContentProps {
   invoices: Invoice[]
-  setIsCreateInvoiceOpen: (isOpen: boolean) => void
+  setInvoices: Dispatch<SetStateAction<Invoice[]>>
+  bookings: Booking[]
+  initialAction: string | null
+  setInitialAction: (action: string | null) => void
   setSelectedItem: (item: any) => void
   setIsViewDetailsOpen: (isOpen: boolean) => void
   handleUpdateInvoiceStatus: (id: string, status: Invoice["status"]) => void
-  setInvoices: (invoices: Invoice[]) => void
 }
 
 export function InvoicesPageContent({
   invoices,
-  setIsCreateInvoiceOpen,
+  setInvoices,
+  bookings,
+  initialAction,
+  setInitialAction,
   setSelectedItem,
   setIsViewDetailsOpen,
   handleUpdateInvoiceStatus,
-  setInvoices,
 }: InvoicesPageContentProps) {
   const [invoiceStatusFilter, setInvoiceStatusFilter] = useState("all")
-  const [isCreateInvoiceDialogOpen, setIsCreateInvoiceDialogOpen] = useState(false)
+  const [isCreateInvoiceOpen, setIsCreateInvoiceOpen] = useState(false)
   const [isEditInvoiceDialogOpen, setIsEditInvoiceDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [invoiceToDelete, setInvoiceToDelete] = useState<string | null>(null)
   const [currentInvoice, setCurrentInvoice] = useState<Invoice | null>(null)
-  const [newInvoice, setNewInvoice] = useState<Omit<Invoice, "id">>({
-    clientId: "",
-    clientName: "",
-    date: "",
-    totalAmount: 0,
-    status: "Pending",
-    items: [],
-  })
-  const [newItem, setNewItem] = useState<InvoiceItem>({
-    type: "service",
-    id: "",
-    name: "",
-    price: 0,
-    quantity: 1,
-  })
   const [searchTerm, setSearchTerm] = useState("")
+  const { toast } = useToast()
 
-  const handleAddItem = () => {
-    if (newItem.id && newItem.name && newItem.price > 0) {
-      setNewInvoice((prev) => ({
-        ...prev,
-        items: [...prev.items, newItem],
-        totalAmount: prev.totalAmount + newItem.price * newItem.quantity,
-      }))
-      setNewItem({ type: "service", id: "", name: "", price: 0, quantity: 1 })
+  useEffect(() => {
+    if (initialAction === "add") {
+      setIsCreateInvoiceOpen(true)
+      setInitialAction(null)
     }
-  }
+  }, [initialAction, setInitialAction])
 
-  const handleRemoveItem = (index: number) => {
-    setNewInvoice((prev) => {
-      const updatedItems = prev.items.filter((_, i) => i !== index)
-      const updatedTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      return { ...prev, items: updatedItems, totalAmount: updatedTotal }
+  const handleCreateInvoice = () => {
+    const completedBookings = bookings.filter(
+      (b) => b.status === "completed" && !invoices.find((i) => i.bookingId === b.id),
+    )
+
+    if (completedBookings.length === 0) {
+      toast({
+        title: "Info",
+        description: "No completed bookings available for invoicing",
+      })
+      return
+    }
+
+    const booking = completedBookings[0]
+    const invoice: Invoice = {
+      id: `INV-${String(invoices.length + 1).padStart(3, "0")}`,
+      clientId: booking.clientId,
+      clientName: booking.clientName,
+      bookingId: booking.id,
+      total: booking.price,
+      status: "pending",
+      date: new Date().toISOString().split("T")[0],
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      items: [
+        {
+          serviceId: booking.serviceId,
+          serviceName: booking.serviceName,
+          quantity: 1,
+          price: booking.price,
+          total: booking.price,
+        },
+      ],
+    }
+
+    setInvoices([...invoices, invoice])
+    setIsCreateInvoiceOpen(false)
+    toast({
+      title: "Success",
+      description: "Invoice created successfully",
     })
   }
 
-const handleCreateInvoice = () => {
-  if (!newInvoice.clientId || !newInvoice.date || newInvoice.items.length === 0) return;
-
-  const client = mockClients.find((c) => c.id === newInvoice.clientId)
-  const newId = Date.now().toString()
-
-  const invoiceToCreate: Invoice = {
-    id: newId,
-    clientId: newInvoice.clientId,
-    clientName: client?.name || "",
-    date: newInvoice.date,
-    status: newInvoice.status,
-    items: newInvoice.items,
-    totalAmount: newInvoice.items.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    ),
-  }
-
-  setInvoices([...invoices, invoiceToCreate])
-
-  // Reset form state
-  setNewInvoice({
-    clientId: "",
-    clientName: "",
-    date: "",
-    totalAmount: 0,
-    status: "Pending",
-    items: [],
-  })
-  setNewItem({
-    type: "service",
-    id: "",
-    name: "",
-    price: 0,
-    quantity: 1,
-  })
-
-  setIsCreateInvoiceDialogOpen(false)
-}
-
-
   const handleEditInvoice = () => {
     if (currentInvoice) {
-      const client = mockClients.find((c) => c.id === currentInvoice.clientId)
+      // This is a placeholder, the original component had mock data logic
+      // I'll keep it simple for now
       setInvoices(
         invoices.map((invoice) =>
           invoice.id === currentInvoice.id
-            ? {
-                ...currentInvoice,
-                clientName: client?.name || "",
-              }
+            ? currentInvoice
             : invoice,
         ),
       )
@@ -198,7 +175,7 @@ const handleCreateInvoice = () => {
         </div>
         <Button
           className="bg-gradient-to-r from-white to-[#f9f9f9] hover:from-[#f0f0f0] hover:to-[#e6e6e6] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-          onClick={() => setIsCreateInvoiceDialogOpen(true)}
+          onClick={() => setIsCreateInvoiceOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" strokeWidth={2} />
           Create Invoice
@@ -289,392 +266,28 @@ const handleCreateInvoice = () => {
         </CardContent>
       </Card>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md mx-4 bg-black/90 backdrop-blur-xl border-0 shadow-2xl rounded-2xl">
+      {/* Create Invoice Modal */}
+      <Dialog open={isCreateInvoiceOpen} onOpenChange={setIsCreateInvoiceOpen}>
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-white">Confirm Delete</DialogTitle>
-            <p className="text-white">
-              Are you sure you want to delete this invoice? This action cannot be undone.
-            </p>
+            <DialogTitle>Create Invoice</DialogTitle>
+            <DialogDescription>Generate invoice from completed bookings.</DialogDescription>
           </DialogHeader>
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="flex justify-end space-x-3 pt-4">
             <Button
               variant="outline"
               onClick={() => {
-                setIsDeleteDialogOpen(false)
-                setInvoiceToDelete(null)
+                setIsCreateInvoiceOpen(false)
               }}
-              className="rounded-xl hover:bg-roseLight-DEFAULT/30"
             >
               Cancel
             </Button>
             <Button
-              className="bg-gradient-to-r from-danger-DEFAULT to-danger-light hover:from-roseDeep-DEFAULT hover:to-danger-DEFAULT text-black rounded-xl bg-[#FFD700]"
-              onClick={handleDeleteInvoice}
-            >
-              Delete
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Create Invoice Dialog */}
-      <Dialog open={isCreateInvoiceDialogOpen} onOpenChange={setIsCreateInvoiceDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto bg-black/90">
-          <DialogHeader>
-            <DialogTitle>Create New Invoice</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="client" className="text-right">
-                Client
-              </Label>
-              <Select
-                onValueChange={(value) => setNewInvoice({ ...newInvoice, clientId: value })}
-                value={newInvoice.clientId}
-              >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                  <SelectValue placeholder="Select a client" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockClients.map((client) => (
-                    <SelectItem key={client.id} value={client.id}>
-                      {client.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="date" className="text-right">
-                Date
-              </Label>
-              <Input
-                id="date"
-                type="date"
-                value={newInvoice.date}
-                onChange={(e) => setNewInvoice({ ...newInvoice, date: e.target.value })}
-                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
-                Status
-              </Label>
-              <Select
-                onValueChange={(value) => setNewInvoice({ ...newInvoice, status: value as Invoice["status"] })}
-                value={newInvoice.status}
-              >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Paid">Paid</SelectItem>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="Cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Items Section */}
-            <div className="col-span-4 space-y-3">
-              <h3 className="text-lg font-semibold">Items</h3>
-              {newInvoice.items.length > 0 && (
-                <div className="space-y-2">
-                  {newInvoice.items.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center p-3 border rounded-lg border-pale-blush/50 bg-pale-blush/10"
-                    >
-                      <div className="flex-1">
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-white">{item.type === "service" ? "Service" : "Product"}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-white">
-                          ${item.price.toFixed(2)} x {item.quantity}
-                        </span>
-                        <Button variant="ghost" size="icon" onClick={() => handleRemoveItem(index)}>
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Add Item Section */}
-            <div className="col-span-4 space-y-3 border-t pt-4">
-              <Label>Add Item</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <Select
-                  onValueChange={(value) =>
-                    setNewItem({ ...newItem, type: value as InvoiceItem["type"], id: "", name: "", price: 0 })
-                  }
-                  value={newItem.type}
-                >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="service">Service</SelectItem>
-                    <SelectItem value="product">Product</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select
-                  onValueChange={(value) => {
-                    const selectedItem =
-                      newItem.type === "service"
-                        ? mockServices.find((s) => s.id === value)
-                        : mockInventory.find((p) => p.id === value)
-                    setNewItem({
-                      ...newItem,
-                      id: value,
-                      name: selectedItem?.name || "",
-                      price: selectedItem?.price || 0,
-                    })
-                  }}
-                  value={newItem.id}
-                >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                    <SelectValue placeholder={`Select ${newItem.type}`} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {newItem.type === "service"
-                      ? mockServices.map((service) => (
-                          <SelectItem key={service.id} value={service.id}>
-                            {service.name} (${service.price.toFixed(2)})
-                          </SelectItem>
-                        ))
-                      : mockInventory.map((product) => (
-                          <SelectItem key={product.id} value={product.id}>
-                            {product.name} (${product.price.toFixed(2)})
-                          </SelectItem>
-                        ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-2">
-                <Input
-                  type="number"
-                  placeholder="Quantity"
-                  value={newItem.quantity}
-                  onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) || 1 })}
-                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="col-span-2 border-pale-blush hover:bg-pale-blush/30 bg-transparent"
-                  onClick={handleAddItem}
-                >
-                  Add Item
-                </Button>
-              </div>
-            </div>
-
-            <div className="col-span-4 text-right text-xl font-bold border-t pt-4">
-              Total: ${newInvoice.totalAmount.toFixed(2)}
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
               onClick={handleCreateInvoice}
-              className="bg-[#FFD700] text-black"
-              disabled={!newInvoice.clientId || !newInvoice.date || newInvoice.items.length === 0}
             >
               Create Invoice
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Invoice Dialog */}
-      <Dialog open={isEditInvoiceDialogOpen} onOpenChange={setIsEditInvoiceDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[80vh] overflow-y-auto bg-black">
-          <DialogHeader>
-            <DialogTitle>Edit Invoice</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-client" className="text-right">
-                Client
-              </Label>
-              <Select
-                onValueChange={(value) =>
-                  setCurrentInvoice(currentInvoice ? { ...currentInvoice, clientId: value } : null)
-                }
-                value={currentInvoice?.clientId || ""}
-              >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                  <SelectValue placeholder="Select a client" />
-                </SelectTrigger>
-                <SelectContent>
-                  {mockClients.map((client) => (
-                    <SelectItem key={client.id} value={client.id}>
-                      {client.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-date" className="text-right">
-                Date
-              </Label>
-              <Input
-                id="edit-date"
-                type="date"
-                value={currentInvoice?.date || ""}
-                onChange={(e) => setCurrentInvoice(currentInvoice ? { ...currentInvoice, date: e.target.value } : null)}
-                className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
-              />
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-status" className="text-right">
-                Status
-              </Label>
-              <Select
-                onValueChange={(value) =>
-                  setCurrentInvoice(currentInvoice ? { ...currentInvoice, status: value as Invoice["status"] } : null)
-                }
-                value={currentInvoice?.status || ""}
-              >
-                <SelectTrigger className="col-span-3 rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Paid">Paid</SelectItem>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="Cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Items Section for Edit */}
-            <div className="col-span-4 space-y-3">
-              <h3 className="text-lg font-semibold">Items</h3>
-              {currentInvoice?.items && currentInvoice.items.length > 0 && (
-                <div className="space-y-2">
-                  {currentInvoice.items.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center p-3 border rounded-lg border-pale-blush/50 bg-pale-blush/10"
-                    >
-                      <div className="flex-1">
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-white">{item.type === "service" ? "Service" : "Product"}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-white">
-                          ${item.price.toFixed(2)} x {item.quantity}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleRemoveItemFromCurrentInvoice(index)}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Add Item Section for Edit */}
-            <div className="col-span-4 space-y-3 border-t pt-4">
-              <Label>Add Item</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <Select
-                  onValueChange={(value) =>
-                    setNewItem({ ...newItem, type: value as InvoiceItem["type"], id: "", name: "", price: 0 })
-                  }
-                  value={newItem.type}
-                >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="service">Service</SelectItem>
-                    <SelectItem value="product">Product</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                <Select
-                  onValueChange={(value) => {
-                    const selectedItem =
-                      newItem.type === "service"
-                        ? mockServices.find((s) => s.id === value)
-                        : mockInventory.find((p) => p.id === value)
-                    setNewItem({
-                      ...newItem,
-                      id: value,
-                      name: selectedItem?.name || "",
-                      price: selectedItem?.price || 0,
-                    })
-                  }}
-                  value={newItem.id}
-                >
-                  <SelectTrigger className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm">
-                    <SelectValue placeholder={`Select ${newItem.type}`} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {newItem.type === "service"
-                      ? mockServices.map((service) => (
-                          <SelectItem key={service.id} value={service.id}>
-                            {service.name} (${service.price.toFixed(2)})
-                          </SelectItem>
-                        ))
-                      : mockInventory.map((product) => (
-                          <SelectItem key={product.id} value={product.id}>
-                            {product.name} (${product.price.toFixed(2)})
-                          </SelectItem>
-                        ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-2">
-                <Input
-                  type="number"
-                  placeholder="Quantity"
-                  value={newItem.quantity}
-                  onChange={(e) => setNewItem({ ...newItem, quantity: Number.parseInt(e.target.value) || 1 })}
-                  className="rounded-xl border-pale-blush focus:border-dusty-rose focus:ring-dusty-rose bg-black/50 backdrop-blur-sm"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="col-span-2 border-pale-blush hover:bg-pale-blush/30 bg-transparent"
-                  onClick={handleAddItemToCurrentInvoice}
-                >
-                  Add Item
-                </Button>
-              </div>
-            </div>
-
-            <div className="col-span-4 text-right text-xl font-bold border-t pt-4">
-              Total: ${currentInvoice?.totalAmount.toFixed(2) || "0.00"}
-            </div>
           </div>
-          <DialogFooter>
-            <Button
-              onClick={handleEditInvoice}
-              className="bg-[#FFD700] text-black"
-            >
-              Save Changes
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
