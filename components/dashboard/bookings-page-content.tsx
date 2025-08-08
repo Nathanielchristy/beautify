@@ -122,8 +122,7 @@ export function BookingsPageContent({
         </div>
         <div className="flex space-x-2">
           <Button
-            className="bg-gradient-to-r from-[#f5d76e] to-[#d4af37] hover:from-[#e6c14c] hover:to-[#bfa235] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200
-"
+            className="bg-gradient-to-r from-white to-[#f9f9f9] hover:from-[#f0f0f0] hover:to-[#e6e6e6] text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
             onClick={() => setIsAddBookingOpen(true)}
           >
             <Plus className="h-4 w-4 mr-2" strokeWidth={2} />

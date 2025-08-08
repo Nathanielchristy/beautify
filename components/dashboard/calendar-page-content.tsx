@@ -225,14 +225,14 @@ const getBookingsForDate = (date: Date, day: number) => {
                           const statusColors = {
                             completed: "bg-green-500 text-white",
                             confirmed: "bg-blue-600 text-white",
-                            pending: "bg-yellow-500 text-black",
+                            pending: "bg-[#c6c3bc] text-black",
                             cancelled: "bg-red-500 text-white",
                           }
 
                           return (
                             <div
                               key={booking.id}
-                              className={`bg-[#c6c3bc] text-xs p-2 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 ${
+                              className={`text-xs p-2 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 ${
                                 statusColors[booking.status] || statusColors.pending
                               }`}
                               onClick={(e) => {
