@@ -10,12 +10,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Search, Filter, Phone, Calendar, Eye, Trash2, Plus, Users, Edit } from "lucide-react"
 import type { Client } from "@/types"
 import { useDebounce } from "@/hooks/use-debounce" // Assuming this hook exists or will be created
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import type { Dispatch, SetStateAction } from "react"
 
 interface ClientPageContentProps {
   clients: Client[]
+  isAddClientOpen: boolean
   setIsAddClientOpen: (isOpen: boolean) => void
+  newClient: Partial<Client>
+  setNewClient: Dispatch<SetStateAction<Partial<Client>>>
+  handleAddClient: () => void
   setSelectedItem: (item: any) => void
   setIsViewDetailsOpen: (isOpen: boolean) => void
   openDeleteConfirm: (type: string, id: string, name: string) => void
@@ -23,7 +29,11 @@ interface ClientPageContentProps {
 
 export function ClientPageContent({
   clients: initialClients,
+  isAddClientOpen,
   setIsAddClientOpen,
+  newClient: newClientFromProps,
+  setNewClient: setNewClientFromProps,
+  handleAddClient: handleAddClientFromProps,
   setSelectedItem,
   setIsViewDetailsOpen,
   openDeleteConfirm,
@@ -431,6 +441,81 @@ export function ClientPageContent({
               Save Changes
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Client Modal */}
+      <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Client</DialogTitle>
+            <DialogDescription>
+              Enter client information to add them to your system.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="clientName">
+                Full Name *
+              </Label>
+              <Input
+                id="clientName"
+                placeholder="Enter client name"
+                value={newClientFromProps.name || ""}
+                onChange={(e) => setNewClientFromProps({ ...newClientFromProps, name: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientEmail">
+                Email *
+              </Label>
+              <Input
+                id="clientEmail"
+                type="email"
+                placeholder="client@example.com"
+                value={newClientFromProps.email || ""}
+                onChange={(e) => setNewClientFromProps({ ...newClientFromProps, email: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientPhone">
+                Phone Number *
+              </Label>
+              <Input
+                id="clientPhone"
+                placeholder="(555) 123-4567"
+                value={newClientFromProps.phone || ""}
+                onChange={(e) => setNewClientFromProps({ ...newClientFromProps, phone: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientNotes">
+                Notes
+              </Label>
+              <Textarea
+                id="clientNotes"
+                placeholder="Additional notes..."
+                value={newClientFromProps.notes || ""}
+                onChange={(e) => setNewClientFromProps({ ...newClientFromProps, notes: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddClientOpen(false)
+                  setNewClientFromProps({})
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddClientFromProps}
+              >
+                Add Client
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
