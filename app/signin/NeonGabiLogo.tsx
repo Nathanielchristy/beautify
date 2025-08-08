@@ -43,9 +43,9 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
 
     if (!letters || !subtitleLetters || !border) return;
 
-    gsap.set(letters, { opacity: 0, y: 20 });
-    gsap.set(subtitleLetters, { opacity: 0, y: 15 });
-    gsap.set(border, { opacity: 0, scale: 0.9 });
+    // gsap.set(letters, { opacity: 0, y: 20 });
+    // gsap.set(subtitleLetters, { opacity: 0, y: 15 });
+    // gsap.set(border, { opacity: 0, scale: 0.9 });
 
     const tl = gsap.timeline();
 
@@ -182,8 +182,6 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
 
         .neon-letter {
           display: inline-block;
-          opacity: 0;
-          transform: translateY(20px);
         }
       `}</style>
 
