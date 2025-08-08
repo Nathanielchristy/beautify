@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -67,6 +68,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
 
   // Modal states
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [isAddClientOpen, setIsAddClientOpen] = useState(false)
   const [isViewDetailsOpen, setIsViewDetailsOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
 
@@ -75,6 +77,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   const [selectedItem, setSelectedItem] = useState<any>(null)
 
   // Form states
+  const [newClient, setNewClient] = useState<Partial<Client>>({})
   const { toast } = useToast()
 
   const [selectedCategory, setSelectedCategory] = useState("all")
@@ -94,6 +97,42 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
   const handleQuickAction = (tab: string, action: string) => {
     setActiveTab(tab)
     setInitialAction(action)
+  }
+
+  // Generate unique ID
+  const generateId = () => Math.random().toString(36).substr(2, 9)
+
+  const handleAddClient = () => {
+    if (!newClient.name || !newClient.email || !newClient.phone) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const client: Client = {
+      id: generateId(),
+      name: newClient.name,
+      email: newClient.email,
+      phone: newClient.phone,
+      avatar: `/placeholder.svg?height=40&width=40&text=${newClient.name?.charAt(0)}`,
+      firstVisit: new Date().toISOString().split("T")[0],
+      servicesCount: 0,
+      totalSpent: 0,
+      lastVisit: new Date().toISOString().split("T")[0],
+      notes: newClient.notes || "",
+      status: "active",
+    }
+
+    setClients([...clients, client])
+    setNewClient({})
+    setIsAddClientOpen(false)
+    toast({
+      title: "Success",
+      description: "Client added successfully",
+    })
   }
 
   const handleDeleteClient = (id: string) => {
@@ -178,9 +217,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         return (
           <ClientPageContent
             clients={clients}
-            setClients={setClients}
-            initialAction={initialAction}
-            setInitialAction={setInitialAction}
+            setIsAddClientOpen={setIsAddClientOpen}
             setSelectedItem={setSelectedItem}
             setIsViewDetailsOpen={setIsViewDetailsOpen}
             openDeleteConfirm={openDeleteConfirm}
@@ -339,6 +376,81 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
               <LogOut className="h-4 w-4 mr-2" strokeWidth={2} />
               Logout
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Client Modal */}
+      <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Client</DialogTitle>
+            <DialogDescription>
+              Enter client information to add them to your system.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label htmlFor="clientName">
+                Full Name *
+              </Label>
+              <Input
+                id="clientName"
+                placeholder="Enter client name"
+                value={newClient.name || ""}
+                onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientEmail">
+                Email *
+              </Label>
+              <Input
+                id="clientEmail"
+                type="email"
+                placeholder="client@example.com"
+                value={newClient.email || ""}
+                onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientPhone">
+                Phone Number *
+              </Label>
+              <Input
+                id="clientPhone"
+                placeholder="(555) 123-4567"
+                value={newClient.phone || ""}
+                onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="clientNotes">
+                Notes
+              </Label>
+              <Textarea
+                id="clientNotes"
+                placeholder="Additional notes..."
+                value={newClient.notes || ""}
+                onChange={(e) => setNewClient({ ...newClient, notes: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end space-x-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsAddClientOpen(false)
+                  setNewClient({})
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleAddClient}
+              >
+                Add Client
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
