@@ -81,23 +81,11 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
           </div>
 
           {/* Right side - Login form area */}
-          <div className="flex flex-col items-center justify-center w-full px-4 relative">
-
-
+          <div className="flex flex-col items-center justify-center w-full px-4">
+            <NeonGabiLogo size="large" />
 
             {/* Form container */}
-            <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-[500px] xs:min-h-[550px] sm:min-h-[600px] md:min-h-[650px] lg:min-h-[688px] rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-[#FFDE59] bg-white/[0.03] shadow-[0_5px_40px_0_rgba(255,222,89,0.60)] backdrop-blur-sm flex flex-col items-center justify-center p-6 xs:p-7 sm:p-8 md:p-10 lg:p-12 xl:p-16 pt-16 xs:pt-18 sm:pt-20 md:pt-22 lg:pt-24 xl:pt-28">
-            {/* Logo positioned above the form */}
-            <div className="absolute -top-4 xs:-top-5 sm:-top-6 md:-top-8 lg:-top-16 xl:-top-20 left-1/2 transform -translate-x-1/2 z-10">
-            <NeonGabiLogo size="large" />
-              {/* <Image
-                src="/gabi_logo.webp"
-                alt="GABI Logo"
-                width={255}
-                height={255}
-                className="object-cover w-28 h-28 xs:w-32 xs:h-32 sm:w-36 sm:h-36 md:w-32 md:h-32 lg:w-40 lg:h-40 xl:w-48 xl:h-48 2xl:w-64 2xl:h-64 pt-10"
-              /> */}
-            </div>
+            <div className="w-full max-w-xs xs:max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-[500px] xs:min-h-[550px] sm:min-h-[600px] md:min-h-[650px] lg:min-h-[688px] rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-[#FFDE59] bg-white/[0.03] shadow-[0_5px_40px_0_rgba(255,222,89,0.60)] backdrop-blur-sm flex flex-col items-center justify-center p-6 xs:p-7 sm:p-8 md:p-10 lg:p-12 xl:p-16 pt-16 xs:pt-18 sm:pt-20 md:pt-22 lg:pt-24 xl:pt-28 -mt-12">
               {/* Email Input */}
               <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-3 sm:mb-4 md:mb-5">
                 <Input
