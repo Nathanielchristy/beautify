@@ -131,7 +131,7 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
 
         .main-text {
           font-family: "Playfair Display", serif;
-          font-weight: 600;
+          font-weight: 700;
           color: #ffd700;
           background: linear-gradient(45deg, #ffd700, #ffb347, #ffd700);
           -webkit-background-clip: text;
