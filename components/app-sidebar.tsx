@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Image from "next/image"
+import NeonGabiLogo from "@/app/signin/NeonGabiLogo"
 
 interface AppSidebarProps {
   activeTab: string
@@ -21,10 +22,10 @@ interface AppSidebarProps {
 const sidebarItems = [
   { id: "dashboard", label: "Dashboard", icon: Home },
   { id: "calendar", label: "Calendar", icon: Calendar },
+  { id: "bookings", label: "Bookings", icon: Calendar },
   { id: "clients", label: "Clients", icon: Users },
   { id: "staff", label: "Staff", icon: UserCheck },
   { id: "services", label: "Services", icon: Scissors },
-  { id: "bookings", label: "Bookings", icon: Calendar },
   { id: "inventory", label: "Inventory", icon: Package },
   { id: "invoices", label: "Invoices", icon: FileText },
   { id: "reports", label: "Reports", icon: BarChart3 },
@@ -36,9 +37,10 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
       <Sidebar className="flex flex-col h-screen justify-between">
 <div className="flex-grow flex flex-col">
   <SidebarHeader>
-    <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
+    {/* <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
       <Image src="/gabi_logo.webp" alt="Glow Look Logo" width={300} height={300} className="h-40 w-40" />
-    </a>
+    </a> */}
+    <NeonGabiLogo size="medium" />
   </SidebarHeader>
 
   <SidebarContent className="flex-grow">
