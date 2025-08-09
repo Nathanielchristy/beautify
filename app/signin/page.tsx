@@ -9,6 +9,7 @@ import type { JSX } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import NeonGabiLogo from "./NeonGabiLogo"
 import { gsap } from "gsap"
+import { useIsMobile } from "../../hooks/use-mobile"
 
 interface SignInPageProps {
   onLogin: (email: string) => void
@@ -20,6 +21,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   const [loginMessage, setLoginMessage] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const isMobile = useIsMobile()
   
   const carouselRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLDivElement | null)[]>([])
@@ -222,7 +224,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                 <div className="absolute inset-1 rounded-2xl sm:rounded-3xl lg:rounded-4xl bg-gradient-to-br from-[#FFDE59]/5 via-transparent to-[#FFDE59]/3 pointer-events-none"></div>
                 
                 <div className="mb-8 relative z-10">
-                  <NeonGabiLogo size="large" />
+                  <NeonGabiLogo size={isMobile ? "medium" : "large"} />
                 </div>
                 
                 {/* Email Input */}
