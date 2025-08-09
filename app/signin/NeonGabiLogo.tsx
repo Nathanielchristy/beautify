@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -15,8 +15,17 @@ interface NeonGabiLogoProps {
 const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
   const logoRef = useRef<HTMLDivElement | null>(null);
   const subtitleRef = useRef<HTMLDivElement | null>(null);
+  const [mainText, setMainText] = useState<string[]>([]);
+  const [subtitleText, setSubtitleText] = useState<string[]>([]);
 
   useEffect(() => {
+    setMainText("GABI".split(""));
+    setSubtitleText("BY GABI SAMIA".split(""));
+  }, []);
+
+  useEffect(() => {
+    if (mainText.length === 0) return;
+
     if (window.gsap) {
       initAnimation();
     } else {
@@ -26,7 +35,7 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
       script.onload = () => initAnimation();
       document.head.appendChild(script);
     }
-  }, []);
+  }, [mainText]);
 
   const initAnimation = () => {
     if (!logoRef.current || !subtitleRef.current || !window.gsap) return;
@@ -35,13 +44,13 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
     const mainLetters = logoRef.current.querySelectorAll(".main-letter");
     const subtitleLetters = subtitleRef.current.querySelectorAll(".subtitle-letter");
 
-    gsap.set([mainLetters, subtitleLetters], { autoAlpha: 0, scale: 0.9 });
+    gsap.set([mainLetters, subtitleLetters], { opacity: 0, scale: 0.9 });
 
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     // Fade & scale in main text
     tl.to(mainLetters, {
-      autoAlpha: 1,
+      opacity: 1,
       scale: 1,
       duration: 1.4,
       stagger: 0.1,
@@ -49,7 +58,7 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
 
     // Subtitle fade in
     tl.to(subtitleLetters, {
-      autoAlpha: 1,
+      opacity: 1,
       scale: 1,
       duration: 1.2,
       stagger: 0.05,
@@ -150,7 +159,7 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
         .subtitle-letter {
           display: inline-block;
           transition: transform 0.3s ease;
-          visibility: hidden;
+          opacity: 0;
         }
 
         .main-letter:hover,
@@ -162,12 +171,12 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
 
       <div ref={logoRef} className={`neon-container ${config.container}`}>
         <div className={`main-text ${config.mainText}`}>
-          {"GABI".split("").map((char, i) => (
+          {mainText.map((char, i) => (
             <span key={i} className="main-letter">{char}</span>
           ))}
         </div>
         <div ref={subtitleRef} className={`subtitle ${config.subtitle} mt-4`}>
-          {"BY GABI SAMIA".split("").map((char, i) => (
+          {subtitleText.map((char, i) => (
             <span key={i} className="subtitle-letter">
               {char === " " ? "\u00A0" : char}
             </span>
