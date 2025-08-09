@@ -10,9 +10,13 @@ declare global {
 
 interface NeonGabiLogoProps {
   size?: "small" | "medium" | "large";
+  onAnimationComplete?: () => void;
 }
 
-const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
+const NeonGabiLogo = ({
+  size = "medium",
+  onAnimationComplete,
+}: NeonGabiLogoProps) => {
   const logoRef = useRef<HTMLDivElement | null>(null);
   const subtitleRef = useRef<HTMLDivElement | null>(null);
 
@@ -37,7 +41,10 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
 
     gsap.set([mainLetters, subtitleLetters], { opacity: 0, scale: 0.9 });
 
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.out" },
+      onComplete: onAnimationComplete,
+    });
 
     // Fade & scale in main text
     tl.to(mainLetters, {
@@ -150,6 +157,7 @@ const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
         .subtitle-letter {
           display: inline-block;
           transition: transform 0.3s ease;
+          opacity: 0;
         }
 
         .main-letter:hover,

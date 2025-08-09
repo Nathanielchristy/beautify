@@ -20,6 +20,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   const [loginMessage, setLoginMessage] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isLogoAnimationComplete, setIsLogoAnimationComplete] = useState(false);
   
   const carouselRef = useRef<HTMLDivElement>(null)
   const imagesRef = useRef<(HTMLDivElement | null)[]>([])
@@ -222,105 +223,111 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                 <div className="absolute inset-1 rounded-2xl sm:rounded-3xl lg:rounded-4xl bg-gradient-to-br from-[#FFDE59]/5 via-transparent to-[#FFDE59]/3 pointer-events-none"></div>
                 
                 <div className="mb-8 relative z-10">
-                  <NeonGabiLogo size="large" />
+                  <NeonGabiLogo size="large" onAnimationComplete={() => setIsLogoAnimationComplete(true)} />
                 </div>
                 
-                {/* Email Input */}
-                <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-3 sm:mb-4 md:mb-5">
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FFDE59]/20 via-[#FFDE59]/30 to-[#FFDE59]/20 blur-sm"></div>
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    onKeyPress={handleKeyPress}
-                    autoComplete="email"
-                    spellCheck={false}
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-all duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)]"
-                    placeholder="Email"
-                    style={{ WebkitAppearance: 'none', appearance: 'none' }}
-                  />
-                </div>
-
-                {/* Password Input */}
-                <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-4 sm:mb-5 md:mb-6 lg:mb-7">
-                  <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FFDE59]/20 via-[#FFDE59]/30 to-[#FFDE59]/20 blur-sm"></div>
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={handlePasswordChange}
-                    onKeyPress={handleKeyPress}
-                    autoComplete="current-password"
-                    spellCheck={false}
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-all duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)]"
-                    placeholder="Password"
-                    style={{ WebkitAppearance: 'none', appearance: 'none' }}
-                  />
-
-                  {/* Eye Icon Toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFDE59] hover:text-yellow-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded pointer-events-auto z-10 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,222,89,0.8)]"
-                    aria-label="Toggle password visibility"
-                    tabIndex={0}
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
-
-                {/* Forget Password Link */}
-                <div className="w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] text-center mb-5 sm:mb-6 md:mb-7 lg:mb-8">
-                  <Link 
-                    href="/forgot-password" 
-                    className="relative text-white font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-all duration-300 underline-offset-2 hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-2 py-1 hover:drop-shadow-[0_0_8px_rgba(255,222,89,0.6)]"
-                  >
-                    Forget Password?
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFDE59]/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded"></div>
-                  </Link>
-                </div>
-
-                {/* Login Button */}
-                <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-7">
-                  <Button
-                    onClick={handleLoginClick}
-                    disabled={!email || !password}
-                    className="relative w-32 xs:w-36 sm:w-40 md:w-44 lg:w-48 xl:w-52 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border-2 border-[rgba(255,222,89,0.80)] bg-gradient-to-r from-[rgba(255,222,89,0.95)] via-[#FFDE59] to-[rgba(255,222,89,0.95)] hover:from-[#FFDE59] hover:via-[#FFB347] hover:to-[#FFDE59] hover:scale-105 hover:shadow-[0_0_25px_rgba(255,222,89,0.8)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[rgba(255,222,89,0.97)] text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(255,222,89,0.4)] focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 overflow-hidden"
-                  >
-                    <span className="relative z-10">Login</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-white/20 translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
-                  </Button>
-                </div>
-
-                {/* Error/Success Message */}
-                {loginMessage && (
-                  <div className="mb-3 sm:mb-4 md:mb-5 lg:mb-6 text-center w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px]">
-                    <p className={`font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl px-2 py-2 rounded-lg backdrop-blur-sm ${
-                      loginMessage.includes("successful") 
-                        ? "text-green-400 bg-green-400/10 border border-green-400/20" 
-                        : "text-red-400 bg-red-400/10 border border-red-400/20"
-                    } transition-all duration-200`}>
-                      {loginMessage}
-                    </p>
+                <div
+                  className={`transition-opacity duration-700 ease-in-out ${
+                    isLogoAnimationComplete ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  {/* Email Input */}
+                  <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-3 sm:mb-4 md:mb-5">
+                    <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FFDE59]/20 via-[#FFDE59]/30 to-[#FFDE59]/20 blur-sm"></div>
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      onKeyPress={handleKeyPress}
+                      autoComplete="email"
+                      spellCheck={false}
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-all duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)]"
+                      placeholder="Email"
+                      style={{ WebkitAppearance: 'none', appearance: 'none' }}
+                    />
                   </div>
-                )}
 
-                {/* Sign up link */}
-                <div className="text-center px-2 max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px]">
-                  <div className="flex flex-col xs:flex-row items-center justify-center gap-1 xs:gap-2">
-                    <span className="text-white/90 font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
-                      Don&apos;t have an account?
-                    </span>
-                    <Link
-                      href="/signup"
-                      className="relative text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-all duration-300 underline-offset-2 hover:underline font-medium focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-2 py-1 hover:drop-shadow-[0_0_12px_rgba(255,222,89,0.7)]"
+                  {/* Password Input */}
+                  <div className="relative w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] h-11 xs:h-12 sm:h-13 md:h-14 lg:h-15 xl:h-16 mb-4 sm:mb-5 md:mb-6 lg:mb-7">
+                    <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FFDE59]/20 via-[#FFDE59]/30 to-[#FFDE59]/20 blur-sm"></div>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={handlePasswordChange}
+                      onKeyPress={handleKeyPress}
+                      autoComplete="current-password"
+                      spellCheck={false}
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-all duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)]"
+                      placeholder="Password"
+                      style={{ WebkitAppearance: 'none', appearance: 'none' }}
+                    />
+
+                    {/* Eye Icon Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#FFDE59] hover:text-yellow-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded pointer-events-auto z-10 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,222,89,0.8)]"
+                      aria-label="Toggle password visibility"
+                      tabIndex={0}
                     >
-                      Sign up
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+
+                  {/* Forget Password Link */}
+                  <div className="w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px] text-center mb-5 sm:mb-6 md:mb-7 lg:mb-8">
+                    <Link
+                      href="/forgot-password"
+                      className="relative text-white font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-all duration-300 underline-offset-2 hover:underline focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-2 py-1 hover:drop-shadow-[0_0_8px_rgba(255,222,89,0.6)]"
+                    >
+                      Forget Password?
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFDE59]/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded"></div>
                     </Link>
+                  </div>
+
+                  {/* Login Button */}
+                  <div className="mb-4 sm:mb-5 md:mb-6 lg:mb-7">
+                    <Button
+                      onClick={handleLoginClick}
+                      disabled={!email || !password}
+                      className="relative w-32 xs:w-36 sm:w-40 md:w-44 lg:w-48 xl:w-52 h-9 xs:h-10 sm:h-11 md:h-12 lg:h-13 xl:h-14 rounded-2xl sm:rounded-3xl border-2 border-[rgba(255,222,89,0.80)] bg-gradient-to-r from-[rgba(255,222,89,0.95)] via-[#FFDE59] to-[rgba(255,222,89,0.95)] hover:from-[#FFDE59] hover:via-[#FFB347] hover:to-[#FFDE59] hover:scale-105 hover:shadow-[0_0_25px_rgba(255,222,89,0.8)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[rgba(255,222,89,0.97)] text-[#272626] font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(255,222,89,0.4)] focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 overflow-hidden"
+                    >
+                      <span className="relative z-10">Login</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-white/20 translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
+                    </Button>
+                  </div>
+
+                  {/* Error/Success Message */}
+                  {loginMessage && (
+                    <div className="mb-3 sm:mb-4 md:mb-5 lg:mb-6 text-center w-full max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px]">
+                      <p className={`font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl px-2 py-2 rounded-lg backdrop-blur-sm ${
+                        loginMessage.includes("successful")
+                          ? "text-green-400 bg-green-400/10 border border-green-400/20"
+                          : "text-red-400 bg-red-400/10 border border-red-400/20"
+                      } transition-all duration-200`}>
+                        {loginMessage}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Sign up link */}
+                  <div className="text-center px-2 max-w-[280px] xs:max-w-[300px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[360px] xl:max-w-[380px]">
+                    <div className="flex flex-col xs:flex-row items-center justify-center gap-1 xs:gap-2">
+                      <span className="text-white/90 font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+                        Don&apos;t have an account?
+                      </span>
+                      <Link
+                        href="/signup"
+                        className="relative text-[rgba(255,222,89,0.97)] font-reem-kufi-fun text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl hover:text-[#FFDE59] transition-all duration-300 underline-offset-2 hover:underline font-medium focus:outline-none focus:ring-2 focus:ring-[#FFDE59]/50 rounded px-2 py-1 hover:drop-shadow-[0_0_12px_rgba(255,222,89,0.7)]"
+                      >
+                        Sign up
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFDE59]/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded"></div>
+                      </Link>
+                    </div>
                   </div>
                 </div>
 
