@@ -10,13 +10,9 @@ declare global {
 
 interface NeonGabiLogoProps {
   size?: "small" | "medium" | "large";
-  onAnimationComplete?: () => void;
 }
 
-const NeonGabiLogo = ({
-  size = "medium",
-  onAnimationComplete,
-}: NeonGabiLogoProps) => {
+const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
   const logoRef = useRef<HTMLDivElement | null>(null);
   const subtitleRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,16 +35,13 @@ const NeonGabiLogo = ({
     const mainLetters = logoRef.current.querySelectorAll(".main-letter");
     const subtitleLetters = subtitleRef.current.querySelectorAll(".subtitle-letter");
 
-    gsap.set([mainLetters, subtitleLetters], { opacity: 0, scale: 0.9 });
+    gsap.set([mainLetters, subtitleLetters], { autoAlpha: 0, scale: 0.9 });
 
-    const tl = gsap.timeline({
-      defaults: { ease: "power3.out" },
-      onComplete: onAnimationComplete,
-    });
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     // Fade & scale in main text
     tl.to(mainLetters, {
-      opacity: 1,
+      autoAlpha: 1,
       scale: 1,
       duration: 1.4,
       stagger: 0.1,
@@ -56,7 +49,7 @@ const NeonGabiLogo = ({
 
     // Subtitle fade in
     tl.to(subtitleLetters, {
-      opacity: 1,
+      autoAlpha: 1,
       scale: 1,
       duration: 1.2,
       stagger: 0.05,
@@ -157,7 +150,7 @@ const NeonGabiLogo = ({
         .subtitle-letter {
           display: inline-block;
           transition: transform 0.3s ease;
-          opacity: 0;
+          visibility: hidden;
         }
 
         .main-letter:hover,
