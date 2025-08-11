@@ -37,10 +37,10 @@ export function AppSidebar({ activeTab, handleTabChange, setShowLogoutConfirm }:
       <Sidebar className="flex flex-col h-screen justify-between">
 <div className="flex-grow flex flex-col">
   <SidebarHeader>
-    {/* <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
+    <a href="#" className="flex flex-col items-center gap-2 font-semibold px-4 py-4 mx-9 ml-10 mb-10 mt-2.5">
       <Image src="/gabi_logo.webp" alt="Glow Look Logo" width={300} height={300} className="h-40 w-40" />
-    </a> */}
-    <NeonGabiLogo size="medium" />
+    </a>
+    {/* <NeonGabiLogo size="medium" /> */}
   </SidebarHeader>
 
   <SidebarContent className="flex-grow">
