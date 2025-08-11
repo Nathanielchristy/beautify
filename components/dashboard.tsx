@@ -1663,20 +1663,32 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
                     {reorderingServices.map((service, index) => (
                       <Draggable key={service.id} draggableId={service.id} index={index}>
-                        {(provided, snapshot) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`border transition-all duration-200 rounded-xl ${
-                              snapshot.isDragging
-                                ? "shadow-lg scale-105 rotate-2 bg-accent"
-                                : "hover:shadow-md cursor-grab active:cursor-grabbing"
-                            }`}
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
+                        {(provided, snapshot) => {
+                          const style = {
+                            ...provided.draggableProps.style,
+                            ...(snapshot.isDragging && {
+                              position: "fixed",
+                              top: (provided.draggableProps.style as React.CSSProperties).top,
+                              left: (provided.draggableProps.style as React.CSSProperties).left,
+                              width: (provided.draggableProps.style as React.CSSProperties).width,
+                              height: (provided.draggableProps.style as React.CSSProperties).height,
+                            }),
+                          }
+                          return (
+                            <Card
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              style={style}
+                              {...provided.dragHandleProps}
+                              className={`border transition-all duration-200 rounded-xl ${
+                                snapshot.isDragging
+                                  ? "shadow-lg scale-105 rotate-2 bg-accent"
+                                  : "hover:shadow-md cursor-grab active:cursor-grabbing"
+                              }`}
+                            >
+                              <CardContent className="p-3">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center space-x-3">
                                   <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
                                     {index + 1}
                                   </div>
