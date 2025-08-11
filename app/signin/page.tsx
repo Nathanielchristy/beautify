@@ -10,6 +10,7 @@ import { Eye, EyeOff } from "lucide-react"
 import NeonGabiLogo from "./NeonGabiLogo"
 import { gsap } from "gsap"
 import { useIsMobile } from "../../hooks/use-mobile"
+import ImageCarousel from "./ImageCarousel"
 
 interface SignInPageProps {
   onLogin: (email: string) => void
@@ -21,116 +22,6 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
   const [loginMessage, setLoginMessage] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const isMobile = useIsMobile()
-
-  const imagesRef = useRef<(HTMLDivElement | null)[]>([])
-  const currentIndexRef = useRef(0)
-  const animationTl = useRef<GSAPTimeline | null>(null)
-  const timeoutId = useRef<NodeJS.Timeout | null>(null)
-
-  const carouselImages = [
-    "/carousel/barber1.jpg",
-    "/carousel/model1.jpg",
-    "/carousel/barber2.jpg",
-  ]
-
-  // Initialize images styles on mount
-  useEffect(() => {
-    imagesRef.current.forEach((img, index) => {
-      if (img) {
-        gsap.set(img, {
-          opacity: index === 0 ? 1 : 0,
-          scale: 1,
-          rotation: 0,
-          filter: "blur(0px)",
-          zIndex: index === 0 ? 3 : 1,
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          willChange: "opacity, transform",
-        })
-      }
-    })
-
-    // Initial scale fade-in for first image
-    if (imagesRef.current[0]) {
-      gsap.fromTo(
-        imagesRef.current[0],
-        { scale: 1.1, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.5 }
-      )
-    }
-  }, [])
-
-  // Animate to next image function
-  const animateToNextImage = (nextIndex: number) => {
-    if (animationTl.current) {
-      animationTl.current.kill()
-      animationTl.current = null
-    }
-
-    const currentImage = imagesRef.current[currentIndexRef.current]
-    const nextImage = imagesRef.current[nextIndex]
-
-    if (currentImage && nextImage) {
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.inOut", duration: 1 },
-        onComplete: () => {
-          currentIndexRef.current = nextIndex
-        },
-      })
-
-      tl.to(currentImage, {
-        opacity: 0,
-        scale: 1.15,
-        rotation: 1,
-        filter: "blur(2px)",
-        duration: 1,
-      })
-
-      tl.fromTo(
-        nextImage,
-        {
-          opacity: 0,
-          scale: 0.85,
-          rotation: -1,
-          filter: "blur(1px)",
-          zIndex: 2,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          rotation: 0,
-          filter: "blur(0px)",
-          duration: 1.2,
-          ease: "power3.out",
-          zIndex: 3,
-        },
-        "-=0.6"
-      )
-
-      tl.set(currentImage, { zIndex: 1, rotation: 0, filter: "blur(0px)", scale: 1 })
-
-      animationTl.current = tl
-    }
-  }
-
-  // Recursive carousel loop using setTimeout
-  useEffect(() => {
-    const cycle = () => {
-      const nextIndex = (currentIndexRef.current + 1) % carouselImages.length
-      animateToNextImage(nextIndex)
-      timeoutId.current = setTimeout(cycle, 5000)
-    }
-
-    timeoutId.current = setTimeout(cycle, 5000)
-
-    return () => {
-      if (timeoutId.current) clearTimeout(timeoutId.current)
-      if (animationTl.current) animationTl.current.kill()
-    }
-  }, [])
 
   // Form handlers
   const handleLoginClick = () => {
@@ -163,36 +54,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
       <div className="absolute inset-0 bg-gradient-to-br from-[#060606]/80 via-[#060606]/60 to-[#060606]/90"></div>
       <div className="relative z-10 w-full h-screen flex lg:p-0 p-4">
         <div className="w-full flex flex-col lg:flex-row h-full items-center justify-center lg:items-stretch lg:justify-stretch">
-          {/* Left side - Image Carousel */}
-          {/* Left side - Image Carousel */}
-          <div className="hidden lg:block lg:w-1/2 h-full relative overflow-hidden">
-            <div className="absolute inset-0 w-full h-full">
-              {carouselImages.map((imageSrc, index) => (
-                <div
-                  key={index}
-                  ref={(el) => {
-                    imagesRef.current[index] = el
-                  }}
-                  className="absolute inset-0 w-full h-full"
-                >
-                  <Image
-                    src={imageSrc}
-                    alt={`Carousel image ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    priority={index === 0}
-                    sizes="50vw"
-                  />
-                  {/* Glow overlays removed here */}
-                  {/* <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 opacity-60" /> */}
-                  {/* <div className="absolute inset-0 bg-gradient-to-r from-[#FFDE59]/5 via-transparent to-[#FFDE59]/5 animate-pulse" /> */}
-                </div>
-              ))}
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#FFDE59]/10 to-transparent pointer-events-none" />
-          </div>
-
+          <ImageCarousel />
 
           {/* Right side - Login form area */}
           <div className="flex flex-col items-center justify-center w-full lg:w-1/2 px-4 relative">
@@ -254,7 +116,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                     spellCheck={false}
                     autoCapitalize="none"
                     autoCorrect="off"
-                    className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-all duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)]"
+                    className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-[border-color,background-color,box-shadow] duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)] will-change-[border-color,background-color,box-shadow]"
                     placeholder="Email"
                     style={{ WebkitAppearance: "none", appearance: "none" }}
                   />
@@ -272,7 +134,7 @@ export const SignInPage = ({ onLogin }: SignInPageProps): JSX.Element => {
                     spellCheck={false}
                     autoCapitalize="none"
                     autoCorrect="off"
-                    className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-all duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)]"
+                    className="relative w-full h-full rounded-xl sm:rounded-2xl border-2 border-[rgba(255,222,89,0.70)] bg-[rgba(255,222,89,0.15)] backdrop-blur-md px-3 xs:px-4 sm:px-5 pr-10 text-white font-reem-kufi-fun text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl placeholder:text-[#fffce1]/80 focus:border-[#FFDE59] focus:ring-2 focus:ring-[#FFDE59]/50 focus:bg-[rgba(255,222,89,0.25)] outline-none transition-[border-color,background-color,box-shadow] duration-300 caret-white selection:bg-[#FFDE59]/30 cursor-text shadow-[0_4px_20px_rgba(255,222,89,0.3)] will-change-[border-color,background-color,box-shadow]"
                     placeholder="Password"
                     style={{ WebkitAppearance: "none", appearance: "none" }}
                   />

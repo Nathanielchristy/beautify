@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, memo } from "react";
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ interface NeonGabiLogoProps {
   size?: "small" | "medium" | "large";
 }
 
-const NeonGabiLogo = ({ size = "medium" }: NeonGabiLogoProps) => {
+const NeonGabiLogo = memo(({ size = "medium" }: NeonGabiLogoProps) => {
   const logoRef = useRef<HTMLDivElement | null>(null);
   const subtitleRef = useRef<HTMLDivElement | null>(null);
   const [mainText, setMainText] = useState<string[]>([]);
