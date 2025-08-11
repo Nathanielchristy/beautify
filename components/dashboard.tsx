@@ -532,6 +532,10 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
     setIsDeleteConfirmOpen(true)
   }
 
+  const handleDeleteCategory = (categoryName: string) => {
+    openDeleteConfirm("category", categoryName, categoryName)
+  }
+
   const handleConfirmDelete = () => {
     if (!deleteItem) return
 
@@ -544,6 +548,13 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
         break
       case "service":
         handleDeleteService(deleteItem.id)
+        break
+      case "category":
+        setServices(services.filter((service) => service.category !== deleteItem.id))
+        toast({
+          title: "Success",
+          description: `Category '${deleteItem.name}' and all its services deleted successfully`,
+        })
         break
     }
 
@@ -600,6 +611,7 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
             setEditingService={setEditingService}
             setIsEditServiceOpen={setIsEditServiceOpen}
             openDeleteConfirm={openDeleteConfirm}
+            handleDeleteCategory={handleDeleteCategory}
             setIsManageOrderOpen={setIsManageOrderOpen}
             setReorderingServices={setReorderingServices}
           />

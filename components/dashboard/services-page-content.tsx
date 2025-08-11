@@ -22,6 +22,7 @@ interface ServicesPageContentProps {
   setEditingService: (service: Service | null) => void
   setIsEditServiceOpen: (isOpen: boolean) => void
   openDeleteConfirm: (type: string, id: string, name: string) => void
+  handleDeleteCategory: (categoryName: string) => void
   setIsManageOrderOpen: (isOpen: boolean) => void
   setReorderingServices: (services: Service[]) => void
 }
@@ -36,6 +37,7 @@ export function ServicesPageContent({
   setEditingService,
   setIsEditServiceOpen,
   openDeleteConfirm,
+  handleDeleteCategory,
   setIsManageOrderOpen,
   setReorderingServices,
 }: ServicesPageContentProps) {
@@ -222,8 +224,10 @@ export function ServicesPageContent({
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
                             <DropdownMenuItem className="hover:bg-roseLight-DEFAULT/30">Edit Category</DropdownMenuItem>
-                            <DropdownMenuItem className="hover:bg-roseLight-DEFAULT/30">Hide Category</DropdownMenuItem>
-                            <DropdownMenuItem className="text-danger-DEFAULT hover:bg-danger-light/30">
+                            <DropdownMenuItem
+                              className="text-danger-DEFAULT hover:bg-danger-light/30"
+                              onClick={() => handleDeleteCategory(category)}
+                            >
                               Delete Category
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -316,8 +320,10 @@ export function ServicesPageContent({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem className="hover:bg-roseLight-DEFAULT/30">Edit Category</DropdownMenuItem>
-                      <DropdownMenuItem className="hover:bg-roseLight-DEFAULT/30">Hide Category</DropdownMenuItem>
-                      <DropdownMenuItem className="text-danger-DEFAULT hover:bg-danger-light/30">
+                      <DropdownMenuItem
+                        className="text-danger-DEFAULT hover:bg-danger-light/30"
+                        onClick={() => handleDeleteCategory(selectedCategory)}
+                      >
                         Delete Category
                       </DropdownMenuItem>
                     </DropdownMenuContent>
