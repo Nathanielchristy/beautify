@@ -185,6 +185,6 @@ const NeonGabiLogo = memo(({ size = "medium" }: NeonGabiLogoProps) => {
       </div>
     </>
   );
-};
+});
 
 export default NeonGabiLogo;
