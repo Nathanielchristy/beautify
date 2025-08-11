@@ -1,7 +1,8 @@
 "use client"
 
-import { useState,useMemo } from "react"
-import { LogOut, Home, Calendar, Users, BarChart3} from "lucide-react"
+import { useState, useMemo } from "react"
+import ReactDOM from "react-dom"
+import { LogOut, Home, Calendar, Users, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
@@ -1663,46 +1664,54 @@ export default function BeautyWellnessDashboard({ onLogout, userEmail }: Dashboa
                   <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
                     {reorderingServices.map((service, index) => (
                       <Draggable key={service.id} draggableId={service.id} index={index}>
-                        {(provided, snapshot) => (
-                          <Card
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`border transition-all duration-200 rounded-xl ${
-                              snapshot.isDragging
-                                ? "shadow-lg scale-105 rotate-2 bg-accent"
-                                : "hover:shadow-md cursor-grab active:cursor-grabbing"
-                            }`}
-                          >
-                            <CardContent className="p-3">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
-                                    {index + 1}
+                        {(provided, snapshot) => {
+                          const child = (
+                            <Card
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className={`border transition-all duration-200 rounded-xl ${
+                                snapshot.isDragging
+                                  ? "shadow-lg scale-105 rotate-2 bg-accent"
+                                  : "hover:shadow-md cursor-grab active:cursor-grabbing"
+                              }`}
+                            >
+                              <CardContent className="p-3">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center space-x-3">
+                                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
+                                      {index + 1}
+                                    </div>
+                                    <div>
+                                      <h4 className="font-semibold">{service.name}</h4>
+                                      <p className="text-sm text-muted-foreground">
+                                        {service.category} • ${service.price}
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <h4 className="font-semibold">{service.name}</h4>
-                                    <p className="text-sm text-muted-foreground">
-                                      {service.category} • ${service.price}
-                                    </p>
+                                  <div className="flex items-center space-x-2 text-muted-foreground">
+                                    <div className="flex flex-col space-y-1">
+                                      <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                      <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                      <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                    </div>
+                                    <div className="flex flex-col space-y-1">
+                                      <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                      <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                      <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="flex items-center space-x-2 text-muted-foreground">
-                                  <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                  </div>
-                                  <div className="flex flex-col space-y-1">
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                    <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        )}
+                              </CardContent>
+                            </Card>
+                          )
+
+                          if (snapshot.isDragging) {
+                            return ReactDOM.createPortal(child, document.body)
+                          }
+
+                          return child
+                        }}
                       </Draggable>
                     ))}
                     {provided.placeholder}
