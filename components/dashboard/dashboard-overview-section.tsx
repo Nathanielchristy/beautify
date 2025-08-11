@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Users, Calendar, DollarSign, UserCheck } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts"
@@ -7,6 +8,7 @@ import type { Client, Staff, Booking, Invoice } from "@/types"
 import { RecentBookingsCard } from "./recent-bookings-card"
 import { QuickActionsCard } from "./quick-actions-card"
 import { UpcomingAppointmentsCard } from "./upcoming-appointments-card"
+import { ImageCarousel } from "./image-carosel"
 
 interface DashboardOverviewSectionProps {
   clients: Client[]
@@ -69,90 +71,87 @@ export function DashboardOverviewSection({
 
   return (
     <div className="space-y-6">
-    <div className="relative rounded-2xl p-6 text-foreground overflow-hidden shadow-xl bg-card">
-      {/* Soft Gold Glow Accents */}
-      <div className="absolute -top-6 -right-6 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
-      <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div className="lg:col-span-1 space-y-6">
+          <div>
+            <h1 className="text-3xl font-semibold text-white">Welcome back</h1>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground text-white">Total Clients</p>
+                    <p className="text-2xl font-bold text-white">{clients.length}</p>
+                    <p className="text-xs text-muted-foreground text-white">Active clients</p>
+                  </div>
+                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                    <Users className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-      {/* Gold Gradient Stripe */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/5 to-transparent pointer-events-none"></div>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-white">Today's Bookings</p>
+                    <p className="text-2xl font-bold text-white">{todayBookings}</p>
+                    <p className="text-xs text-white">Scheduled today</p>
+                  </div>
+                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                    <Calendar className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-      {/* Content */}
-      <div className="relative z-10">
-        <h1 className="text-3xl font-semibold mb-2 text-white">
-          Welcome back to GABI
-        </h1>
-        <p className="text-sm text-white">
-          Here's what's happening with your beauty business today.
-        </p>
-      </div>
-    </div>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-white">Revenue</p>
+                    <p className="text-2xl font-bold text-white">${totalRevenue.toFixed(0)}</p>
+                    <p className="text-xs text-white">This month</p>
+                  </div>
+                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground text-white">Total Clients</p>
-                <p className="text-2xl font-bold text-white">{clients.length}</p>
-                <p className="text-xs text-muted-foreground text-white">Active clients</p>
-              </div>
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-white">Today's Bookings</p>
-                <p className="text-2xl font-bold text-white">{todayBookings}</p>
-                <p className="text-xs text-white">Scheduled today</p>
-              </div>
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-white">Revenue</p>
-                <p className="text-2xl font-bold text-white">${totalRevenue.toFixed(0)}</p>
-                <p className="text-xs text-white">This month</p>
-              </div>
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-white">Active Staff</p>
-                <p className="text-2xl font-bold text-white">{activeStaffCount}</p>
-                <p className="text-xs text-white">Available today</p>
-              </div>
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <UserCheck className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-white">Active Staff</p>
+                    <p className="text-2xl font-bold text-white">{activeStaffCount}</p>
+                    <p className="text-xs text-white">Available today</p>
+                  </div>
+                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                    <UserCheck className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <div className="lg:col-span-1 flex items-center justify-center">
+          {/* <Image
+            src="/girl-dash.jpg"
+            alt="A lady"
+            width={300}
+            height={300}
+            className="object-contain rounded-2xl"
+          /> */}
+          <ImageCarousel />
+        </div>
       </div>
 
       {/* Recent Sales Chart - Moved before the other cards */}
-<div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-6">
   <Card>
     <CardContent className="p-6">
       <div className="flex items-center justify-between mb-6">
